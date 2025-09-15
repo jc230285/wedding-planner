@@ -1,48 +1,10 @@
-{{
-
-  "version": "1.0",  "$schema": "https://cdn.coollabs.io/coolify/coolify.schema.json",
-
-  "services": [  "build": {
-
-    {    "build_pack": "dockerfile",
-
-      "name": "wedding-frontend",    "base_directory": "/dockerfile"
-
-      "type": "application",  },
-
-      "git": "https://github.com/jc230285/wedding-planner",  "network": {
-
-      "root_path": "frontend",    "domains": {
-
-      "build": {      "fqdn": "http://hellotwitter.127.0.0.1.sslip.io"
-
-        "dockerfile": "Dockerfile.frontend"    },
-
-      },    "ports": {
-
-      "ports": [5070],      "expose": "80",
-
-      "domains": [      "mappings": "8888:80"
-
-        "https://wed.edbmotte.com"    }
-
-      ],  },
-
-      "env": {  "health_check_path": "/health",
-
-        "NEXT_PUBLIC_API_URL": "https://apiwed.edbmotte.com"  "health_check_interval": 30,
-
-      }  "health_check_timeout": 10,
-
-    },  "health_check_retries": 3,
-
-    {  "settings": {
-
-      "name": "wedding-backend",    "is_static": false
-
-      "type": "application",  }
-
-      "git": "https://github.com/jc230285/wedding-planner",}
+{
+  "version": "1.0",
+  "services": [
+    {
+      "name": "wedding-backend",
+      "type": "application",
+      "git": "https://github.com/jc230285/wedding-planner",
       "root_path": "backend",
       "build": {
         "dockerfile": "Dockerfile.backend"
@@ -50,11 +12,7 @@
       "ports": [5071],
       "domains": [
         "https://apiwed.edbmotte.com"
-      ],
-      "env": {
-        "CLOUDFLARE_TUNNEL_DOMAIN": "james-and-heather.com",
-        "CLOUDFLARE_TUNNEL_TOKEN": "<your_tunnel_token_here>"
-      }
+      ]
     }
   ]
 }
