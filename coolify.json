@@ -2,17 +2,23 @@
   "version": "1.0",
   "services": [
     {
-      "name": "wedding-backend",
+      "name": "wedding-app",
       "type": "application",
       "git": "https://github.com/jc230285/wedding-planner",
-      "root_path": "backend",
+      "root_path": ".",
       "build": {
-        "dockerfile": "Dockerfile.backend"
+        "dockerfile": "Dockerfile"
       },
-      "ports": [5071],
+      "ports": [5070, 5071],
       "domains": [
+        "https://wed.edbmotte.com",
         "https://apiwed.edbmotte.com"
-      ]
+      ],
+      "env": {
+        "CLOUDFLARE_TUNNEL_DOMAIN": "james-and-heather.com",
+        "CLOUDFLARE_TUNNEL_TOKEN": "<your_tunnel_token_here>",
+        "NEXT_PUBLIC_API_URL": "https://apiwed.edbmotte.com"
+      }
     }
   ]
 }
