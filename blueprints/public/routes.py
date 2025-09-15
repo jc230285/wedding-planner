@@ -17,7 +17,7 @@ def health():
         'version': '1.0.0',
         'port': 5070
     }
-    current_app.logger.info(f"Health check requested: {health_data}")
+    current_app.logger.info(f"Health check requested from {request.remote_addr}")
     return health_data, 200
 
 @public_bp.route('/')

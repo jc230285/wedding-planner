@@ -21,10 +21,12 @@ def create_app():
 
     # Enhanced logging configuration
     import logging
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, format='[APP] %(levelname)s: %(message)s')
     app.logger.setLevel(logging.INFO)
 
-    app.logger.info("=== FLASK APPLICATION STARTUP ===")
+    app.logger.info("=========================================")
+    app.logger.info("🚀 FLASK APPLICATION STARTUP")
+    app.logger.info("=========================================")
     app.logger.info(f"Flask environment: {os.environ.get('FLASK_ENV', 'Not set')}")
     app.logger.info(f"Debug mode: {os.environ.get('FLASK_DEBUG', 'Not set')}")
     app.logger.info(f"Domain: {os.environ.get('DOMAIN', 'Not set')}")
@@ -72,6 +74,8 @@ if __name__ == '__main__':
     app.logger.info(f"Starting Flask development server on port {port}")
     app.logger.info(f"Debug mode: {debug}")
     app.logger.info(f"Health check: http://localhost:{port}/health")
-    app.logger.info("=== APPLICATION STARTUP COMPLETE ===")
+    app.logger.info("=========================================")
+    app.logger.info("✅ APPLICATION STARTUP COMPLETE")
+    app.logger.info("=========================================")
 
     app.run(host='0.0.0.0', port=port, debug=debug)
