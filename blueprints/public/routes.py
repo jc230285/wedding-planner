@@ -15,7 +15,7 @@ def health():
         'timestamp': datetime.datetime.utcnow().isoformat(),
         'service': 'wedding-planner',
         'version': '1.0.0',
-        'port': 3000
+        'port': 5070
     }
     current_app.logger.info(f"Health check requested: {health_data}")
     return health_data, 200
