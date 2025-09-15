@@ -2,7 +2,7 @@
     "build_pack": "nixpacks",
     "base_directory": "/",
     "publish_directory": "/",
-    "ports_exposes": "5070",
+    "ports_exposed": "5070",
     "health_check_path": "/health",
     "health_check_interval": 30,
     "health_check_timeout": 10,
