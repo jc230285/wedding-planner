@@ -1,0 +1,15 @@
+﻿version: '3.8'
+
+services:
+  wedding-planner:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=true
+    volumes:
+      - .:/app
+      - /app/__pycache__
+    env_file:
+      - .env
