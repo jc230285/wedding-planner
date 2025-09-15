@@ -25,9 +25,15 @@ EXPOSE 5000
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
+set -e\n\
 echo "Starting Wedding Planner Application..."\n\
-gunicorn --bind 0.0.0.0:5000 --workers 4 app:app' > /app/start.sh && \
+echo "Health check available at: http://localhost:5000/health"\n\
+exec gunicorn --bind 0.0.0.0:5000 --workers 4 app:app' > /app/start.sh && \
     chmod +x /app/start.sh
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5000/health || exit 1
 
 # Run the application
 CMD ["/app/start.sh"]
