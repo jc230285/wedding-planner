@@ -1,23 +1,61 @@
-﻿from flask import Blueprint, render_template, request, redirect, url_for, flash
+﻿from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from ..models import Guest
 from .. import db
+import os
+import sys
 
 public_bp = Blueprint('public', __name__)
 
 @public_bp.route('/health')
 def health():
     """Health check endpoint for deployment monitoring"""
-    return {'status': 'healthy'}, 200
+    import datetime
+    health_data = {
+        'status': 'healthy',
+        'timestamp': datetime.datetime.utcnow().isoformat(),
+        'service': 'wedding-planner',
+        'version': '1.0.0',
+        'port': 5070
+    }
+    current_app.logger.info(f"Health check requested: {health_data}")
+    return health_data, 200
 
 @public_bp.route('/')
 def index():
     """Main wedding website"""
     return render_template('index.html')
 
-@public_bp.route('/rsvp/<code>', methods=['GET', 'POST'])
-def rsvp(code):
-    """RSVP page for a specific family code"""
-    code = code.upper()
+@public_bp.route('/debug')
+def debug():
+    """Debug endpoint for troubleshooting"""
+    import datetime
+    import os
+
+    debug_info = {
+        'timestamp': datetime.datetime.utcnow().isoformat(),
+        'service': 'wedding-planner',
+        'version': '1.0.0',
+        'environment': {
+            'FLASK_ENV': os.environ.get('FLASK_ENV'),
+            'FLASK_DEBUG': os.environ.get('FLASK_DEBUG'),
+            'DOMAIN': os.environ.get('DOMAIN'),
+            'PORT': os.environ.get('PORT', '5070'),
+            'SECRET_KEY': '***configured***' if os.environ.get('SECRET_KEY') else 'NOT SET',
+            'DATABASE_URL': '***configured***' if os.environ.get('DATABASE_URL') else 'sqlite:///wedding.db'
+        },
+        'system': {
+            'python_version': sys.version,
+            'platform': sys.platform,
+            'working_directory': os.getcwd()
+        },
+        'health_endpoints': {
+            'health': '/health',
+            'debug': '/debug'
+        }
+    }
+
+    current_app.logger.info(f"Debug info requested: {debug_info}")
+    return debug_info, 200
     
     # Find guests with this family code
     guests = Guest.query.filter_by(family_code=code).all()

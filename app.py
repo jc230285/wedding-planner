@@ -19,10 +19,23 @@ def create_app():
     """Application factory pattern"""
     app = Flask(__name__)
 
+    # Enhanced logging configuration
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    app.logger.setLevel(logging.INFO)
+
+    app.logger.info("=== FLASK APPLICATION STARTUP ===")
+    app.logger.info(f"Flask environment: {os.environ.get('FLASK_ENV', 'Not set')}")
+    app.logger.info(f"Debug mode: {os.environ.get('FLASK_DEBUG', 'Not set')}")
+    app.logger.info(f"Domain: {os.environ.get('DOMAIN', 'Not set')}")
+    app.logger.info(f"Secret key configured: {'Yes' if os.environ.get('SECRET_KEY') else 'No'}")
+
     # Configuration
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///wedding.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    app.logger.info(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
     # Admin configuration
     app.config['ADMIN_USERNAME'] = os.environ.get('ADMIN_USERNAME', 'admin')
@@ -48,6 +61,17 @@ app = create_app()
 
 if __name__ == '__main__':
     with app.app_context():
+        app.logger.info("Creating database tables if they don't exist...")
         # Create tables if they don't exist
         db.create_all()
-    app.run(host='0.0.0.0', port=5070, debug=os.environ.get('FLASK_DEBUG', 'False').lower() == 'true')
+        app.logger.info("Database tables created successfully")
+
+    port = int(os.environ.get('PORT', 5070))
+    debug = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+
+    app.logger.info(f"Starting Flask development server on port {port}")
+    app.logger.info(f"Debug mode: {debug}")
+    app.logger.info(f"Health check: http://localhost:{port}/health")
+    app.logger.info("=== APPLICATION STARTUP COMPLETE ===")
+
+    app.run(host='0.0.0.0', port=port, debug=debug)
