@@ -1,10 +1,6 @@
-Flask==3.0.3Flask==3.0.3
-
-Flask-SQLAlchemy==3.1.1gunicorn==22.0.0
-
-Flask-Migrate==4.0.7Flask-SQLAlchemy==3.1.1
-
-Flask-Login==0.7.0Flask-Migrate==4.0.7
-
-python-dotenv==1.0.0requests==2.31.0
+Flask==3.0.3
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.7
+Flask-Login==0.7.0
+python-dotenv==1.0.0
 gunicorn==22.0.0
