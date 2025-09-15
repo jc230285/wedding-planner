@@ -4,6 +4,11 @@ from .. import db
 
 public_bp = Blueprint('public', __name__)
 
+@public_bp.route('/health')
+def health():
+    """Health check endpoint for deployment monitoring"""
+    return {'status': 'healthy'}, 200
+
 @public_bp.route('/')
 def index():
     """Main wedding website"""
