@@ -1,6 +1,8 @@
 ﻿FROM python:3.11-slim
 
-# Set working directory
+# Set working direct# Health check with better logging
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f -v http://localhost:3000/health 2>&1 | head -10 || (echo "Health check failed at $(date)" && exit 1)
 WORKDIR /app
 
 # Install system dependencies
@@ -21,7 +23,7 @@ RUN useradd --create-home --shell /bin/bash app \
 USER app
 
 # Expose port
-EXPOSE 5070
+EXPOSE 3000
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
@@ -35,10 +37,10 @@ echo "Environment variables:"\n\
 env | grep -E "(FLASK|DOMAIN|SECRET|CLOUDFLARE)" | sort || echo "No Flask env vars found"\n\
 echo "Python version: $(python --version 2>&1)"\n\
 echo "Gunicorn version: $(gunicorn --version 2>&1)"\n\
-echo "Health check available at: http://localhost:5070/health"\n\
-echo "Application starting on port 5070..."\n\
+echo "Health check available at: http://localhost:3000/health"\n\
+echo "Application starting on port 3000..."\n\
 echo "====================================="\n\
-exec gunicorn --bind 0.0.0.0:5070 --workers 4 --log-level info --access-logfile - --error-logfile - app:app' > /app/start.sh && \
+exec gunicorn --bind 0.0.0.0:3000 --workers 4 --log-level info --access-logfile - --error-logfile - app:app' > /app/start.sh && \
     chmod +x /app/start.sh
 
 # Health check with better logging

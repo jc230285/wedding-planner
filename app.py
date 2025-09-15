@@ -66,7 +66,7 @@ if __name__ == '__main__':
         db.create_all()
         app.logger.info("Database tables created successfully")
 
-    port = int(os.environ.get('PORT', 5070))
+    port = int(os.environ.get('PORT', 3000))
     debug = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
 
     app.logger.info(f"Starting Flask development server on port {port}")
