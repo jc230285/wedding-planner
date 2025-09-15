@@ -34,10 +34,15 @@ def create_app():
 
     # Configuration
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///wedding.db')
+
+    # Database configuration - use absolute path for SQLite in container
+    db_path = os.path.join(os.getcwd(), 'wedding.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', f'sqlite:///{db_path}')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     app.logger.info(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+    app.logger.info(f"Current working directory: {os.getcwd()}")
+    app.logger.info(f"Database file path: {db_path}")
 
     # Admin configuration
     app.config['ADMIN_USERNAME'] = os.environ.get('ADMIN_USERNAME', 'admin')
@@ -60,10 +65,20 @@ def create_app():
     with app.app_context():
         try:
             app.logger.info("Initializing database...")
+            app.logger.info(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+
+            # Test database connection
+            from sqlalchemy import text
+            db.session.execute(text("SELECT 1"))
+            app.logger.info("✅ Database connection successful")
+
             db.create_all()
             app.logger.info("✅ Database tables created successfully")
         except Exception as e:
             app.logger.error(f"❌ Database initialization failed: {e}")
+            app.logger.error(f"Error type: {type(e).__name__}")
+            import traceback
+            app.logger.error(f"Traceback: {traceback.format_exc()}")
             # Don't fail the entire app startup for database issues
             pass
 

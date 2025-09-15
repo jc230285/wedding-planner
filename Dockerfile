@@ -23,6 +23,9 @@ USER app
 # Ensure the app directory is writable for database files
 RUN mkdir -p /app && chmod 755 /app
 
+# Create database directory with proper permissions
+RUN mkdir -p /app/data && chmod 755 /app/data
+
 # Expose port
 EXPOSE 5070
 
@@ -47,6 +50,12 @@ echo "[APP] Gunicorn version: $(gunicorn --version 2>&1)"\n\
 echo "[APP] Testing Python imports..."\n\
 python -c "import flask; print(f\"[APP] Flask version: {flask.__version__}\")" 2>&1 | sed "s/^/[APP] /"\n\
 python -c "import sqlalchemy; print(f\"[APP] SQLAlchemy version: {sqlalchemy.__version__}\")" 2>&1 | sed "s/^/[APP] /"\n\
+echo "[APP] Testing Flask app import..."\n\
+python -c "from app import create_app; print(\"[APP] Flask app import successful\")" 2>&1 | sed "s/^/[APP] /"\n\
+echo "[APP] Testing blueprint imports..."\n\
+python -c "from blueprints.public.routes import public_bp; print(\"[APP] Public blueprint import successful\")" 2>&1 | sed "s/^/[APP] /"\n\
+python -c "from blueprints.admin.routes import admin_bp; print(\"[APP] Admin blueprint import successful\")" 2>&1 | sed "s/^/[APP] /"\n\
+python -c "from blueprints.api.routes import api_bp; print(\"[APP] API blueprint import successful\")" 2>&1 | sed "s/^/[APP] /"\n\
 echo "[APP] Health check available at: http://localhost:5070/health"\n\
 echo "[APP] Debug info available at: http://localhost:5070/debug"\n\
 echo "[APP] Application starting on port 5070..."\n\
