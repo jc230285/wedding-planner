@@ -28,7 +28,7 @@ EXPOSE 5070
 # Create startup script
 RUN echo '#!/bin/bash\n\
 set -e\n\
-echo "=== WEDDING PLANNER STARTUP SCRIPT ===\n\
+echo "=== WEDDING PLANNER STARTUP - FLASK APP ===\n\
 echo "Starting Wedding Planner Application..."\n\
 echo "Current date/time: $(date)"\n\
 echo "Working directory: $(pwd)"\n\
@@ -40,7 +40,8 @@ echo "Gunicorn version: $(gunicorn --version 2>&1)"\n\
 echo "Health check available at: http://localhost:5070/health"\n\
 echo "Application starting on port 5070..."\n\
 echo "====================================="\n\
-exec gunicorn --bind 0.0.0.0:5070 --workers 4 --log-level info --access-logfile - --error-logfile - app:app' > /app/start.sh && \
+echo "[FLASK] Starting Gunicorn server..."\n\
+exec gunicorn --bind 0.0.0.0:5070 --workers 4 --log-level info --access-logfile - --error-logfile - --logger-class=gunicorn.glogging.Logger app:app' > /app/start.sh && \
     chmod +x /app/start.sh
 
 # Health check with better logging
