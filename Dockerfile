@@ -23,5 +23,11 @@ USER app
 # Expose port
 EXPOSE 5000
 
+# Create startup script
+RUN echo '#!/bin/bash\n\
+echo "Starting Wedding Planner Application..."\n\
+gunicorn --bind 0.0.0.0:5000 --workers 4 app:app' > /app/start.sh && \
+    chmod +x /app/start.sh
+
 # Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "app:app"]
+CMD ["/app/start.sh"]
