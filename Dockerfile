@@ -20,6 +20,9 @@ RUN useradd --create-home --shell /bin/bash app \
     && chown -R app:app /app
 USER app
 
+# Ensure the app directory is writable for database files
+RUN mkdir -p /app && chmod 755 /app
+
 # Expose port
 EXPOSE 5070
 
@@ -35,10 +38,15 @@ echo "[APP] Current date/time: $(date)"\n\
 echo "[APP] Working directory: $(pwd)"\n\
 echo "[APP] User: $(whoami)"\n\
 echo "[APP] Process ID: $$"\n\
+echo "[APP] Directory permissions:" \n\
+ls -la /app | head -5 | sed "s/^/[APP] /"\n\
 echo "[APP] Environment variables:" \n\
-env | grep -E "(FLASK|DOMAIN|SECRET|CLOUDFLARE)" | sed "s/^/[APP] /" || echo "[APP] No Flask env vars found"\n\
+env | grep -E "(FLASK|DOMAIN|SECRET|CLOUDFLARE|DATABASE)" | sed "s/^/[APP] /" || echo "[APP] No Flask env vars found"\n\
 echo "[APP] Python version: $(python --version 2>&1)"\n\
 echo "[APP] Gunicorn version: $(gunicorn --version 2>&1)"\n\
+echo "[APP] Testing Python imports..."\n\
+python -c "import flask; print(f\"[APP] Flask version: {flask.__version__}\")" 2>&1 | sed "s/^/[APP] /"\n\
+python -c "import sqlalchemy; print(f\"[APP] SQLAlchemy version: {sqlalchemy.__version__}\")" 2>&1 | sed "s/^/[APP] /"\n\
 echo "[APP] Health check available at: http://localhost:5070/health"\n\
 echo "[APP] Debug info available at: http://localhost:5070/debug"\n\
 echo "[APP] Application starting on port 5070..."\n\

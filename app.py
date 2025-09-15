@@ -56,6 +56,18 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(api_bp, url_prefix='/api')
 
+    # Initialize database within app context
+    with app.app_context():
+        try:
+            app.logger.info("Initializing database...")
+            db.create_all()
+            app.logger.info("✅ Database tables created successfully")
+        except Exception as e:
+            app.logger.error(f"❌ Database initialization failed: {e}")
+            # Don't fail the entire app startup for database issues
+            pass
+
+    app.logger.info("✅ Application initialization complete")
     return app
 
 # Create the app instance
