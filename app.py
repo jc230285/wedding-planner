@@ -2,6 +2,7 @@
 
 import os
 from datetime import datetime
+from uuid import UUID
 from typing import Any, Dict, Iterable, List
 
 import requests
@@ -337,8 +338,9 @@ def update_guest():
 
 
 
-@app.route("/api/guests/<int:guest_id>", methods=["PATCH"])
-def update_guest_by_id(guest_id: int):
+@app.route("/api/guests/<uuid:guest_id>", methods=["PATCH"])
+def update_guest_by_id(guest_id: UUID):
+    guest_id_str = str(guest_id)
     payload = request.get_json(silent=True)
     if payload is None or not isinstance(payload, dict):
         abort(400, description="Request must contain a JSON object.")
@@ -362,7 +364,7 @@ def update_guest_by_id(guest_id: int):
         with psycopg.connect(_require_database_url(), row_factory=dict_row) as conn:
             with conn.cursor() as cur:
                 # Check if guest exists
-                cur.execute("SELECT * FROM public.guests WHERE id = %s", (guest_id,))
+                cur.execute("SELECT * FROM public.guests WHERE id = %s", (guest_id_str,))
                 current = cur.fetchone()
                 if current is None:
                     abort(404, description="Guest not found.")
@@ -378,7 +380,7 @@ def update_guest_by_id(guest_id: int):
                 # Update the guest
                 set_clause = ", ".join(f"{column} = %s" for column in changed)
                 params = [data["new"] for data in changed.values()]
-                params.append(guest_id)
+                params.append(guest_id_str)
                 cur.execute(
                     f"UPDATE public.guests SET {set_clause} WHERE id = %s",
                     params,
@@ -387,7 +389,7 @@ def update_guest_by_id(guest_id: int):
                 # Log the changes
                 log_entries = [
                     (
-                        guest_id,
+                        guest_id_str,
                         current.get("family_id"),
                         column,
                         None if change["old"] is None else str(change["old"]),
@@ -490,3 +492,4 @@ def update_family_attendance():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
