@@ -17,3 +17,5 @@
     depends_on:
       - web
     restart: unless-stopped
+    networks:
+      - default
