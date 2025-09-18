@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>James & Heather – Wedding Weekend</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
       :root {
         color-scheme: light;
@@ -483,11 +484,6 @@
         header.hero {
           min-height: 46vh;
         }
-
-        .section .inner {
-          padding: 2.2rem 1.6rem;
-          border-radius: 14px;
-        }
       }
 
       /* Admin Section Styles */
@@ -503,13 +499,12 @@
 
       .admin-table-container {
         width: 100%;
-        overflow-x: auto;
         background: rgba(255, 255, 255, 0.05);
         border-radius: 12px;
         padding: 1rem;
       }
 
-      .admin-table {
+      .admin-table-header {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.85rem;
@@ -517,27 +512,42 @@
         border-radius: 8px;
         overflow: hidden;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 0;
       }
 
-      .admin-table th {
+      .admin-table-body-container {
+        max-height: 500px;
+        overflow-x: auto;
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .admin-table-body {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+      }
+
+      .admin-table-header th,
+      .admin-table-body th {
         background: linear-gradient(120deg, rgba(109, 92, 231, 0.9), rgba(24, 18, 43, 0.95));
         color: white;
         padding: 0.75rem 0.5rem;
         text-align: left;
         font-weight: 600;
         border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-        position: sticky;
-        top: 0;
-        z-index: 10;
       }
 
-      .admin-table td {
+      .admin-table-header td,
+      .admin-table-body td {
         padding: 0.5rem;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         vertical-align: top;
       }
 
-      .admin-table tbody tr:nth-child(even) {
+      .admin-table-body tbody tr:nth-child(even) {
         background: rgba(109, 92, 231, 0.05);
       }
 
@@ -676,45 +686,36 @@
     <main>
       <ul class="timeline">
         <li id="admin-section" class="section admin-section hidden" style="--section-image: url('{{ url_for('static', filename='images/admin.jpg') }}');">
-          <div class="inner">
+          <div class="inner-full"> 
             <h2>Admin Section</h2>
-            <div class="admin-controls">
-              <button id="refresh-guests-btn" class="rsvp-button">Refresh Guest Data</button>
-              <span id="guest-count">Loading...</span>
-            </div>
             <div class="admin-table-container">
               <table id="admin-guest-table" class="admin-table">
-                <thead>
+                <thead class="admin-table-header">
                   <tr>
-                    <th>ID</th>
+                    <th><i class="fas fa-cog" style="font-size: 1.2em;"></i></th>
                     <th>Name</th>
-                    <th>Age</th>
-                    <th>Side</th>
-                    <th>Guest Type</th>
-                    <th>Sex</th>
                     <th>Stag</th>
                     <th>Hen</th>
                     <th>Friday Room</th>
                     <th>Ceremony</th>
+                    <th>Attendance Status</th>
                     <th>Wedding Meal</th>
                     <th>Restrictions</th>
                     <th>Saturday Room</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>Address</th>
-                    <th>Family ID</th>
-                    <th>Music Requests</th>
                     <th>Comment</th>
-                    <th>Attendance Status</th>
-                    <th>Created At</th>
+                    <th>Family ID</th>
                   </tr>
                 </thead>
-                <tbody id="admin-table-body">
-                  <tr>
-                    <td colspan="21" class="loading">Loading guest data...</td>
-                  </tr>
-                </tbody>
               </table>
+              <div class="admin-table-body-container">
+                <table class="admin-table-body">
+                  <tbody id="admin-table-body">
+                    <tr>
+                      <td colspan="12" class="loading">Loading guest data...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </li>
@@ -1272,19 +1273,31 @@
       let allAdminGuests = [];
 
       async function loadAdminGuests() {
+        console.log('🚀 Starting to load admin guests...');
         try {
+          console.log('📡 Making API request to /api/guests...');
           const response = await fetch('/api/guests');
+          console.log('📡 API response status:', response.status);
+
           if (!response.ok) {
+            console.error('❌ API response not ok:', response.status, response.statusText);
             throw new Error('Failed to load guest data');
           }
+
           const data = await response.json();
+          console.log('✅ API response data:', data);
+          console.log('✅ Number of guests received:', data.data?.length || 0);
+
           allAdminGuests = data.data || [];
+          console.log('💾 Stored admin guests:', allAdminGuests.length);
+
           renderAdminTable();
-          updateGuestCount();
+
+          console.log('🎉 Admin guests loaded successfully!');
         } catch (error) {
-          console.error('Error loading admin guests:', error);
-          document.getElementById('admin-table-body').innerHTML = 
-            '<tr><td colspan="21" style="color: red;">Error loading guest data</td></tr>';
+          console.error('❌ Error loading admin guests:', error);
+          document.getElementById('admin-table-body').innerHTML =
+            '<tr><td colspan="12" style="color: red;">Error loading guest data</td></tr>';
         }
       }
 
@@ -1346,7 +1359,7 @@
         };
 
         const createSelect = (field, value, options) => {
-          const select = `<select data-field="${field}" data-guest-id="${guest.id}">`;
+          let select = `<select data-field="${field}" data-guest-id="${guest.id}">`;
           options.forEach(option => {
             const selected = value == option.value ? 'selected' : '';
             select += `<option value="${option.value}" ${selected}>${option.label}</option>`;
@@ -1361,73 +1374,65 @@
 
         return `
           <tr>
-            <td><span class="guest-id" data-guest-id="${guest.id}">${guest.id}</span></td>
+            <td><span class="guest-id" data-guest-id="${guest.id}" style="cursor: pointer; color: #6d5ce7;"><i class="fas fa-cog" style="font-size: 1.2em;"></i></span></td>
             <td>${createInput('name', guest.name)}</td>
-            <td>${createInput('age', guest.age, 'number')}</td>
-            <td>${createSelect('side', guest.side, [
-              {value: '', label: ''},
-              {value: 'bride', label: 'Bride'},
-              {value: 'groom', label: 'Groom'}
-            ])}</td>
-            <td>${createInput('guest_type', guest.guest_type)}</td>
-            <td>${createSelect('sex', guest.sex, [
-              {value: '', label: ''},
-              {value: 'M', label: 'Male'},
-              {value: 'F', label: 'Female'}
-            ])}</td>
             <td>${createSelect('stag', guest.stag, [
               {value: '', label: ''},
-              {value: 0, label: 'No'},
-              {value: 1, label: 'Yes'}
+              {value: -2, label: 'Invited'},
+              {value: -1, label: 'Not Invited'},
+              {value: 0, label: 'Not Attending'},
+              {value: 1, label: 'Attending'}
             ])}</td>
             <td>${createSelect('hen', guest.hen, [
               {value: '', label: ''},
-              {value: 0, label: 'No'},
-              {value: 1, label: 'Yes'}
+              {value: -2, label: 'Invited'},
+              {value: -1, label: 'Not Invited'},
+              {value: 0, label: 'Not Attending'},
+              {value: 1, label: 'Attending'}
             ])}</td>
             <td>${createSelect('friday_room', guest.friday_room, [
               {value: '', label: ''},
-              {value: 0, label: 'No'},
-              {value: 1, label: 'Yes'}
+              {value: -2, label: 'Invited'},
+              {value: -1, label: 'Not Invited'},
+              {value: 0, label: 'Not Attending'},
+              {value: 1, label: 'Attending'}
             ])}</td>
             <td>${createSelect('ceremony', guest.ceremony, [
               {value: '', label: ''},
-              {value: 0, label: 'No'},
-              {value: 1, label: 'Yes'}
+              {value: -2, label: 'Invited'},
+              {value: -1, label: 'Not Invited'},
+              {value: 0, label: 'Not Attending'},
+              {value: 1, label: 'Attending'}
+            ])}</td>
+            <td>${createSelect('attendance_status', guest.attendance_status, [
+              {value: '', label: ''},
+              {value: -2, label: 'Invited'},
+              {value: -1, label: 'Not Invited'},
+              {value: 0, label: 'Not Attending'},
+              {value: 1, label: 'Attending'}
             ])}</td>
             <td>${createSelect('wedding_meal', guest.wedding_meal, [
               {value: '', label: ''},
-              {value: 0, label: 'No'},
-              {value: 1, label: 'Yes'}
+              {value: -2, label: 'Invited'},
+              {value: -1, label: 'Not Invited'},
+              {value: 0, label: 'Not Attending'},
+              {value: 1, label: 'Attending'}
             ])}</td>
             <td>${createTextarea('restrictions', guest.restrictions)}</td>
             <td>${createSelect('saturday_room', guest.saturday_room, [
               {value: '', label: ''},
-              {value: 0, label: 'No'},
-              {value: 1, label: 'Yes'}
-            ])}</td>
-            <td>${createInput('email', guest.email, 'email')}</td>
-            <td>${createInput('mobile', guest.mobile)}</td>
-            <td>${createTextarea('address', guest.address)}</td>
-            <td>${createInput('family_id', guest.family_id)}</td>
-            <td>${createTextarea('music_requests', guest.music_requests)}</td>
-            <td>${createTextarea('comment', guest.comment)}</td>
-            <td>${createSelect('attendance_status', guest.attendance_status, [
-              {value: '', label: ''},
+              {value: -2, label: 'Invited'},
+              {value: -1, label: 'Not Invited'},
               {value: 0, label: 'Not Attending'},
               {value: 1, label: 'Attending'}
             ])}</td>
-            <td>${formatDate(guest.created_at)}</td>
+            <td>${createTextarea('comment', guest.comment)}</td>
+            <td>${createInput('family_id', guest.family_id)}</td>
           </tr>
         `;
       }
 
-      function updateGuestCount() {
-        const countElement = document.getElementById('guest-count');
-        if (countElement) {
-          countElement.textContent = `Total: ${allAdminGuests.length} guest${allAdminGuests.length !== 1 ? 's' : ''}`;
-        }
-      }
+
 
       function showGuestPopup(guestId) {
         const guest = allAdminGuests.find(g => g.id == guestId);
@@ -1440,10 +1445,20 @@
         popup.innerHTML = `
           <div class="guest-popup-content">
             <button class="close-btn" onclick="this.closest('.guest-popup').remove()">×</button>
-            <h3>Guest Link for ${guest.name}</h3>
+            <h3>Invitation Link for ${guest.name}</h3>
             <p><strong>Guest ID:</strong> ${guest.id}</p>
             <p><strong>Family Code:</strong> ${guest.family_id || 'None'}</p>
-            <p><strong>Link:</strong></p>
+            <div style="background: rgba(109, 92, 231, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+              <h4 style="margin-top: 0; color: #6d5ce7;">Personalized Invitation Message:</h4>
+              <p style="font-style: italic; margin-bottom: 0;">
+                "Dear ${guest.name},<br><br>
+                You are invited to celebrate the wedding of James & Heather!<br><br>
+                Please use this personal link to RSVP and view all the wedding details:<br>
+                <a href="${guestLink}" style="color: #6d5ce7; text-decoration: underline;">${guestLink}</a><br><br>
+                We can't wait to celebrate with you!"
+              </p>
+            </div>
+            <p><strong>Direct Link:</strong></p>
             <a href="${guestLink}" class="guest-link" target="_blank">${guestLink}</a>
             <p><em>Click the link above to copy and send to the guest</em></p>
           </div>
@@ -1479,20 +1494,17 @@
       }
 
       function initializeAdminSection() {
+        console.log('🔧 Initializing admin section...');
+
         // Load admin data when admin section becomes visible
         const adminSection = document.getElementById('admin-section');
-        if (adminSection && !adminSection.classList.contains('hidden')) {
-          loadAdminGuests();
-        }
+        console.log('Admin section element:', adminSection);
+        console.log('Admin section classes:', adminSection?.className);
+        console.log('Admin section hidden?', adminSection?.classList.contains('hidden'));
 
-        // Handle refresh button
-        const refreshBtn = document.getElementById('refresh-guests-btn');
-        if (refreshBtn) {
-          refreshBtn.addEventListener('click', () => {
-            loadAdminGuests();
-            showToast('Refreshing guest data...', 'success');
-          });
-        }
+        // Always try to load admin data, regardless of visibility check
+        console.log('📊 Loading admin guest data...');
+        loadAdminGuests();
 
         // Handle guest ID clicks
         document.addEventListener('click', (e) => {
@@ -1502,27 +1514,30 @@
           }
         });
 
-        // Handle field changes
-        document.addEventListener('change', (e) => {
-          const target = e.target;
-          if (target.dataset.guestId && target.dataset.field) {
-            const guestId = target.dataset.guestId;
-            const field = target.dataset.field;
-            let value = target.value;
-
-            // Convert empty strings to null for certain fields
-            if (value === '' && ['age', 'stag', 'hen', 'friday_room', 'ceremony', 'wedding_meal', 'saturday_room', 'attendance_status'].includes(field)) {
-              value = null;
-            }
-
-            saveGuestField(guestId, field, value);
+        // Fallback: Check periodically if admin section becomes visible
+        const checkAdminVisibility = () => {
+          const adminSection = document.getElementById('admin-section');
+          if (adminSection && !adminSection.classList.contains('hidden') && allAdminGuests.length === 0) {
+            console.log('🔄 Admin section became visible, loading data...');
+            loadAdminGuests();
           }
-        });
+        };
 
-        // Handle input blur (for text inputs)
+        // Check every 2 seconds for the first 30 seconds
+        let checkCount = 0;
+        const visibilityCheck = setInterval(() => {
+          checkCount++;
+          if (checkCount > 15) { // Stop after 30 seconds
+            clearInterval(visibilityCheck);
+            return;
+          }
+          checkAdminVisibility();
+        }, 2000);
+
+        // Handle input blur (for text inputs and textareas)
         document.addEventListener('blur', (e) => {
           const target = e.target;
-          if (target.tagName === 'INPUT' && target.dataset.guestId && target.dataset.field) {
+          if ((target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') && target.dataset.guestId && target.dataset.field) {
             const guestId = target.dataset.guestId;
             const field = target.dataset.field;
             let value = target.value;
@@ -1535,9 +1550,36 @@
             saveGuestField(guestId, field, value);
           }
         });
+
+        // Handle field changes (inputs, selects, textareas)
+        document.addEventListener('change', (e) => {
+          const target = e.target;
+          if (target.dataset.guestId && target.dataset.field) {
+            const guestId = target.dataset.guestId;
+            const field = target.dataset.field;
+            let value = target.value;
+
+            // Convert empty strings to null for appropriate fields
+            if (value === '') {
+              if (['stag', 'hen', 'friday_room', 'ceremony', 'wedding_meal', 'saturday_room', 'attendance_status'].includes(field)) {
+                value = null;
+              } else if (['age'].includes(field)) {
+                value = null;
+              }
+            }
+
+            saveGuestField(guestId, field, value);
+          }
+        });
       }
 
       loadInstagramPosts();
+
+      // Manual trigger for debugging (call from browser console)
+      window.forceLoadAdminData = () => {
+        console.log('🔧 Manual admin data load triggered');
+        loadAdminGuests();
+      };
     </script>
   </body>
 </html>
