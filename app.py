@@ -4,8 +4,9 @@ import os
 from datetime import datetime
 from typing import Any, Dict, Iterable, List
 
+import requests
 from dotenv import load_dotenv
-from flask import Flask, abort, jsonify, render_template, request
+from flask import Flask, abort, jsonify, render_template, request, url_for
 import psycopg
 from psycopg.rows import dict_row
 
@@ -17,6 +18,8 @@ app = Flask(__name__)
 
 DATABASE_URL_RAW = os.getenv("DATABASE_URL")
 DATABASE_URL = normalize_database_url(DATABASE_URL_RAW) if DATABASE_URL_RAW else None
+INSTAGRAM_USER_ID = os.getenv("INSTAGRAM_USER_ID")
+INSTAGRAM_ACCESS_TOKEN = os.getenv("INSTAGRAM_ACCESS_TOKEN")
 
 INT_COLUMNS = {"stag", "hen", "friday_room", "ceremony", "wedding_meal", "saturday_room"}
 UPDATABLE_COLUMNS = {
@@ -114,6 +117,69 @@ def get_guests_by_family(family_code: str):
 def get_guests_without_family():
     guests = _fetch_guests("WHERE family_id IS NULL OR family_id = ''")
     return jsonify({"data": guests})
+
+
+@app.get("/api/entertainment/posts")
+def get_entertainment_posts():
+    posts: List[Dict[str, Any]] = []
+    if INSTAGRAM_USER_ID and INSTAGRAM_ACCESS_TOKEN:
+        try:
+            response = requests.get(
+                f"https://graph.instagram.com/{INSTAGRAM_USER_ID}/media",
+                params={
+                    "fields": "id,caption,permalink,media_url,thumbnail_url,media_type,timestamp",
+                    "access_token": INSTAGRAM_ACCESS_TOKEN,
+                    "limit": 5,
+                },
+                timeout=8,
+            )
+            if response.ok:
+                for item in response.json().get("data", []):
+                    if item.get("media_type") not in {"IMAGE", "CAROUSEL_ALBUM", "VIDEO"}:
+                        continue
+                    image_url = item.get("media_url") or item.get("thumbnail_url")
+                    if not image_url:
+                        continue
+                    caption = (item.get("caption") or "").strip()
+                    if len(caption) > 140:
+                        caption = caption[:137].rstrip() + "…"
+                    posts.append(
+                        {
+                            "caption": caption,
+                            "permalink": item.get("permalink"),
+                            "image_url": image_url,
+                            "timestamp": item.get("timestamp"),
+                        }
+                    )
+        except requests.RequestException:
+            posts = []
+
+    if len(posts) < 3:
+        fallback_image = url_for("static", filename="images/entertainment.jpg")
+        posts.extend(
+            [
+                {
+                    "caption": "Beard live highlight reel – book us for your next party!",
+                    "permalink": "https://www.instagram.com/beardbanduk/",
+                    "image_url": fallback_image,
+                    "timestamp": None,
+                },
+                {
+                    "caption": "Late-night DJ sets keep the dance floor packed until close.",
+                    "permalink": "https://www.instagram.com/beardbanduk/",
+                    "image_url": fallback_image,
+                    "timestamp": None,
+                },
+                {
+                    "caption": "Behind the scenes with the band – follow @beardbanduk for more!",
+                    "permalink": "https://www.instagram.com/beardbanduk/",
+                    "image_url": fallback_image,
+                    "timestamp": None,
+                },
+            ][: 3 - len(posts)]
+        )
+
+    return jsonify({"data": posts[:3]})
 
 
 def _normalize_update_value(column: str, value: Any) -> Any:
