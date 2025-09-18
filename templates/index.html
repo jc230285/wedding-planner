@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 
 <html lang="en">
 
@@ -8,7 +8,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>James & Heather – Wedding Weekend</title>
+    <title>James & Heather - Wedding Weekend</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -996,7 +996,87 @@
 
 
 
+      .admin-stats {
+
+        display: grid;
+
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+        gap: 1rem;
+
+        margin: 1.5rem 0;
+
+      }
+
+
+
+      .admin-stat-card {
+
+        background: rgba(255, 255, 255, 0.18);
+
+        border-radius: 12px;
+
+        padding: 1rem;
+
+        backdrop-filter: blur(6px);
+
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        box-shadow: 0 12px 24px rgba(24, 18, 43, 0.18);
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 0.35rem;
+
+        min-height: 120px;
+
+      }
+
+
+
+      .admin-stat-label {
+
+        font-size: 0.9rem;
+
+        font-weight: 600;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.05em;
+
+        color: rgba(43, 29, 66, 0.85);
+
+      }
+
+
+
+      .admin-stat-value {
+
+        font-size: 1.8rem;
+
+        font-weight: 700;
+
+        color: #2b1d42;
+
+      }
+
+
+
+      .admin-stat-subtext {
+
+        font-size: 0.75rem;
+
+        color: rgba(43, 29, 66, 0.75);
+
+      }
+
+
+
       .admin-table-container {
+
+
 
         width: 100%;
 
@@ -1392,6 +1472,52 @@
 
             <h2>Admin Section</h2>
 
+            <div class="admin-stats" id="admin-stat-cards">
+
+              <div class="admin-stat-card">
+                <div class="admin-stat-label">Stag</div>
+                <div class="admin-stat-value" id="stat-stag">0 / 0</div>
+                <div class="admin-stat-subtext">Attending / Invited</div>
+              </div>
+
+              <div class="admin-stat-card">
+                <div class="admin-stat-label">Hen</div>
+                <div class="admin-stat-value" id="stat-hen">0 / 0</div>
+                <div class="admin-stat-subtext">Attending / Invited</div>
+              </div>
+
+              <div class="admin-stat-card">
+                <div class="admin-stat-label">Attendance Status</div>
+                <div class="admin-stat-value" id="stat-attendance_status">0 / 0</div>
+                <div class="admin-stat-subtext">Attending / Invited</div>
+              </div>
+
+              <div class="admin-stat-card">
+                <div class="admin-stat-label">Ceremony</div>
+                <div class="admin-stat-value" id="stat-ceremony">0 / 0</div>
+                <div class="admin-stat-subtext">Attending / Invited</div>
+              </div>
+
+              <div class="admin-stat-card">
+                <div class="admin-stat-label">Wedding Meal</div>
+                <div class="admin-stat-value" id="stat-wedding_meal">0 / 0</div>
+                <div class="admin-stat-subtext">Confirmed / Invited</div>
+              </div>
+
+              <div class="admin-stat-card">
+                <div class="admin-stat-label">Friday Room</div>
+                <div class="admin-stat-value" id="stat-friday_room">0 / 0</div>
+                <div class="admin-stat-subtext">Families booked / Families invited</div>
+              </div>
+
+              <div class="admin-stat-card">
+                <div class="admin-stat-label">Saturday Room</div>
+                <div class="admin-stat-value" id="stat-saturday_room">0 / 0</div>
+                <div class="admin-stat-subtext">Families booked / Families invited</div>
+              </div>
+
+            </div>
+
             <div class="admin-table-container">
 
               <div class="admin-table-scroll">
@@ -1456,7 +1582,7 @@
 
             <p class="note">Detailed plans will drop about two months before the wedding. Expect an outdoorsy afternoon with a hearty feast to follow.</p>
 
-            <p>We’ll share timings, meeting point, and kit list as soon as venues confirm availability. A group message will go out once everything is booked.</p>
+            <p>We'll share timings, meeting point, and kit list as soon as venues confirm availability. A group message will go out once everything is booked.</p>
 
             <p><strong>Join the Stag WhatsApp Group:</strong> <a href="https://chat.whatsapp.com/BI51UKUcHJtLho8yVLaAQo" target="_blank" rel="noopener" style="color: #ffd6ff; text-decoration: underline;">Click here to join</a></p>
 
@@ -1474,7 +1600,7 @@
 
             <p class="note">Heather is shaping the perfect calm-before-the-celebration day. Finalised details will arrive around the two-month mark.</p>
 
-            <p>Plan on relaxed pampering, something floral, and golden hour cocktails. We’ll publish the full itinerary and RSVP info soon.</p>
+            <p>Plan on relaxed pampering, something floral, and golden hour cocktails. We'll publish the full itinerary and RSVP info soon.</p>
 
             <p><strong>Join the Hen WhatsApp Group:</strong> <a href="https://chat.whatsapp.com/KKFD5tVsRfGKnMspqhhLqD" target="_blank" rel="noopener" style="color: #ffd6ff; text-decoration: underline;">Click here to join</a></p>
 
@@ -1532,7 +1658,7 @@
 
             <h2>Formal Ceremony</h2>
 
-            <p>We’ll say “I do” in the oak meadow, then celebrate with bubbles and canapés.</p>
+            <p>We'll say "I do" in the oak meadow, then celebrate with bubbles and canapes.</p>
 
             <ul class="schedule">
 
@@ -1548,7 +1674,7 @@
 
                 <time>15:45</time>
 
-                <p>Confetti toss followed by canapés (4pp) with cocktails and sparkling as meal guests arrive.</p>
+                <p>Confetti toss followed by canapes (4pp) with cocktails and sparkling as meal guests arrive.</p>
 
               </li>
 
@@ -1582,7 +1708,7 @@
 
                 <time>18:40</time>
 
-                <p>Toasts and prayers between courses—short, sweet, and celebratory.</p>
+                <p>Toasts and prayers between courses - short, sweet, and celebratory.</p>
 
               </li>
 
@@ -1604,9 +1730,9 @@
 
             <div class="band-highlight">
 
-              <p><strong>Live Band:</strong> <a href="https://www.instagram.com/beardbanduk" target="_blank" rel="noopener">@beardbanduk</a> — 169 posts · 350 followers · 377 following. Available for bookings via <a href="https://www.facebook.com/share/1BKjEJbGak" target="_blank" rel="noopener">Facebook</a>.</p>
+              <p><strong>Live Band:</strong> <a href="https://www.instagram.com/beardbanduk" target="_blank" rel="noopener">@beardbanduk</a> - 169 posts - 350 followers - 377 following. Available for bookings via <a href="https://www.facebook.com/share/1BKjEJbGak" target="_blank" rel="noopener">Facebook</a>.</p>
 
-              <p><strong>Evening Flow:</strong> Party kicks off 18:20 with Beard’s first set, DJ takeover from 22:30 mixing crowd requests until 01:00.</p>
+              <p><strong>Evening Flow:</strong> Party kicks off 18:20 with Beard's first set, DJ takeover from 22:30 mixing crowd requests until 01:00.</p>
 
             </div>
 
@@ -1624,7 +1750,7 @@
 
                 <time>21:00</time>
 
-                <p>Cut the cake, refill the glasses, and transition to the DJ’s high-energy mix.</p>
+                <p>Cut the cake, refill the glasses, and transition to the DJ's high-energy mix.</p>
 
               </li>
 
@@ -1678,7 +1804,7 @@
 
                 <time>11:00</time>
 
-                <p>Check-out and farewell hugs—safe travels and see you soon.</p>
+                <p>Check-out and farewell hugs - safe travels and see you soon.</p>
 
               </li>
 
@@ -2558,21 +2684,21 @@
 
       async function loadAdminGuests() {
 
-        console.log('🚀 Starting to load admin guests...');
+        console.log('Starting to load admin guests...');
 
         try {
 
-          console.log('📡 Making API request to /api/guests...');
+          console.log('Making API request to /api/guests...');
 
           const response = await fetch('/api/guests');
 
-          console.log('📡 API response status:', response.status);
+          console.log('API response status:', response.status);
 
 
 
           if (!response.ok) {
 
-            console.error('❌ API response not ok:', response.status, response.statusText);
+            console.error('API response not ok:', response.status, response.statusText);
 
             throw new Error('Failed to load guest data');
 
@@ -2582,27 +2708,28 @@
 
           const data = await response.json();
 
-          console.log('✅ API response data:', data);
+          console.log('API response data:', data);
 
-          console.log('✅ Number of guests received:', data.data?.length || 0);
+          console.log('Number of guests received:', data.data?.length || 0);
 
 
 
           allAdminGuests = data.data || [];
 
-          console.log('💾 Stored admin guests:', allAdminGuests.length);
+          console.log('Stored admin guests:', allAdminGuests.length);
 
 
 
           renderAdminTable();
 
+          updateAdminStats();
 
 
-          console.log('🎉 Admin guests loaded successfully!');
+          console.log('Admin guests loaded successfully!');
 
         } catch (error) {
 
-          console.error('❌ Error loading admin guests:', error);
+          console.error('Error loading admin guests:', error);
 
           document.getElementById('admin-table-body').innerHTML =
 
@@ -2888,13 +3015,13 @@
 
           { field: 'hen', element: 'stat-hen', compute: computeGuestMetric },
 
-          { field: 'friday_room', element: 'stat-friday_room', compute: computeFamilyMetric },
+          { field: 'attendance_status', element: 'stat-attendance_status', compute: computeGuestMetric },
 
           { field: 'ceremony', element: 'stat-ceremony', compute: computeGuestMetric },
 
-          { field: 'attendance_status', element: 'stat-attendance_status', compute: computeGuestMetric },
-
           { field: 'wedding_meal', element: 'stat-wedding_meal', compute: computeGuestMetric },
+
+          { field: 'friday_room', element: 'stat-friday_room', compute: computeFamilyMetric },
 
           { field: 'saturday_room', element: 'stat-saturday_room', compute: computeFamilyMetric },
 
@@ -3026,7 +3153,7 @@
 
           <div class="guest-popup-content">
 
-            <button class="close-btn" onclick="this.closest('.guest-popup').remove()">×</button>
+            <button class="close-btn" onclick="this.closest('.guest-popup').remove()">x</button>
 
             <h3>Invitation Link for ${guest.name}</h3>
 
@@ -3156,7 +3283,7 @@
 
       function initializeAdminSection() {
 
-        console.log('🔧 Initializing admin section...');
+        console.log('Initializing admin section...');
 
 
 
@@ -3174,7 +3301,7 @@
 
         // Always try to load admin data, regardless of visibility check
 
-        console.log('📊 Loading admin guest data...');
+        console.log('Loading admin guest data...');
 
         loadAdminGuests();
 
@@ -3218,7 +3345,7 @@
 
           if (adminSection && !adminSection.classList.contains('hidden') && allAdminGuests.length === 0) {
 
-            console.log('🔄 Admin section became visible, loading data...');
+            console.log('Admin section became visible, loading data...');
 
             loadAdminGuests();
 
@@ -3336,7 +3463,7 @@
 
       window.forceLoadAdminData = () => {
 
-        console.log('🔧 Manual admin data load triggered');
+        console.log('Manual admin data load triggered');
 
         loadAdminGuests();
 
@@ -3347,4 +3474,5 @@
   </body>
 
 </html>
+
 
