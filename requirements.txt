@@ -1,2 +1,4 @@
 ﻿Flask==3.0.3
 Gunicorn==21.2.0
+psycopg[binary]==3.2.10
+python-dotenv==1.0.1
