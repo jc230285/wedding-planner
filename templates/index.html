@@ -504,50 +504,54 @@
         padding: 1rem;
       }
 
-      .admin-table-header {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.85rem;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        margin-bottom: 0;
-      }
-
-      .admin-table-body-container {
+      .admin-table-scroll {
         max-height: 500px;
-        overflow-x: auto;
-        overflow-y: auto;
+        overflow: auto;
         background: rgba(255, 255, 255, 0.9);
-        border-radius: 0 0 8px 8px;
+        border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
-      .admin-table-body {
+      .admin-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.85rem;
+        min-width: 960px;
       }
 
-      .admin-table-header th,
-      .admin-table-body th {
+      .admin-table thead th {
+        position: sticky;
+        top: 0;
         background: linear-gradient(120deg, rgba(109, 92, 231, 0.9), rgba(24, 18, 43, 0.95));
         color: white;
         padding: 0.75rem 0.5rem;
         text-align: left;
         font-weight: 600;
         border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+        z-index: 2;
       }
 
-      .admin-table-header td,
-      .admin-table-body td {
+      .admin-table thead th:first-child {
+        border-top-left-radius: 12px;
+      }
+
+      .admin-table thead th:last-child {
+        border-top-right-radius: 12px;
+      }
+
+      .admin-table tbody tr {
+        background: rgba(255, 255, 255, 0.85);
+        transition: background 0.2s ease;
+      }
+
+      .admin-table td {
         padding: 0.5rem;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         vertical-align: top;
       }
 
-      .admin-table-body tbody tr:nth-child(even) {
+      .admin-table tbody tr:nth-child(even) {
         background: rgba(109, 92, 231, 0.05);
       }
 
@@ -689,26 +693,24 @@
           <div class="inner-full"> 
             <h2>Admin Section</h2>
             <div class="admin-table-container">
-              <table id="admin-guest-table" class="admin-table">
-                <thead class="admin-table-header">
-                  <tr>
-                    <th><i class="fas fa-cog" style="font-size: 1.2em;"></i></th>
-                    <th>Name</th>
-                    <th>Stag</th>
-                    <th>Hen</th>
-                    <th>Friday Room</th>
-                    <th>Ceremony</th>
-                    <th>Attendance Status</th>
-                    <th>Wedding Meal</th>
-                    <th>Restrictions</th>
-                    <th>Saturday Room</th>
-                    <th>Comment</th>
-                    <th>Family ID</th>
-                  </tr>
-                </thead>
-              </table>
-              <div class="admin-table-body-container">
-                <table class="admin-table-body">
+              <div class="admin-table-scroll">
+                <table id="admin-guest-table" class="admin-table">
+                  <thead>
+                    <tr>
+                      <th><i class="fas fa-cog" style="font-size: 1.2em;"></i></th>
+                      <th>Name</th>
+                      <th>Stag</th>
+                      <th>Hen</th>
+                      <th>Friday Room</th>
+                      <th>Ceremony</th>
+                      <th>Attendance Status</th>
+                      <th>Wedding Meal</th>
+                      <th>Restrictions</th>
+                      <th>Saturday Room</th>
+                      <th>Comment</th>
+                      <th>Family ID</th>
+                    </tr>
+                  </thead>
                   <tbody id="admin-table-body">
                     <tr>
                       <td colspan="12" class="loading">Loading guest data...</td>
