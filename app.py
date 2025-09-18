@@ -21,7 +21,7 @@ DATABASE_URL = normalize_database_url(DATABASE_URL_RAW) if DATABASE_URL_RAW else
 INSTAGRAM_USER_ID = os.getenv("INSTAGRAM_USER_ID")
 INSTAGRAM_ACCESS_TOKEN = os.getenv("INSTAGRAM_ACCESS_TOKEN")
 
-INT_COLUMNS = {"stag", "hen", "friday_room", "ceremony", "wedding_meal", "saturday_room"}
+INT_COLUMNS = {"stag", "hen", "friday_room", "ceremony", "wedding_meal", "saturday_room", "attendance_status"}
 UPDATABLE_COLUMNS = {
     "name",
     "age",
@@ -41,6 +41,7 @@ UPDATABLE_COLUMNS = {
     "family_id",
     "music_requests",
     "comment",
+    "attendance_status",
 }
 FIELD_ALIASES = {"family_code": "family_id"}
 GUEST_COLUMNS = (
@@ -63,6 +64,7 @@ GUEST_COLUMNS = (
     "family_id",
     "music_requests",
     "comment",
+    "attendance_status",
     "created_at",
 )
 
@@ -94,9 +96,61 @@ def _fetch_guests(where_clause: str = "", params: Iterable[Any] = ()) -> List[Di
     return [_serialize_guest(row) for row in rows]
 
 
+
 @app.route("/")
 def home() -> str:
-    return render_template("index.html")
+    family_code_raw = request.args.get("family_code", "")
+    family_code_clean = family_code_raw.strip()
+    family_code = family_code_clean.upper()
+
+    show_rsvp_form = True
+    family_code_valid = False
+    family_guests = []
+    all_guests = []
+    guests_without_family = []
+    data_error = None
+    attendance_status = None
+    pending_invites = False
+
+    if family_code:
+        try:
+            family_guests = _fetch_guests("WHERE upper(family_id) = %s", (family_code,))
+            family_code_valid = len(family_guests) > 0
+            show_rsvp_form = not family_code_valid
+
+            all_guests = _fetch_guests()
+            guests_without_family = _fetch_guests("WHERE family_id IS NULL OR family_id = ''")
+
+            if family_code_valid:
+                statuses = {guest.get("attendance_status") for guest in family_guests if guest.get("attendance_status") is not None}
+                if statuses:
+                    pending_invites = 2 in statuses
+                    responded_statuses = {status for status in statuses if status in (0, 1)}
+                    if responded_statuses and len(responded_statuses) == 1 and len(statuses - responded_statuses) <= 1:
+                        attendance_status = responded_statuses.pop()
+        except psycopg.Error as exc:
+            data_error = str(exc)
+            app.logger.exception("Failed to load guest data for code %s", family_code)
+            family_guests = []
+            all_guests = []
+            guests_without_family = []
+            show_rsvp_form = True
+            family_code_valid = False
+            attendance_status = None
+            pending_invites = False
+
+    return render_template(
+        "index.html",
+        family_code=family_code,
+        family_code_valid=family_code_valid,
+        show_rsvp_form=show_rsvp_form,
+        family_guests=family_guests,
+        all_guests=all_guests,
+        guests_without_family=guests_without_family,
+        data_error=data_error,
+        attendance_status=attendance_status,
+        pending_invites=pending_invites,
+    )
 
 
 @app.get("/api/guests")
@@ -279,6 +333,158 @@ def update_guest():
     return jsonify({
         "message": "Guest updated successfully.",
         "updated_fields": list(changed.keys()),
+    })
+
+
+
+@app.route("/api/guests/<int:guest_id>", methods=["PATCH"])
+def update_guest_by_id(guest_id: int):
+    payload = request.get_json(silent=True)
+    if payload is None or not isinstance(payload, dict):
+        abort(400, description="Request must contain a JSON object.")
+
+    updates: Dict[str, Any] = {}
+    for key, value in payload.items():
+        column = FIELD_ALIASES.get(key, key)
+        if column not in UPDATABLE_COLUMNS:
+            abort(400, description=f"Field '{key}' cannot be updated.")
+        try:
+            updates[column] = _normalize_update_value(column, value)
+        except ValueError as exc:
+            abort(400, description=str(exc))
+
+    if not updates:
+        abort(400, description="No updatable fields were provided.")
+
+    updated_by = payload.get("updated_by", "admin")
+
+    try:
+        with psycopg.connect(_require_database_url(), row_factory=dict_row) as conn:
+            with conn.cursor() as cur:
+                # Check if guest exists
+                cur.execute("SELECT * FROM public.guests WHERE id = %s", (guest_id,))
+                current = cur.fetchone()
+                if current is None:
+                    abort(404, description="Guest not found.")
+
+                changed: Dict[str, Dict[str, Any]] = {}
+                for column, new_value in updates.items():
+                    if current.get(column) != new_value:
+                        changed[column] = {"old": current.get(column), "new": new_value}
+
+                if not changed:
+                    return jsonify({"message": "No changes detected."}), 200
+
+                # Update the guest
+                set_clause = ", ".join(f"{column} = %s" for column in changed)
+                params = [data["new"] for data in changed.values()]
+                params.append(guest_id)
+                cur.execute(
+                    f"UPDATE public.guests SET {set_clause} WHERE id = %s",
+                    params,
+                )
+
+                # Log the changes
+                log_entries = [
+                    (
+                        guest_id,
+                        current.get("family_id"),
+                        column,
+                        None if change["old"] is None else str(change["old"]),
+                        None if change["new"] is None else str(change["new"]),
+                        updated_by,
+                    )
+                    for column, change in changed.items()
+                ]
+                cur.executemany(
+                    """
+                    INSERT INTO public.guest_change_log
+                        (guest_id, family_id, column_name, old_value, new_value, changed_by)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    """,
+                    log_entries,
+                )
+            conn.commit()
+    except psycopg.Error as exc:
+        abort(500, description=f"Database error: {exc.pgerror or exc.diag.message_primary}")
+
+    return jsonify({
+        "message": "Guest updated successfully.",
+        "updated_fields": list(changed.keys()),
+    })
+
+
+@app.post("/api/family/attendance")
+def update_family_attendance():
+    payload = request.get_json(silent=True)
+    if payload is None or not isinstance(payload, dict):
+        abort(400, description="Request must contain a JSON object.")
+
+    family_code_raw = payload.get("family_code") or payload.get("family_id")
+    status_raw = payload.get("status")
+    updated_by = payload.get("updated_by")
+
+    if family_code_raw is None or str(family_code_raw).strip() == "":
+        abort(400, description="Family code is required.")
+
+    try:
+        status_int = int(status_raw)
+    except (TypeError, ValueError):
+        abort(400, description="Status must be an integer.")
+
+    if status_int not in {0, 1, 2}:
+        abort(400, description="Status must be 0 (not attending), 1 (attending), or 2 (invited).")
+
+    family_code = str(family_code_raw).strip().upper()
+
+    try:
+        with psycopg.connect(_require_database_url(), row_factory=dict_row) as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT id, family_id, attendance_status FROM public.guests WHERE upper(family_id) = %s",
+                    (family_code,),
+                )
+                rows = cur.fetchall()
+                if not rows:
+                    abort(404, description="No guests found for that family code.")
+
+                changed_rows = [row for row in rows if row.get("attendance_status") != status_int]
+
+                if changed_rows:
+                    cur.execute(
+                        "UPDATE public.guests SET attendance_status = %s WHERE upper(family_id) = %s",
+                        (status_int, family_code),
+                    )
+
+                    log_entries = [
+                        (
+                            row["id"],
+                            row.get("family_id"),
+                            "attendance_status",
+                            None if row.get("attendance_status") is None else str(row.get("attendance_status")),
+                            str(status_int),
+                            updated_by,
+                        )
+                        for row in changed_rows
+                    ]
+                    cur.executemany(
+                        """
+                        INSERT INTO public.guest_change_log
+                            (guest_id, family_id, column_name, old_value, new_value, changed_by)
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                        """,
+                        log_entries,
+                    )
+                    updated_count = len(changed_rows)
+                else:
+                    updated_count = 0
+            conn.commit()
+    except psycopg.Error as exc:
+        abort(500, description=f"Database error: {exc}")
+
+    return jsonify({
+        "message": "Attendance updated." if updated_count else "Attendance already up to date.",
+        "updated_guests": updated_count,
     })
 
 

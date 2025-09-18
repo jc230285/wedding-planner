@@ -1,9 +1,9 @@
-<!doctype html>
+Ôªø<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>James & Heather ñ Wedding Weekend</title>
+    <title>James & Heather ‚Äì Wedding Weekend</title>
     <style>
       :root {
         color-scheme: light;
@@ -40,7 +40,7 @@
         display: grid;
         place-items: center;
         text-align: center;
-        min-height: 70vh;
+        min-height: 52vh;
         color: var(--text-light);
         background: #18122b;
         overflow: hidden;
@@ -51,42 +51,258 @@
         position: absolute;
         inset: 0;
         background: linear-gradient(180deg, rgba(12, 8, 30, 0.35) 0%, rgba(24, 18, 43, 0.85) 100%),
-          url("{{ url_for('static', filename='images/hero.jpg') }}") center/cover;
+          var(--hero-image, url('/static/images/hero.jpg')) center/cover;
         filter: saturate(1.05);
         z-index: 0;
       }
 
       header.hero .content {
         position: relative;
-        padding: 3rem 1.5rem 4rem;
+        padding: 3rem 1.5rem 3.5rem;
         max-width: var(--max-width);
         z-index: 1;
       }
 
+      header.hero .hero-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      .hero-rsvp {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+
+      .hero-rsvp input {
+        flex: 0 1 220px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.95);
+        color: #12082c;
+        font-size: 1.05rem;
+        padding: 0.75rem 1.25rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-align: center;
+        outline: none;
+        transition: box-shadow 0.25s ease, transform 0.25s ease;
+      }
+
+      .hero-rsvp input:focus {
+        box-shadow: 0 0 0 3px rgba(109, 92, 231, 0.45);
+        transform: translateY(-2px);
+      }
+
+      .hero-rsvp .rsvp-button {
+        padding: 0.75rem 2.25rem;
+        font-size: 1.05rem;
+      }
+
+      .rsvp-feedback {
+        font-size: 0.95rem;
+        padding: 0.6rem 1.1rem;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.16);
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0;
+      }
+
+      .rsvp-feedback + .hero-rsvp {
+        margin-top: 0.75rem;
+      }
+
+      .rsvp-feedback--success {
+        background: rgba(64, 224, 182, 0.25);
+        color: #e5fff7;
+      }
+
+      .rsvp-feedback--error {
+        background: rgba(255, 99, 132, 0.25);
+        color: #ffe5ec;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #additional-guests {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+      }
+
+      #additional-guests h2 {
+        color: var(--text-light);
+        margin-bottom: 1rem;
+      }
+
+      #additional-guests h3 {
+        color: var(--text-light);
+        margin: 1rem 0 0.5rem;
+      }
+
+      #additional-guests ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      #additional-guests li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      #additional-guests li:last-child {
+        border-bottom: none;
+      }
+
+      .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        background: rgba(64, 224, 182, 0.9);
+        color: #e5fff7;
+        border-radius: 8px;
+        font-weight: 500;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        max-width: 300px;
+        word-wrap: break-word;
+      }
+
+      .toast--visible {
+        transform: translateX(0);
+      }
+
+      .toast--error {
+        background: rgba(255, 99, 132, 0.9);
+        color: #ffe5ec;
+      }
+
+      .attendance-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .attendance-toggle {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+      }
+
+      .attendance-button {
+        appearance: none;
+        border: none;
+        border-radius: 999px;
+        padding: 0.75rem 2.25rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: #ffffff;
+        transition: opacity 0.3s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .attendance-button--yes {
+        background: linear-gradient(120deg, rgba(64, 224, 182, 0.9), rgba(33, 147, 90, 0.95));
+        box-shadow: 0 18px 32px rgba(33, 147, 90, 0.35);
+      }
+
+      .attendance-button--no {
+        background: linear-gradient(120deg, rgba(255, 99, 132, 0.9), rgba(199, 35, 78, 0.95));
+        box-shadow: 0 18px 32px rgba(199, 35, 78, 0.35);
+      }
+
+      .attendance-button.is-active {
+        opacity: 1;
+      }
+
+      .attendance-button:not(.is-active) {
+        opacity: 0.4;
+      }
+
+      .attendance-button:not(.is-active):hover {
+        opacity: 0.6;
+      }
+
+      .attendance-button:disabled {
+        cursor: wait;
+        opacity: 0.4;
+      }
+
+      .rsvp-button {
+        appearance: none;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(120deg, rgba(255, 214, 255, 0.9), rgba(109, 92, 231, 0.95));
+        color: #12082c;
+        font-size: 1.05rem;
+        font-weight: 600;
+        padding: 0.85rem 2.75rem;
+        cursor: pointer;
+        box-shadow: 0 18px 32px rgba(18, 8, 44, 0.35);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .rsvp-button:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 24px 40px rgba(18, 8, 44, 0.4);
+      }
+
+      .rsvp-button:active {
+        transform: translateY(0);
+        box-shadow: 0 12px 24px rgba(18, 8, 44, 0.32);
+      }
+
       header.hero h1 {
-        font-size: clamp(2.25rem, 4vw, 3.5rem);
+        font-size: clamp(2rem, 3.2vw, 3rem);
         letter-spacing: 0.04em;
       }
 
       header.hero p {
-        font-size: clamp(1.125rem, 2vw, 1.35rem);
-        margin-bottom: 2rem;
+        font-size: clamp(1.05rem, 2vw, 1.25rem);
+        margin-bottom: 1.5rem;
+      }
+
+      main {
+        padding: 0;
       }
 
       .timeline {
-        display: grid;
-        gap: 3rem;
         margin: 0;
-        padding: 3rem 0 4rem;
+        padding: 0;
+        list-style: none;
+      }
+
+      .timeline > li {
         list-style: none;
       }
 
       .section {
         position: relative;
         color: var(--text-light);
-        min-height: 60vh;
-        display: grid;
-        align-items: center;
+        margin: 0px;
+        padding: 20px 0;
         overflow: hidden;
         isolation: isolate;
       }
@@ -95,10 +311,11 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: var(--section-image, #2b1d42) center/cover;
-        filter: brightness(0.8);
+        background: var(--section-image, #2b1d42) center/cover no-repeat;
+        filter: brightness(0.82);
         transform: scale(1.02);
-        transition: transform 18s ease;
+        opacity: 0.88;
+        transition: transform 18s ease, opacity 1.2s ease;
         z-index: -2;
       }
 
@@ -106,38 +323,53 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(120deg, rgba(12, 8, 30, 0.35), rgba(61, 44, 141, 0.8));
+        background: linear-gradient(
+          to bottom,
+          rgba(12, 8, 30, 0.8) 0%,
+          rgba(12, 8, 30, 0.4) 15%,
+          rgba(12, 8, 30, 0.2) 35%,
+          rgba(12, 8, 30, 0.2) 65%,
+          rgba(12, 8, 30, 0.4) 85%,
+          rgba(12, 8, 30, 0.8) 100%
+        );
+        opacity: 0.68;
+        transition: opacity 1.2s ease;
         z-index: -1;
       }
 
       .section:hover::before {
-        transform: scale(1.08);
+        transform: scale(1.06);
+        opacity: 1;
+      }
+
+      .section:hover::after {
+        opacity: 0.38;
       }
 
       .section .inner {
         max-width: var(--max-width);
         margin: 0 auto;
-        padding: clamp(2.5rem, 4vw, 4rem) clamp(1.5rem, 5vw, 3rem);
-        background: rgba(12, 8, 30, 0.45);
+        padding: clamp(2rem, 4vw, 3.2rem) clamp(1.5rem, 4vw, 2.75rem);
+        background: rgba(12, 8, 30, 0.42);
         border-radius: 18px;
         border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 32px 60px rgba(12, 8, 30, 0.25);
+        box-shadow: 0 28px 48px rgba(12, 8, 30, 0.25);
         backdrop-filter: blur(6px);
       }
 
       .section h2 {
-        font-size: clamp(1.8rem, 3vw, 2.75rem);
-        margin-bottom: 1rem;
+        font-size: clamp(1.65rem, 2.8vw, 2.4rem);
+        margin-bottom: 0.75rem;
         letter-spacing: 0.05em;
         text-transform: uppercase;
       }
 
       .section h3 {
-        font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+        font-size: clamp(1.2rem, 2.3vw, 1.6rem);
       }
 
       .section p, .section li, .section time {
-        font-size: clamp(1rem, 2vw, 1.15rem);
+        font-size: clamp(1rem, 2vw, 1.1rem);
         color: rgba(255, 255, 255, 0.92);
       }
 
@@ -146,22 +378,27 @@
         padding-left: 1.25rem;
       }
 
+      .section .note {
+        font-style: italic;
+        color: rgba(255, 255, 255, 0.82);
+      }
+
       .schedule {
         display: grid;
         gap: 0.75rem;
-        margin: 1.5rem 0 0;
+        margin: 1.35rem 0 0;
         padding: 0;
         list-style: none;
       }
 
       .schedule-item {
         display: grid;
-        grid-template-columns: minmax(90px, 120px) minmax(90px, 150px) 1fr;
+        grid-template-columns: minmax(90px, 120px) 1fr;
         gap: 0.75rem;
         align-items: start;
         background: rgba(12, 8, 30, 0.5);
         border-radius: 12px;
-        padding: 0.9rem 1.1rem;
+        padding: 0.85rem 1.05rem;
         border: 1px solid rgba(255, 255, 255, 0.12);
       }
 
@@ -170,17 +407,13 @@
         letter-spacing: 0.04em;
       }
 
-      .schedule-item span {
-        font-size: 0.95em;
-        color: rgba(255, 255, 255, 0.75);
-      }
-
       .band-highlight {
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        margin-top: 1.5rem;
-        padding: 1.25rem 1.5rem;
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+        padding: 1.1rem 1.35rem;
         border-radius: 16px;
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.18);
@@ -192,7 +425,7 @@
       }
 
       .insta-grid {
-        margin-top: 1.5rem;
+        margin-top: 1.35rem;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1rem;
@@ -202,7 +435,7 @@
         position: relative;
         border-radius: 14px;
         overflow: hidden;
-        min-height: 240px;
+        min-height: 220px;
         background: rgba(12, 8, 30, 0.5);
         display: grid;
         grid-template-rows: 1fr auto;
@@ -216,7 +449,7 @@
       }
 
       .insta-card footer {
-        padding: 0.85rem 1rem;
+        padding: 0.8rem 1rem;
         font-size: 0.9rem;
         color: rgba(255, 255, 255, 0.85);
         background: rgba(12, 8, 30, 0.65);
@@ -231,18 +464,9 @@
         text-decoration: underline;
       }
 
-      footer.site-footer {
-        background: #110c1d;
-        color: rgba(255, 255, 255, 0.72);
-        text-align: center;
-        padding: 2.5rem 1.5rem;
-        font-size: 0.95rem;
-      }
-
       @media (max-width: 800px) {
         .schedule-item {
-          grid-template-columns: repeat(2, minmax(80px, 1fr));
-          grid-template-rows: auto auto;
+          grid-template-columns: minmax(80px, 110px) 1fr;
         }
 
         .schedule-item p {
@@ -256,100 +480,278 @@
           background-position: center top;
         }
 
-        .section {
-          min-height: auto;
+        header.hero {
+          min-height: 46vh;
         }
 
         .section .inner {
-          padding: 2.5rem 1.5rem;
+          padding: 2.2rem 1.6rem;
           border-radius: 14px;
         }
+      }
+
+      /* Admin Section Styles */
+      .admin-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+      }
+
+      .admin-table-container {
+        width: 100%;
+        overflow-x: auto;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 1rem;
+      }
+
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .admin-table th {
+        background: linear-gradient(120deg, rgba(109, 92, 231, 0.9), rgba(24, 18, 43, 0.95));
+        color: white;
+        padding: 0.75rem 0.5rem;
+        text-align: left;
+        font-weight: 600;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .admin-table td {
+        padding: 0.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        vertical-align: top;
+      }
+
+      .admin-table tbody tr:nth-child(even) {
+        background: rgba(109, 92, 231, 0.05);
+      }
+
+      .admin-table tbody tr:hover {
+        background: rgba(109, 92, 231, 0.1);
+      }
+
+      .admin-table .family-group {
+        background: rgba(24, 18, 43, 0.1) !important;
+        border-top: 2px solid rgba(24, 18, 43, 0.3);
+      }
+
+      .admin-table .family-group:first-child {
+        border-top: none;
+      }
+
+      .admin-table .family-header {
+        background: rgba(24, 18, 43, 0.15) !important;
+        font-weight: bold;
+        color: rgba(24, 18, 43, 0.9);
+      }
+
+      .admin-table input, .admin-table select, .admin-table textarea {
+        width: 100%;
+        padding: 0.25rem;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        font-size: 0.8rem;
+        background: white;
+      }
+
+      .admin-table input:focus, .admin-table select:focus, .admin-table textarea:focus {
+        outline: none;
+        border-color: rgba(109, 92, 231, 0.5);
+        box-shadow: 0 0 0 2px rgba(109, 92, 231, 0.2);
+      }
+
+      .admin-table .guest-id {
+        cursor: pointer;
+        color: rgba(109, 92, 231, 0.9);
+        font-weight: bold;
+        text-decoration: underline;
+      }
+
+      .admin-table .guest-id:hover {
+        color: rgba(24, 18, 43, 0.9);
+      }
+
+      .admin-table .loading {
+        text-align: center;
+        padding: 2rem;
+        color: rgba(24, 18, 43, 0.7);
+        font-style: italic;
+      }
+
+      /* Guest Link Popup */
+      .guest-popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      }
+
+      .guest-popup-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .guest-popup h3 {
+        margin-top: 0;
+        color: rgba(24, 18, 43, 0.9);
+      }
+
+      .guest-popup .guest-link {
+        display: block;
+        padding: 1rem;
+        background: rgba(109, 92, 231, 0.1);
+        border: 1px solid rgba(109, 92, 231, 0.3);
+        border-radius: 8px;
+        margin: 1rem 0;
+        word-break: break-all;
+        font-family: monospace;
+        font-size: 0.9rem;
+      }
+
+      .guest-popup .close-btn {
+        background: rgba(255, 99, 132, 0.9);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        float: right;
+      }
+
+      .guest-popup .close-btn:hover {
+        background: rgba(199, 35, 78, 0.95);
       }
     </style>
   </head>
   <body>
-    <header class="hero">
+    <header class="hero" style="--hero-image: url('{{ url_for('static', filename='images/hero.jpg') }}');">
       <div class="content">
-        <p>4th ñ 6th July ∑ The Cotswolds Barn</p>
-        <h1>Welcome to James & Heather's Wedding Weekend</h1>
-        <p>A relaxed countryside celebration with our favourite people. Scroll for the full itinerary so you can flow from wake-up to grand exit without missing a beat.</p>
+        <div class="hero-actions">
+          <p>4th &ndash; 6th July &middot; The Cotswolds Barn</p>
+          <h1>James & Heather's Wedding Weekend</h1>
+          <p>Here's the working itinerary for our wedding celebration. We'll keep this page updated as plans lock in.</p>
+          <div id="family-section" class="hidden">
+            <div class="attendance-toggle" id="attendance-toggle">
+              <button class="attendance-button attendance-button--yes" type="button" data-status="1">Attending</button>
+              <button class="attendance-button attendance-button--no" type="button" data-status="0">Not attending</button>
+            </div>
+          </div>
+          <div id="public-section">
+            <form class="hero-rsvp" novalidate>
+              <label class="sr-only" for="family-code">Family code</label>
+              <input id="family-code" name="family_code" type="text" inputmode="text" maxlength="4" placeholder="Enter family code" autocomplete="off" required>
+              <button class="rsvp-button" type="submit">View Details</button>
+            </form>
+          </div>
+        </div>
+        </div>
       </div>
     </header>
 
     <main>
       <ul class="timeline">
-        <li class="section" style="--section-image: url('{{ url_for('static', filename='images/stag.jpg') }}');">
+        <li id="admin-section" class="section admin-section hidden" style="--section-image: url('{{ url_for('static', filename='images/admin.jpg') }}');">
+          <div class="inner">
+            <h2>Admin Section</h2>
+            <div class="admin-controls">
+              <button id="refresh-guests-btn" class="rsvp-button">Refresh Guest Data</button>
+              <span id="guest-count">Loading...</span>
+            </div>
+            <div class="admin-table-container">
+              <table id="admin-guest-table" class="admin-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Side</th>
+                    <th>Guest Type</th>
+                    <th>Sex</th>
+                    <th>Stag</th>
+                    <th>Hen</th>
+                    <th>Friday Room</th>
+                    <th>Ceremony</th>
+                    <th>Wedding Meal</th>
+                    <th>Restrictions</th>
+                    <th>Saturday Room</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Address</th>
+                    <th>Family ID</th>
+                    <th>Music Requests</th>
+                    <th>Comment</th>
+                    <th>Attendance Status</th>
+                    <th>Created At</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-table-body">
+                  <tr>
+                    <td colspan="21" class="loading">Loading guest data...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </li>
+        <li id="stag-section" class="section hidden" style="--section-image: url('{{ url_for('static', filename='images/stag.jpg') }}');">
           <div class="inner">
             <h2>Stag Adventure</h2>
-            <p>James and the crew kick things off on Thursday with clay shooting, a countryside ramble, and hearty pub fare. Dress for the outdoors and bring layers for the evening fireside pints.</p>
-            <ul class="schedule">
-              <li class="schedule-item">
-                <time>13:00</time>
-                <span>2 hrs</span>
-                <p>Meet at The Stag &amp; Hound, then head out for clay shooting and a wander through the hills.</p>
-              </li>
-              <li class="schedule-item">
-                <time>17:00</time>
-                <span>1 hr</span>
-                <p>Return to the barn for welcome drinks as the rest of the guests arrive.</p>
-              </li>
-              <li class="schedule-item">
-                <time>19:00</time>
-                <span>2 hrs</span>
-                <p>Casual dinner with wood-fired sharing plates followed by relaxed games into the evening.</p>
-              </li>
-            </ul>
+            <p class="note">Detailed plans will drop about two months before the wedding. Expect an outdoorsy afternoon with a hearty feast to follow.</p>
+            <p>We‚Äôll share timings, meeting point, and kit list as soon as venues confirm availability. A group message will go out once everything is booked.</p>
+            <p><strong>Join the Stag WhatsApp Group:</strong> <a href="https://chat.whatsapp.com/BI51UKUcHJtLho8yVLaAQo" target="_blank" rel="noopener" style="color: #ffd6ff; text-decoration: underline;">Click here to join</a></p>
           </div>
         </li>
 
-        <li class="section" style="--section-image: url('{{ url_for('static', filename='images/hen.jpg') }}');">
+        <li id="hen-section" class="section hidden" style="--section-image: url('{{ url_for('static', filename='images/hen.jpg') }}');">
           <div class="inner">
             <h2>Hen Gathering</h2>
-            <p>Heather's Friday is all about calm and connection: spa morning, brunch, and flower crowns that carry right into the ceremony.</p>
-            <ul class="schedule">
-              <li class="schedule-item">
-                <time>11:30</time>
-                <span>30 min</span>
-                <p>Sparkling light brunch to fuel up before the glam squad gets started.</p>
-              </li>
-              <li class="schedule-item">
-                <time>12:45</time>
-                <span>50 min</span>
-                <p>Hair and makeup with the prosóbring your inspo pics and favourite playlist.</p>
-              </li>
-              <li class="schedule-item">
-                <time>13:00</time>
-                <span>30 min</span>
-                <p>Everyone gets dressed, last-minute vows rehearsed, deep breaths with the bridesmaids.</p>
-              </li>
-            </ul>
+            <p class="note">Heather is shaping the perfect calm-before-the-celebration day. Finalised details will arrive around the two-month mark.</p>
+            <p>Plan on relaxed pampering, something floral, and golden hour cocktails. We‚Äôll publish the full itinerary and RSVP info soon.</p>
+            <p><strong>Join the Hen WhatsApp Group:</strong> <a href="https://chat.whatsapp.com/KKFD5tVsRfGKnMspqhhLqD" target="_blank" rel="noopener" style="color: #ffd6ff; text-decoration: underline;">Click here to join</a></p>
           </div>
         </li>
 
         <li class="section" style="--section-image: url('{{ url_for('static', filename='images/friday.jpg') }}');">
           <div class="inner">
             <h2>Friday Night Stay</h2>
-            <p>Check into your rooms from 14:00, then ease into the weekend with welcome drinks, a relaxed dinner, and a cosy evening.</p>
+            <p>Settle in, meet the crew, and ease into the weekend.</p>
             <ul class="schedule">
               <li class="schedule-item">
                 <time>14:00</time>
-                <span>120 min</span>
-                <p>Guest check-in. Drop bags, explore the grounds, and settle into the barn.</p>
+                <p>Guest check-in. Drop bags, explore the grounds, and claim your room.</p>
               </li>
               <li class="schedule-item">
                 <time>17:00</time>
-                <span>120 min</span>
                 <p>Welcome drinks on the terrace with small bites and acoustic covers.</p>
               </li>
               <li class="schedule-item">
                 <time>19:00</time>
-                <span>120 min</span>
-                <p>Casual dinner featuring wood-fired pizza and seasonal salads.</p>
-              </li>
-              <li class="schedule-item">
-                <time>19:00</time>
-                <span>120 min</span>
-                <p>After-dinner games, lawn fun, and chill playlists until the fairy lights fade.</p>
+                <p>Casual dinner featuring wood-fired pizza, salads, and relaxed lawn games into the evening.</p>
               </li>
             </ul>
           </div>
@@ -358,17 +760,15 @@
         <li class="section" style="--section-image: url('{{ url_for('static', filename='images/ceremony.jpg') }}');">
           <div class="inner">
             <h2>Formal Ceremony</h2>
-            <p>Weíll say ìI doî in the oak meadow at 14:00. The ceremony is short, heartfelt, and full of musicóplease be seated by 13:45.</p>
+            <p>We‚Äôll say ‚ÄúI do‚Äù in the oak meadow, then celebrate with bubbles and canap√©s.</p>
             <ul class="schedule">
               <li class="schedule-item">
                 <time>14:00</time>
-                <span>30 min</span>
-                <p>Formal ceremony under the pergola. Confetti toss immediately after.</p>
+                <p>Formal ceremony under the pergola. Please be seated by 13:45.</p>
               </li>
               <li class="schedule-item">
                 <time>15:45</time>
-                <span>20 min</span>
-                <p>CanapÈs (4pp) with cocktails and sparkling as meal guests arrive.</p>
+                <p>Confetti toss followed by canap√©s (4pp) with cocktails and sparkling as meal guests arrive.</p>
               </li>
             </ul>
           </div>
@@ -377,17 +777,15 @@
         <li class="section" style="--section-image: url('{{ url_for('static', filename='images/meal.jpg') }}');">
           <div class="inner">
             <h2>Wedding Meal</h2>
-            <p>A gourmet 3-course wedding breakfast at Wine &amp; Pairings with carefully matched vintages. Vegetarian, vegan, and allergy-friendly options included.</p>
+            <p>A gourmet 3-course wedding breakfast at Wine &amp; Pairings with carefully matched vintages.</p>
             <ul class="schedule">
               <li class="schedule-item">
                 <time>17:00</time>
-                <span>40 min</span>
                 <p>Take your seats, pour the first glass, and enjoy the opening course.</p>
               </li>
               <li class="schedule-item">
                 <time>18:40</time>
-                <span>40 min</span>
-                <p>Toasts and prayers between coursesóshort, sweet, and celebratory.</p>
+                <p>Toasts and prayers between courses‚Äîshort, sweet, and celebratory.</p>
               </li>
             </ul>
           </div>
@@ -398,23 +796,20 @@
             <h2>Entertainment</h2>
             <p>Beard are here to rock and roll, bringing indie anthems and party classics. A late-night DJ set keeps the dance floor alive until the grand exit.</p>
             <div class="band-highlight">
-              <p><strong>Live Band:</strong> <a href="https://www.instagram.com/beardbanduk" target="_blank" rel="noopener">@beardbanduk</a> ó 169 posts ∑ 350 followers ∑ 377 following. Available for bookings via <a href="https://www.facebook.com/share/1BKjEJbGak" target="_blank" rel="noopener">Facebook</a>.</p>
-              <p><strong>Evening Flow:</strong> Party kicks off 18:20 with Beardís first set, DJ takeover from 22:30 mixing crowd requests until 01:00.</p>
+              <p><strong>Live Band:</strong> <a href="https://www.instagram.com/beardbanduk" target="_blank" rel="noopener">@beardbanduk</a> ‚Äî 169 posts ¬∑ 350 followers ¬∑ 377 following. Available for bookings via <a href="https://www.facebook.com/share/1BKjEJbGak" target="_blank" rel="noopener">Facebook</a>.</p>
+              <p><strong>Evening Flow:</strong> Party kicks off 18:20 with Beard‚Äôs first set, DJ takeover from 22:30 mixing crowd requests until 01:00.</p>
             </div>
             <ul class="schedule">
               <li class="schedule-item">
                 <time>18:20</time>
-                <span>100 min</span>
                 <p>Party Time! Live band set, photo booth fun, and lawn games under the festoon lights.</p>
               </li>
               <li class="schedule-item">
                 <time>21:00</time>
-                <span>60 min</span>
-                <p>Cut the cake, refill the glasses, and transition to the DJís high-energy mix.</p>
+                <p>Cut the cake, refill the glasses, and transition to the DJ‚Äôs high-energy mix.</p>
               </li>
               <li class="schedule-item">
                 <time>23:30</time>
-                <span>30 min</span>
                 <p>Grand exit with sparklers and a final slow dance before the after-hours playlist.</p>
               </li>
             </ul>
@@ -430,31 +825,421 @@
             <ul class="schedule">
               <li class="schedule-item">
                 <time>18:30</time>
-                <span>120 min</span>
                 <p>Laid-back BBQ and salad bar, acoustic set by the fire, and cosy blankets.</p>
               </li>
               <li class="schedule-item">
                 <time>09:30</time>
-                <span>0 min</span>
                 <p>Breakfast on Sunday with pastries, fresh fruit, and barista coffee.</p>
               </li>
               <li class="schedule-item">
                 <time>11:00</time>
-                <span>0 min</span>
-                <p>Check-out and farewell hugsósafe travels and see you soon.</p>
+                <p>Check-out and farewell hugs‚Äîsafe travels and see you soon.</p>
               </li>
             </ul>
           </div>
         </li>
       </ul>
+
+      <div id="additional-guests" class="hidden">
+        <h2>Additional Guest Information</h2>
+        <div id="no-family-guests" class="hidden">
+          <h3>Guests Without Family Code</h3>
+          <ul id="no-family-list"></ul>
+        </div>
+        <div id="all-guests" class="hidden">
+          <h3>All Guests</h3>
+          <ul id="all-guests-list"></ul>
+        </div>
+      </div>
     </main>
 
-    <footer class="site-footer">
-      <p>Questions, songs, or special requests? Email <a href="mailto:wedding@example.com" style="color: inherit; text-decoration: underline;">wedding@example.com</a>.</p>
-      <p>We canít wait to celebrate with you! ñ James &amp; Heather</p>
-    </footer>
-
     <script>
+      let currentFamilyCode = null;
+      let familyData = null;
+      let noFamilyGuests = null;
+      let allGuests = null;
+
+      // Ensure all functions are defined before use
+      function ensureFunctionsReady() {
+        const requiredFunctions = ['showElement', 'hideElement', 'showToast', 'displayGuests', 'updateAdditionalGuestsSection', 'updateFamilySection', 'loadFamilyData', 'getFamilyCodeFromURL'];
+        const missing = [];
+        for (const fn of requiredFunctions) {
+          const isFunction = typeof window[fn] === 'function' || typeof globalThis[fn] === 'function';
+          console.log(`${fn}: ${isFunction ? 'defined' : 'NOT defined'}`);
+          if (!isFunction) {
+            missing.push(fn);
+          }
+        }
+        if (missing.length > 0) {
+          console.error('Missing functions:', missing);
+          return false;
+        }
+        console.log('All functions are ready!');
+        return true;
+      }
+
+      function showElement(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('hidden');
+      }
+
+      function hideElement(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      }
+
+      function showToast(message, type = 'success') {
+        // Remove existing toast
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) {
+          existingToast.remove();
+        }
+
+        // Create new toast
+        const toast = document.createElement('div');
+        toast.className = `toast toast--${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        // Show toast
+        setTimeout(() => toast.classList.add('toast--visible'), 10);
+
+        // Hide toast after 3 seconds
+        setTimeout(() => {
+          toast.classList.remove('toast--visible');
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      function displayGuests(guests, listElementId) {
+        console.log('displayGuests function called');
+        console.log('displayGuests is defined:', typeof displayGuests);
+        console.log('Arguments:', guests, listElementId);
+        const list = document.getElementById(listElementId);
+        if (!list) {
+          console.error('List element not found:', listElementId);
+          return;
+        }
+
+        list.innerHTML = '';
+        if (!guests || !Array.isArray(guests)) {
+          console.warn('Invalid guests data:', guests);
+          return;
+        }
+
+        guests.forEach(guest => {
+          const li = document.createElement('li');
+          li.textContent = `${guest.name} (${guest.family_id || 'No family'})`;
+          list.appendChild(li);
+        });
+        console.log('displayGuests completed successfully');
+      }
+
+      function updateAdditionalGuestsSection() {
+        console.log('updateAdditionalGuestsSection called');
+        console.log('noFamilyGuests:', noFamilyGuests);
+        console.log('allGuests:', allGuests);
+        console.log('displayGuests function:', typeof displayGuests);
+
+        const section = document.getElementById('additional-guests');
+        const noFamilyDiv = document.getElementById('no-family-guests');
+        const allGuestsDiv = document.getElementById('all-guests');
+
+        if ((noFamilyGuests && noFamilyGuests.length > 0) || (allGuests && allGuests.length > 0)) {
+          showElement('additional-guests');
+          
+          if (noFamilyGuests && noFamilyGuests.length > 0) {
+            showElement('no-family-guests');
+            if (typeof displayGuests === 'function') {
+              displayGuests(noFamilyGuests, 'no-family-list');
+            } else {
+              console.error('displayGuests is not a function when trying to display noFamilyGuests');
+            }
+          } else {
+            hideElement('no-family-guests');
+          }
+          
+          if (allGuests && allGuests.length > 0) {
+            showElement('all-guests');
+            if (typeof displayGuests === 'function') {
+              displayGuests(allGuests, 'all-guests-list');
+            } else {
+              console.error('displayGuests is not a function when trying to display allGuests');
+            }
+          } else {
+            hideElement('all-guests');
+          }
+        } else {
+          hideElement('additional-guests');
+        }
+      }
+
+      function updateFamilySection() {
+        console.log('updateFamilySection called');
+        console.log('familyData:', familyData);
+        console.log('currentFamilyCode:', currentFamilyCode);
+        const toggle = document.getElementById('attendance-toggle');
+
+        if (!familyData || !currentFamilyCode) {
+          console.log('Hiding family-section, showing public-section, hiding admin-section');
+          hideElement('family-section');
+          showElement('public-section');
+          hideElement('admin-section');
+          hideElement('stag-section');
+          hideElement('hen-section');
+          return;
+        }
+
+        console.log('Showing family-section, hiding public-section');
+        showElement('family-section');
+        hideElement('public-section');
+
+        // Show admin section only for LAMP family code
+        if (currentFamilyCode && currentFamilyCode.toUpperCase() === 'LAMP') {
+          console.log('Showing admin section for LAMP family code');
+          showElement('admin-section');
+          // Initialize admin functionality when section becomes visible
+          setTimeout(() => initializeAdminSection(), 100);
+        } else {
+          console.log('Hiding admin section (not LAMP code)');
+          hideElement('admin-section');
+        }
+
+        // Show stag section if any family member has stag > 0
+        const hasStag = familyData.some(guest => guest.stag && guest.stag > 0);
+        if (hasStag) {
+          console.log('Showing stag section');
+          showElement('stag-section');
+        } else {
+          console.log('Hiding stag section');
+          hideElement('stag-section');
+        }
+
+        // Show hen section if any family member has hen > 0
+        const hasHen = familyData.some(guest => guest.hen && guest.hen > 0);
+        if (hasHen) {
+          console.log('Showing hen section');
+          showElement('hen-section');
+        } else {
+          console.log('Hiding hen section');
+          hideElement('hen-section');
+        }
+
+        toggle.dataset.familyCode = currentFamilyCode;
+
+        // Set active state based on attendance
+        const statuses = familyData.map(guest => guest.attendance_status).filter(s => s !== null);
+        const yesBtn = toggle.querySelector('[data-status="1"]');
+        const noBtn = toggle.querySelector('[data-status="0"]');
+
+        if (statuses.includes(1)) {
+          yesBtn.classList.add('is-active');
+          noBtn.classList.remove('is-active');
+        } else if (statuses.includes(0)) {
+          noBtn.classList.add('is-active');
+          yesBtn.classList.remove('is-active');
+        } else {
+          yesBtn.classList.remove('is-active');
+          noBtn.classList.remove('is-active');
+        }
+      }
+
+      async function loadFamilyData(code) {
+        // Reset data
+        familyData = null;
+        noFamilyGuests = null;
+        allGuests = null;
+        updateFamilySection();
+        if (typeof updateAdditionalGuestsSection === 'function') {
+          updateAdditionalGuestsSection();
+        }
+
+        try {
+          const response = await fetch(`/api/guests/family/${code}`);
+          if (!response.ok) {
+            if (response.status === 404) {
+              throw new Error('We couldn\'t find that family code. Check your invite and try again.');
+            }
+            throw new Error('We couldn\'t load the guest list right now. Please try again shortly.');
+          }
+          const data = await response.json();
+          familyData = data.data;
+          currentFamilyCode = code;
+          console.log('Family data loaded successfully');
+          console.log('familyData:', familyData);
+          console.log('currentFamilyCode:', currentFamilyCode);
+          updateFamilySection();
+
+          // If we got family data, also fetch guests without family
+          if (familyData && familyData.length > 0) {
+            try {
+              const noFamilyResponse = await fetch('/api/guests/no-family');
+              if (noFamilyResponse.ok) {
+                const noFamilyData = await noFamilyResponse.json();
+                noFamilyGuests = noFamilyData.data;
+                if (typeof updateAdditionalGuestsSection === 'function') {
+                  updateAdditionalGuestsSection();
+                }
+              }
+            } catch (error) {
+              console.error('Failed to load no-family guests', error);
+            }
+          }
+
+
+          if (typeof updateAdditionalGuestsSection === 'function') {
+            updateAdditionalGuestsSection();
+          }
+        } catch (error) {
+          console.error('Failed to load family data', error);
+          familyData = null;
+          currentFamilyCode = null;
+          noFamilyGuests = null;
+          allGuests = null;
+          updateFamilySection();
+          if (typeof updateAdditionalGuestsSection === 'function') {
+            updateAdditionalGuestsSection();
+          }
+        }
+      }
+
+      function getFamilyCodeFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('family_code');
+      }
+
+      // On page load
+      if (ensureFunctionsReady()) {
+        const initialCode = getFamilyCodeFromURL();
+        if (initialCode) {
+          loadFamilyData(initialCode);
+        } else {
+          updateFamilySection();
+        }
+      } else {
+        console.error('Functions not ready, retrying in 100ms...');
+        setTimeout(() => {
+          if (ensureFunctionsReady()) {
+            const initialCode = getFamilyCodeFromURL();
+            if (initialCode) {
+              loadFamilyData(initialCode);
+            } else {
+              updateFamilySection();
+            }
+          } else {
+            console.error('Functions still not ready after retry');
+          }
+        }, 100);
+      }
+
+      const rsvpForm = document.querySelector('.hero-rsvp');
+      if (rsvpForm) {
+        const input = rsvpForm.querySelector('input[name="family_code"]');
+        if (input) {
+          input.addEventListener('input', () => {
+            input.value = input.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 4);
+          });
+        }
+        rsvpForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          if (!input) {
+            return;
+          }
+          const code = (input.value || '').trim().toUpperCase();
+          if (code.length !== 4) {
+            window.alert('Please enter your four-character family code.');
+            input.focus();
+            return;
+          }
+          loadFamilyData(code);
+          // Update URL without reload
+          const url = new URL(window.location);
+          url.searchParams.set('family_code', code);
+          window.history.pushState({}, '', url);
+        });
+      }
+
+      const attendanceToggle = document.getElementById('attendance-toggle');
+      if (attendanceToggle) {
+        const buttons = attendanceToggle.querySelectorAll('.attendance-button');
+
+        const setActiveState = (targetStatus) => {
+          buttons.forEach((btn) => {
+            const btnStatus = Number(btn.dataset.status);
+            btn.classList.toggle('is-active', btnStatus === targetStatus);
+          });
+        };
+
+        buttons.forEach((button) => {
+          button.addEventListener('click', async () => {
+            const status = Number(button.dataset.status);
+            if (!currentFamilyCode || Number.isNaN(status)) {
+              return;
+            }
+
+            // Store original button texts
+            const originalTexts = {};
+            buttons.forEach((btn) => {
+              originalTexts[btn.dataset.status] = btn.textContent;
+              btn.disabled = true;
+              btn.textContent = 'Saving...';
+            });
+
+            console.log('Starting attendance update for status:', status);
+
+            try {
+              const response = await fetch('/api/family/attendance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ family_code: currentFamilyCode, status }),
+              });
+
+              console.log('API response status:', response.status);
+
+              if (!response.ok) {
+                let message = 'Unable to update attendance right now.';
+                try {
+                  const payload = await response.json();
+                  message = payload.description || payload.message || message;
+                } catch (_) {
+                  // noop
+                }
+                throw new Error(message);
+              }
+
+              const result = await response.json();
+              console.log('API response:', result);
+
+              // Update buttons immediately
+              setActiveState(status);
+
+              // Update local family data to reflect the change
+              if (familyData) {
+                familyData.forEach(guest => {
+                  guest.attendance_status = status;
+                });
+                updateFamilySection();
+              }
+
+              // Show success toast
+              showToast(`Attendance updated for ${result.updated_guests} guest${result.updated_guests !== 1 ? 's' : ''}!`);
+
+            } catch (error) {
+              console.error('Attendance update failed:', error);
+              showToast(error.message || 'Could not update attendance. Please try again.', 'error');
+            } finally {
+              // Reset button states
+              console.log('Resetting button states');
+              buttons.forEach((btn) => {
+                btn.disabled = false;
+                const btnStatus = btn.dataset.status;
+                btn.textContent = originalTexts[btnStatus] || (btnStatus === '1' ? 'Attending' : 'Not attending');
+              });
+            }
+          });
+        });
+      }
+
       async function loadInstagramPosts() {
         const container = document.getElementById('instagram-feed');
         if (!container) return;
@@ -481,6 +1266,275 @@
           console.error('Failed to load Instagram posts', error);
           container.innerHTML = '<p>Instagram feed is temporarily unavailable. Check back soon!</p>';
         }
+      }
+
+      // Admin Section Functions
+      let allAdminGuests = [];
+
+      async function loadAdminGuests() {
+        try {
+          const response = await fetch('/api/guests');
+          if (!response.ok) {
+            throw new Error('Failed to load guest data');
+          }
+          const data = await response.json();
+          allAdminGuests = data.data || [];
+          renderAdminTable();
+          updateGuestCount();
+        } catch (error) {
+          console.error('Error loading admin guests:', error);
+          document.getElementById('admin-table-body').innerHTML = 
+            '<tr><td colspan="21" style="color: red;">Error loading guest data</td></tr>';
+        }
+      }
+
+      function renderAdminTable() {
+        const tbody = document.getElementById('admin-table-body');
+        
+        if (!allAdminGuests || allAdminGuests.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="21" class="loading">No guest data available</td></tr>';
+          return;
+        }
+
+        // Group guests by family_id
+        const groupedGuests = {};
+        allAdminGuests.forEach(guest => {
+          const familyId = guest.family_id || 'No Family';
+          if (!groupedGuests[familyId]) {
+            groupedGuests[familyId] = [];
+          }
+          groupedGuests[familyId].push(guest);
+        });
+
+        // Sort families by ID
+        const sortedFamilyIds = Object.keys(groupedGuests).sort((a, b) => {
+          if (a === 'No Family') return 1;
+          if (b === 'No Family') return -1;
+          return parseInt(a) - parseInt(b);
+        });
+
+        let html = '';
+        sortedFamilyIds.forEach(familyId => {
+          const familyGuests = groupedGuests[familyId].sort((a, b) => a.id - b.id);
+          
+          // Add family header
+          html += `<tr class="family-header">
+            <td colspan="21" style="font-weight: bold; background: rgba(24, 18, 43, 0.1);">
+              Family ${familyId} (${familyGuests.length} guest${familyGuests.length !== 1 ? 's' : ''})
+            </td>
+          </tr>`;
+          
+          // Add guest rows
+          familyGuests.forEach(guest => {
+            html += createGuestRow(guest);
+          });
+        });
+
+        tbody.innerHTML = html;
+      }
+
+      function createGuestRow(guest) {
+        const formatDate = (dateStr) => {
+          if (!dateStr) return '';
+          return new Date(dateStr).toLocaleDateString();
+        };
+
+        const createInput = (field, value, type = 'text') => {
+          const inputType = type === 'number' ? 'number' : 
+                           type === 'email' ? 'email' : 'text';
+          return `<input type="${inputType}" value="${value || ''}" data-field="${field}" data-guest-id="${guest.id}">`;
+        };
+
+        const createSelect = (field, value, options) => {
+          const select = `<select data-field="${field}" data-guest-id="${guest.id}">`;
+          options.forEach(option => {
+            const selected = value == option.value ? 'selected' : '';
+            select += `<option value="${option.value}" ${selected}>${option.label}</option>`;
+          });
+          select += '</select>';
+          return select;
+        };
+
+        const createTextarea = (field, value) => {
+          return `<textarea data-field="${field}" data-guest-id="${guest.id}" rows="2">${value || ''}</textarea>`;
+        };
+
+        return `
+          <tr>
+            <td><span class="guest-id" data-guest-id="${guest.id}">${guest.id}</span></td>
+            <td>${createInput('name', guest.name)}</td>
+            <td>${createInput('age', guest.age, 'number')}</td>
+            <td>${createSelect('side', guest.side, [
+              {value: '', label: ''},
+              {value: 'bride', label: 'Bride'},
+              {value: 'groom', label: 'Groom'}
+            ])}</td>
+            <td>${createInput('guest_type', guest.guest_type)}</td>
+            <td>${createSelect('sex', guest.sex, [
+              {value: '', label: ''},
+              {value: 'M', label: 'Male'},
+              {value: 'F', label: 'Female'}
+            ])}</td>
+            <td>${createSelect('stag', guest.stag, [
+              {value: '', label: ''},
+              {value: 0, label: 'No'},
+              {value: 1, label: 'Yes'}
+            ])}</td>
+            <td>${createSelect('hen', guest.hen, [
+              {value: '', label: ''},
+              {value: 0, label: 'No'},
+              {value: 1, label: 'Yes'}
+            ])}</td>
+            <td>${createSelect('friday_room', guest.friday_room, [
+              {value: '', label: ''},
+              {value: 0, label: 'No'},
+              {value: 1, label: 'Yes'}
+            ])}</td>
+            <td>${createSelect('ceremony', guest.ceremony, [
+              {value: '', label: ''},
+              {value: 0, label: 'No'},
+              {value: 1, label: 'Yes'}
+            ])}</td>
+            <td>${createSelect('wedding_meal', guest.wedding_meal, [
+              {value: '', label: ''},
+              {value: 0, label: 'No'},
+              {value: 1, label: 'Yes'}
+            ])}</td>
+            <td>${createTextarea('restrictions', guest.restrictions)}</td>
+            <td>${createSelect('saturday_room', guest.saturday_room, [
+              {value: '', label: ''},
+              {value: 0, label: 'No'},
+              {value: 1, label: 'Yes'}
+            ])}</td>
+            <td>${createInput('email', guest.email, 'email')}</td>
+            <td>${createInput('mobile', guest.mobile)}</td>
+            <td>${createTextarea('address', guest.address)}</td>
+            <td>${createInput('family_id', guest.family_id)}</td>
+            <td>${createTextarea('music_requests', guest.music_requests)}</td>
+            <td>${createTextarea('comment', guest.comment)}</td>
+            <td>${createSelect('attendance_status', guest.attendance_status, [
+              {value: '', label: ''},
+              {value: 0, label: 'Not Attending'},
+              {value: 1, label: 'Attending'}
+            ])}</td>
+            <td>${formatDate(guest.created_at)}</td>
+          </tr>
+        `;
+      }
+
+      function updateGuestCount() {
+        const countElement = document.getElementById('guest-count');
+        if (countElement) {
+          countElement.textContent = `Total: ${allAdminGuests.length} guest${allAdminGuests.length !== 1 ? 's' : ''}`;
+        }
+      }
+
+      function showGuestPopup(guestId) {
+        const guest = allAdminGuests.find(g => g.id == guestId);
+        if (!guest) return;
+
+        const guestLink = `${window.location.origin}${window.location.pathname}?family_code=${guest.family_id || ''}`;
+
+        const popup = document.createElement('div');
+        popup.className = 'guest-popup';
+        popup.innerHTML = `
+          <div class="guest-popup-content">
+            <button class="close-btn" onclick="this.closest('.guest-popup').remove()">√ó</button>
+            <h3>Guest Link for ${guest.name}</h3>
+            <p><strong>Guest ID:</strong> ${guest.id}</p>
+            <p><strong>Family Code:</strong> ${guest.family_id || 'None'}</p>
+            <p><strong>Link:</strong></p>
+            <a href="${guestLink}" class="guest-link" target="_blank">${guestLink}</a>
+            <p><em>Click the link above to copy and send to the guest</em></p>
+          </div>
+        `;
+
+        document.body.appendChild(popup);
+        
+        // Close popup when clicking outside
+        popup.addEventListener('click', (e) => {
+          if (e.target === popup) {
+            popup.remove();
+          }
+        });
+      }
+
+      async function saveGuestField(guestId, field, value) {
+        try {
+          const response = await fetch(`/api/guests/${guestId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ [field]: value })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to save changes');
+          }
+
+          showToast(`Updated ${field} successfully`, 'success');
+        } catch (error) {
+          console.error('Error saving guest field:', error);
+          showToast(`Failed to update ${field}`, 'error');
+        }
+      }
+
+      function initializeAdminSection() {
+        // Load admin data when admin section becomes visible
+        const adminSection = document.getElementById('admin-section');
+        if (adminSection && !adminSection.classList.contains('hidden')) {
+          loadAdminGuests();
+        }
+
+        // Handle refresh button
+        const refreshBtn = document.getElementById('refresh-guests-btn');
+        if (refreshBtn) {
+          refreshBtn.addEventListener('click', () => {
+            loadAdminGuests();
+            showToast('Refreshing guest data...', 'success');
+          });
+        }
+
+        // Handle guest ID clicks
+        document.addEventListener('click', (e) => {
+          if (e.target.classList.contains('guest-id')) {
+            const guestId = e.target.dataset.guestId;
+            showGuestPopup(guestId);
+          }
+        });
+
+        // Handle field changes
+        document.addEventListener('change', (e) => {
+          const target = e.target;
+          if (target.dataset.guestId && target.dataset.field) {
+            const guestId = target.dataset.guestId;
+            const field = target.dataset.field;
+            let value = target.value;
+
+            // Convert empty strings to null for certain fields
+            if (value === '' && ['age', 'stag', 'hen', 'friday_room', 'ceremony', 'wedding_meal', 'saturday_room', 'attendance_status'].includes(field)) {
+              value = null;
+            }
+
+            saveGuestField(guestId, field, value);
+          }
+        });
+
+        // Handle input blur (for text inputs)
+        document.addEventListener('blur', (e) => {
+          const target = e.target;
+          if (target.tagName === 'INPUT' && target.dataset.guestId && target.dataset.field) {
+            const guestId = target.dataset.guestId;
+            const field = target.dataset.field;
+            let value = target.value;
+
+            // Convert empty strings to null for certain fields
+            if (value === '' && ['age'].includes(field)) {
+              value = null;
+            }
+
+            saveGuestField(guestId, field, value);
+          }
+        });
       }
 
       loadInstagramPosts();
