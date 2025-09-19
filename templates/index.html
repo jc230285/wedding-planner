@@ -974,6 +974,143 @@
 
 
 
+      /* Stag and Hen Section Styles */
+
+      .stag-toggle, .hen-toggle {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+      }
+
+      .stag-names, .hen-names {
+        margin: 1.5rem 0;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .stag-names h3, .hen-names h3 {
+        margin: 0 0 0.75rem 0;
+        color: #ffd6ff;
+        font-size: 1.2rem;
+      }
+
+      .stag-names-list, .hen-names-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .name-tag {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .name-tag.attending {
+        background: rgba(64, 224, 182, 0.2);
+        color: #40e0b6;
+        border-color: #40e0b6;
+      }
+
+      .name-tag.invited {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+        border-color: #ffc107;
+      }
+
+      .name-tag.not-attending {
+        background: rgba(255, 99, 132, 0.2);
+        color: #ff6384;
+        border-color: #ff6384;
+      }
+
+      .stag-ideas, .hen-ideas {
+        margin: 1.5rem 0;
+      }
+
+      .stag-ideas h3, .hen-ideas h3 {
+        margin: 0 0 0.75rem 0;
+        color: #ffd6ff;
+        font-size: 1.2rem;
+      }
+
+      .stag-ideas textarea, .hen-ideas textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 1rem;
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .stag-ideas textarea:focus, .hen-ideas textarea:focus {
+        outline: none;
+        border-color: #ffd6ff;
+        box-shadow: 0 0 0 2px rgba(255, 214, 255, 0.3);
+      }
+
+      .stag-ideas textarea::placeholder, .hen-ideas textarea::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .ceremony-toggle, .ceremony-names {
+        margin: 1.5rem 0;
+      }
+
+      .ceremony-names h3 {
+        margin: 0 0 0.75rem 0;
+        color: #ffd6ff;
+        font-size: 1.2rem;
+      }
+
+      .ceremony-names-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .whatsapp-bubble {
+        text-align: center;
+        margin: 1.5rem 0;
+      }
+
+      .whatsapp-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(120deg, #25d366, #128c7e);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1rem;
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .whatsapp-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+        text-decoration: none;
+        color: #ffffff;
+      }
+
+      .whatsapp-icon {
+        font-size: 1.2rem;
+      }
+
       /* Admin Section Styles */
 
       .admin-controls {
@@ -1683,7 +1820,27 @@
 
             <p>We'll share timings, meeting point, and kit list as soon as venues confirm availability. A group message will go out once everything is booked.</p>
 
-            <p><strong>Join the Stag WhatsApp Group:</strong> <a href="https://chat.whatsapp.com/BI51UKUcHJtLho8yVLaAQo" target="_blank" rel="noopener" style="color: #ffd6ff; text-decoration: underline;">Click here to join</a></p>
+            <div class="stag-toggle" id="stag-toggle">
+              <button class="attendance-button attendance-button--yes" type="button" data-status="1">I'll be there</button>
+              <button class="attendance-button attendance-button--no" type="button" data-status="0">Can't make it</button>
+            </div>
+
+            <div class="stag-names" id="stag-names">
+              <h3>Who's Coming:</h3>
+              <div id="stag-names-list"></div>
+            </div>
+
+            <div class="stag-ideas">
+              <h3>Stag Ideas:</h3>
+              <textarea id="stag-ideas-text" placeholder="Share your stag adventure ideas here..." rows="3"></textarea>
+            </div>
+
+            <div class="whatsapp-bubble">
+              <a href="https://chat.whatsapp.com/BI51UKUcHJtLho8yVLaAQo" target="_blank" rel="noopener" class="whatsapp-link">
+                <span class="whatsapp-icon">📱</span>
+                Join Stag WhatsApp Group
+              </a>
+            </div>
 
           </div>
 
@@ -1701,7 +1858,27 @@
 
             <p>Plan on relaxed pampering, something floral, and golden hour cocktails. We'll publish the full itinerary and RSVP info soon.</p>
 
-            <p><strong>Join the Hen WhatsApp Group:</strong> <a href="https://chat.whatsapp.com/KKFD5tVsRfGKnMspqhhLqD" target="_blank" rel="noopener" style="color: #ffd6ff; text-decoration: underline;">Click here to join</a></p>
+            <div class="hen-toggle" id="hen-toggle">
+              <button class="attendance-button attendance-button--yes" type="button" data-status="1">I'll be there</button>
+              <button class="attendance-button attendance-button--no" type="button" data-status="0">Can't make it</button>
+            </div>
+
+            <div class="hen-names" id="hen-names">
+              <h3>Who's Coming:</h3>
+              <div id="hen-names-list"></div>
+            </div>
+
+            <div class="hen-ideas">
+              <h3>Hen Ideas:</h3>
+              <textarea id="hen-ideas-text" placeholder="Share your hen gathering ideas here..." rows="3"></textarea>
+            </div>
+
+            <div class="whatsapp-bubble">
+              <a href="https://chat.whatsapp.com/KKFD5tVsRfGKnMspqhhLqD" target="_blank" rel="noopener" class="whatsapp-link">
+                <span class="whatsapp-icon">📱</span>
+                Join Hen WhatsApp Group
+              </a>
+            </div>
 
           </div>
 
@@ -1758,6 +1935,16 @@
             <h2>Formal Ceremony</h2>
 
             <p>We'll say "I do" in the oak meadow, then celebrate with bubbles and canapes.</p>
+
+            <div class="ceremony-toggle" id="ceremony-toggle">
+              <button class="attendance-button attendance-button--yes" type="button" data-status="1">I'll be there</button>
+              <button class="attendance-button attendance-button--no" type="button" data-status="0">Can't make it</button>
+            </div>
+
+            <div class="ceremony-names" id="ceremony-names">
+              <h3>Who's Attending the Ceremony:</h3>
+              <div id="ceremony-names-list"></div>
+            </div>
 
             <ul class="schedule">
 
@@ -2389,6 +2576,80 @@
 
         }
 
+
+
+        // Set active state for stag buttons
+
+        const stagStatuses = familyData.map(guest => guest.stag).filter(s => s !== null && s !== undefined && s !== '');
+
+        const stagYesBtn = document.querySelector('#stag-toggle [data-status="1"]');
+
+        const stagNoBtn = document.querySelector('#stag-toggle [data-status="0"]');
+
+        if (stagYesBtn && stagNoBtn) {
+
+          if (stagStatuses.includes(1)) {
+
+            stagYesBtn.classList.add('is-active');
+
+            stagNoBtn.classList.remove('is-active');
+
+          } else if (stagStatuses.includes(0)) {
+
+            stagNoBtn.classList.add('is-active');
+
+            stagYesBtn.classList.remove('is-active');
+
+          } else {
+
+            stagYesBtn.classList.remove('is-active');
+
+            stagNoBtn.classList.remove('is-active');
+
+          }
+
+        }
+
+
+
+        // Set active state for hen buttons
+
+        const henStatuses = familyData.map(guest => guest.hen).filter(s => s !== null && s !== undefined && s !== '');
+
+        const henYesBtn = document.querySelector('#hen-toggle [data-status="1"]');
+
+        const henNoBtn = document.querySelector('#hen-toggle [data-status="0"]');
+
+        if (henYesBtn && henNoBtn) {
+
+          if (henStatuses.includes(1)) {
+
+            henYesBtn.classList.add('is-active');
+
+            henNoBtn.classList.remove('is-active');
+
+          } else if (henStatuses.includes(0)) {
+
+            henNoBtn.classList.add('is-active');
+
+            henYesBtn.classList.remove('is-active');
+
+          } else {
+
+            henYesBtn.classList.remove('is-active');
+
+            henNoBtn.classList.remove('is-active');
+
+          }
+
+        }
+
+
+
+        // Update stag and hen names display
+
+        updateStagHenNames();
+
       }
 
 
@@ -2856,6 +3117,287 @@
       }
 
 
+
+      // Stag, Hen, and Ceremony Section Functionality
+
+      function updateStagHenCeremonyNames() {
+        if (!familyData) return;
+
+        // Update stag names
+        const stagNamesList = document.getElementById('stag-names-list');
+        if (stagNamesList) {
+          const stagGuests = familyData.filter(guest => {
+            const stagValue = guest.stag;
+            return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) >= -1;
+          });
+
+          stagNamesList.innerHTML = stagGuests.map(guest => {
+            const stagValue = parseInt(guest.stag, 10);
+            let className = 'name-tag';
+            if (stagValue === 1) className += ' attending';
+            else if (stagValue === -1) className += ' invited';
+            else if (stagValue === 0) className += ' not-attending';
+            return `<span class="${className}">${guest.name}</span>`;
+          }).join('');
+        }
+
+        // Update hen names
+        const henNamesList = document.getElementById('hen-names-list');
+        if (henNamesList) {
+          const henGuests = familyData.filter(guest => {
+            const henValue = guest.hen;
+            return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) >= -1;
+          });
+
+          henNamesList.innerHTML = henGuests.map(guest => {
+            const henValue = parseInt(guest.hen, 10);
+            let className = 'name-tag';
+            if (henValue === 1) className += ' attending';
+            else if (henValue === -1) className += ' invited';
+            else if (henValue === 0) className += ' not-attending';
+            return `<span class="${className}">${guest.name}</span>`;
+          }).join('');
+        }
+
+        // Update ceremony names
+        const ceremonyNamesList = document.getElementById('ceremony-names-list');
+        if (ceremonyNamesList) {
+          const ceremonyGuests = familyData.filter(guest => {
+            const ceremonyValue = guest.ceremony;
+            return ceremonyValue !== null && ceremonyValue !== undefined && ceremonyValue !== '' && parseInt(ceremonyValue, 10) >= -1;
+          });
+
+          ceremonyNamesList.innerHTML = ceremonyGuests.map(guest => {
+            const ceremonyValue = parseInt(guest.ceremony, 10);
+            let className = 'name-tag';
+            if (ceremonyValue === 1) className += ' attending';
+            else if (ceremonyValue === -1) className += ' invited';
+            else if (ceremonyValue === 0) className += ' not-attending';
+            return `<span class="${className}">${guest.name}</span>`;
+          }).join('');
+        }
+      }
+
+      // Stag attendance toggle
+      const stagToggle = document.getElementById('stag-toggle');
+      if (stagToggle) {
+        const buttons = stagToggle.querySelectorAll('.attendance-button');
+
+        const setStagActiveState = (targetStatus) => {
+          buttons.forEach((btn) => {
+            const btnStatus = Number(btn.dataset.status);
+            btn.classList.toggle('is-active', btnStatus === targetStatus);
+          });
+        };
+
+        buttons.forEach((button) => {
+          button.addEventListener('click', async () => {
+            const status = Number(button.dataset.status);
+            if (!currentFamilyCode || Number.isNaN(status)) {
+              return;
+            }
+
+            // Store original button texts
+            const originalTexts = {};
+            buttons.forEach((btn) => {
+              originalTexts[btn.dataset.status] = btn.textContent;
+              btn.disabled = true;
+              btn.textContent = 'Saving...';
+            });
+
+            try {
+              const response = await fetch('/api/family/stag', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ family_code: currentFamilyCode, status }),
+              });
+
+              if (!response.ok) {
+                let message = 'Unable to update stag attendance right now.';
+                try {
+                  const payload = await response.json();
+                  message = payload.description || payload.message || message;
+                } catch (_) {
+                  // noop
+                }
+                throw new Error(message);
+              }
+
+              const result = await response.json();
+
+              // Update buttons immediately
+              setStagActiveState(status);
+
+              // Update local family data to reflect the change
+              if (familyData) {
+                familyData.forEach(guest => {
+                  guest.stag = status;
+                });
+                updateFamilySection();
+                updateStagHenNames();
+              }
+
+              // Show success toast
+              showToast(`Stag attendance updated for ${result.updated_guests} guest${result.updated_guests !== 1 ? 's' : ''}!`);
+
+            } catch (error) {
+              console.error('Stag attendance update failed:', error);
+              showToast(error.message || 'Could not update stag attendance. Please try again.', 'error');
+            } finally {
+              // Reset button states
+              buttons.forEach((btn) => {
+                btn.disabled = false;
+                const btnStatus = btn.dataset.status;
+                btn.textContent = originalTexts[btnStatus] || (btnStatus === '1' ? 'I\'ll be there' : 'Can\'t make it');
+              });
+            }
+          });
+        });
+      }
+
+      // Hen attendance toggle
+      const henToggle = document.getElementById('hen-toggle');
+      if (henToggle) {
+        const buttons = henToggle.querySelectorAll('.attendance-button');
+
+        const setHenActiveState = (targetStatus) => {
+          buttons.forEach((btn) => {
+            const btnStatus = Number(btn.dataset.status);
+            btn.classList.toggle('is-active', btnStatus === targetStatus);
+          });
+        };
+
+        buttons.forEach((button) => {
+          button.addEventListener('click', async () => {
+            const status = Number(button.dataset.status);
+            if (!currentFamilyCode || Number.isNaN(status)) {
+              return;
+            }
+
+            // Store original button texts
+            const originalTexts = {};
+            buttons.forEach((btn) => {
+              originalTexts[btn.dataset.status] = btn.textContent;
+              btn.disabled = true;
+              btn.textContent = 'Saving...';
+            });
+
+            try {
+              const response = await fetch('/api/family/hen', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ family_code: currentFamilyCode, status }),
+              });
+
+              if (!response.ok) {
+                let message = 'Unable to update hen attendance right now.';
+                try {
+                  const payload = await response.json();
+                  message = payload.description || payload.message || message;
+                } catch (_) {
+                  // noop
+                }
+                throw new Error(message);
+              }
+
+              const result = await response.json();
+
+              // Update buttons immediately
+              setHenActiveState(status);
+
+              // Update local family data to reflect the change
+              if (familyData) {
+                familyData.forEach(guest => {
+                  guest.hen = status;
+                });
+                updateFamilySection();
+                updateStagHenNames();
+              }
+
+              // Show success toast
+              showToast(`Hen attendance updated for ${result.updated_guests} guest${result.updated_guests !== 1 ? 's' : ''}!`);
+
+            } catch (error) {
+              console.error('Hen attendance update failed:', error);
+              showToast(error.message || 'Could not update hen attendance. Please try again.', 'error');
+            } finally {
+              // Reset button states
+              buttons.forEach((btn) => {
+                btn.disabled = false;
+                const btnStatus = btn.dataset.status;
+                btn.textContent = originalTexts[btnStatus] || (btnStatus === '1' ? 'I\'ll be there' : 'Can\'t make it');
+              });
+            }
+          });
+        });
+      }
+
+      // Debounced save function for ideas
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
+      // Stag ideas saving
+      const stagIdeasTextarea = document.getElementById('stag-ideas-text');
+      if (stagIdeasTextarea) {
+        const saveStagIdeas = debounce(async (ideas) => {
+          try {
+            const response = await fetch('/api/family/stag-ideas', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ family_code: currentFamilyCode, ideas }),
+            });
+
+            if (!response.ok) {
+              throw new Error('Failed to save stag ideas');
+            }
+
+            showToast('Stag ideas saved!', 'success');
+          } catch (error) {
+            console.error('Failed to save stag ideas:', error);
+            showToast('Failed to save stag ideas', 'error');
+          }
+        }, 2000);
+
+        stagIdeasTextarea.addEventListener('input', (e) => {
+          saveStagIdeas(e.target.value);
+        });
+      }
+
+      // Hen ideas saving
+      const henIdeasTextarea = document.getElementById('hen-ideas-text');
+      if (henIdeasTextarea) {
+        const saveHenIdeas = debounce(async (ideas) => {
+          try {
+            const response = await fetch('/api/family/hen-ideas', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ family_code: currentFamilyCode, ideas }),
+            });
+
+            if (!response.ok) {
+              throw new Error('Failed to save hen ideas');
+            }
+
+            showToast('Hen ideas saved!', 'success');
+          } catch (error) {
+            console.error('Failed to save hen ideas:', error);
+            showToast('Failed to save hen ideas', 'error');
+          }
+        }, 2000);
+
+        henIdeasTextarea.addEventListener('input', (e) => {
+          saveHenIdeas(e.target.value);
+        });
+      }
 
       async function loadInstagramPosts() {
 
