@@ -1530,6 +1530,12 @@
         color: #40e0b6;
       }
 
+      .wedding-meal-option[data-meal="0"].is-active {
+        background: rgba(255, 107, 107, 0.3);
+        border-color: #ff6b6b;
+        color: #ff6b6b;
+      }
+
       .wedding-meal-option:disabled {
         opacity: 0.6;
         cursor: not-allowed;
@@ -4174,6 +4180,7 @@
                 <button class="wedding-meal-option${mealValue === 5 ? ' is-active' : ''}" data-meal="5" data-guest-id="${guest.id}">Beef</button>
                 <button class="wedding-meal-option${mealValue === 4 ? ' is-active' : ''}" data-meal="4" data-guest-id="${guest.id}">Fish</button>
                 <button class="wedding-meal-option${mealValue === 3 ? ' is-active' : ''}" data-meal="3" data-guest-id="${guest.id}">Vegetarian</button>
+                <button class="wedding-meal-option${mealValue === 0 ? ' is-active' : ''}" data-meal="0" data-guest-id="${guest.id}">Not Attending</button>
               </div>
             </div>
           `;
@@ -4249,7 +4256,15 @@
           allButtons.forEach(btn => {
             btn.disabled = false;
             const btnMeal = parseInt(btn.dataset.meal);
-            btn.textContent = btnMeal === 5 ? 'Beef' : btnMeal === 4 ? 'Fish' : 'Vegetarian';
+            if (btnMeal === 5) {
+              btn.textContent = 'Beef';
+            } else if (btnMeal === 4) {
+              btn.textContent = 'Fish';
+            } else if (btnMeal === 3) {
+              btn.textContent = 'Vegetarian';
+            } else if (btnMeal === 0) {
+              btn.textContent = 'Not Attending';
+            }
           });
         }
       }
