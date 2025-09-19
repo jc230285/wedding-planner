@@ -697,23 +697,15 @@
 
 
       .section .inner {
-
+        position: relative;
         max-width: var(--max-width);
-
         margin: 0 auto;
-
         padding: clamp(2rem, 4vw, 3.2rem) clamp(1.5rem, 4vw, 2.75rem);
-
         background: rgba(12, 8, 30, 0.42);
-
         border-radius: 18px;
-
         border: 1px solid rgba(255, 255, 255, 0.2);
-
         box-shadow: 0 28px 48px rgba(12, 8, 30, 0.25);
-
         backdrop-filter: blur(6px);
-
       }
 
 
@@ -932,6 +924,136 @@
 
 
 
+      .upcoming-events {
+
+        margin-top: 1.35rem;
+
+      }
+
+
+
+      .upcoming-events h3 {
+
+        color: rgba(255, 255, 255, 0.9);
+
+        margin-bottom: 1rem;
+
+        font-size: 1.1rem;
+
+      }
+
+
+
+      .events-grid {
+
+        display: grid;
+
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+        gap: 1rem;
+
+      }
+
+
+
+      .event-card {
+
+        background: rgba(12, 8, 30, 0.5);
+
+        border: 1px solid rgba(255, 255, 255, 0.18);
+
+        border-radius: 12px;
+
+        padding: 1rem;
+
+        transition: all 0.2s ease;
+
+      }
+
+
+
+      .event-card:hover {
+
+        background: rgba(12, 8, 30, 0.7);
+
+        border-color: rgba(255, 255, 255, 0.3);
+
+      }
+
+
+
+      .event-title {
+
+        font-weight: 600;
+
+        color: rgba(255, 255, 255, 0.95);
+
+        margin-bottom: 0.5rem;
+
+        font-size: 1rem;
+
+      }
+
+
+
+      .event-date {
+
+        color: rgba(255, 255, 255, 0.8);
+
+        font-size: 0.9rem;
+
+        margin-bottom: 0.3rem;
+
+      }
+
+
+
+      .event-venue {
+
+        color: rgba(255, 255, 255, 0.65);
+
+        font-size: 0.85rem;
+
+        margin-bottom: 0.8rem;
+
+      }
+
+
+
+      .event-link {
+
+        color: rgba(255, 255, 255, 0.9);
+
+        text-decoration: none;
+
+        font-size: 0.85rem;
+
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        padding: 0.4rem 0.8rem;
+
+        border-radius: 6px;
+
+        display: inline-block;
+
+        transition: all 0.2s ease;
+
+      }
+
+
+
+      .event-link:hover {
+
+        background: rgba(255, 255, 255, 0.1);
+
+        border-color: rgba(255, 255, 255, 0.5);
+
+        text-decoration: none;
+
+      }
+
+
+
       @media (max-width: 800px) {
 
         .schedule-item {
@@ -1011,6 +1133,7 @@
         font-size: 0.9rem;
         font-weight: 500;
         border: 1px solid rgba(255, 255, 255, 0.3);
+        margin-right: 5px;
       }
 
       .name-tag.attending {
@@ -1031,17 +1154,23 @@
         border-color: #ff6384;
       }
 
-      .stag-ideas, .hen-ideas {
+      .name-tag.not-invited {
+        background: rgba(128, 128, 128, 0.2);
+        color: #888;
+        border-color: #888;
+      }
+
+      .stag-ideas, .hen-ideas, .music-requests {
         margin: 1.5rem 0;
       }
 
-      .stag-ideas h3, .hen-ideas h3 {
+      .stag-ideas h3, .hen-ideas h3, .music-requests h3 {
         margin: 0 0 0.75rem 0;
         color: #ffd6ff;
         font-size: 1.2rem;
       }
 
-      .stag-ideas textarea, .hen-ideas textarea {
+      .stag-ideas textarea, .hen-ideas textarea, .music-requests textarea {
         width: 100%;
         padding: 0.75rem;
         border: 1px solid rgba(255, 255, 255, 0.3);
@@ -1054,7 +1183,7 @@
         min-height: 80px;
       }
 
-      .stag-ideas textarea:focus, .hen-ideas textarea:focus {
+      .stag-ideas textarea:focus, .hen-ideas textarea:focus, .music-requests textarea:focus {
         outline: none;
         border-color: #ffd6ff;
         box-shadow: 0 0 0 2px rgba(255, 214, 255, 0.3);
@@ -1064,7 +1193,7 @@
         color: rgba(255, 255, 255, 0.6);
       }
 
-      .ceremony-toggle, .ceremony-names {
+      .ceremony-names {
         margin: 1.5rem 0;
       }
 
@@ -1080,9 +1209,185 @@
         gap: 0.5rem;
       }
 
+      .stag-selection, .hen-selection, .ceremony-selection {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .stag-selection h3, .hen-selection h3, .ceremony-selection h3 {
+        margin: 0 0 1.5rem 0;
+        color: #ffd6ff;
+        font-size: 1.3rem;
+        text-align: center;
+      }
+
+      .stag-guests, .hen-guests, .ceremony-guests {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .stag-guest, .hen-guest, .ceremony-guest {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .stag-guest-name, .hen-guest-name, .ceremony-guest-name {
+        font-weight: 600;
+        color: #ffffff;
+        font-size: 1.1rem;
+        flex: 1;
+      }
+
+      .stag-options, .hen-options, .ceremony-options {
+        display: flex;
+        gap: 0.5rem;
+        flex-shrink: 0;
+      }
+
+      .stag-option, .hen-option, .ceremony-option {
+        padding: 0.4rem 0.8rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 6px;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        min-width: 80px;
+      }
+
+      .stag-option:hover, .hen-option:hover, .ceremony-option:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+        color: #ffffff;
+      }
+
+      .stag-option.is-active, .hen-option.is-active, .ceremony-option.is-active {
+        background: rgba(64, 224, 182, 0.3);
+        border-color: #40e0b6;
+        color: #40e0b6;
+      }
+
+      /* Red styling for "Can't make it" buttons - only when active */
+      .stag-option[data-stag="0"].is-active, .hen-option[data-hen="0"].is-active, .ceremony-option[data-ceremony="0"].is-active {
+        background: rgba(220, 38, 38, 0.4);
+        border-color: #dc2626;
+        color: #dc2626;
+      }
+
+      /* Hover states for "Can't make it" buttons */
+      .stag-option[data-stag="0"]:hover, .hen-option[data-hen="0"]:hover, .ceremony-option[data-ceremony="0"]:hover {
+        background: rgba(220, 38, 38, 0.1);
+        border-color: rgba(220, 38, 38, 0.5);
+        color: #dc2626;
+      }
+
+      .stag-option:disabled, .hen-option:disabled, .ceremony-option:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .wedding-meal-selection {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .wedding-meal-selection h3 {
+        margin: 0 0 1.5rem 0;
+        color: #ffd6ff;
+        font-size: 1.3rem;
+        text-align: center;
+      }
+
+      .wedding-meal-guests {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .wedding-meal-guest {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .wedding-meal-guest-name {
+        font-weight: 600;
+        color: #ffffff;
+        font-size: 1.1rem;
+        flex: 1;
+      }
+
+      .wedding-meal-options {
+        display: flex;
+        gap: 0.5rem;
+        flex-shrink: 0;
+      }
+
+      .wedding-meal-option {
+        padding: 0.4rem 0.8rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        min-width: 80px;
+      }
+
+      .wedding-meal-option:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+      .wedding-meal-option.is-active {
+        background: rgba(64, 224, 182, 0.3);
+        border-color: #40e0b6;
+        color: #40e0b6;
+      }
+
+      .wedding-meal-option:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
       .whatsapp-bubble {
         text-align: center;
         margin: 1.5rem 0;
+      }
+
+      .whatsapp-bubble--top-right {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        margin: 0;
+        z-index: 10;
+      }
+
+      .whatsapp-bubble--top-right .whatsapp-link {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
       }
 
       .whatsapp-link {
@@ -1800,8 +2105,7 @@
 
             <div class="admin-table-container">
               <h3>Recent Changes</h3>
-              <button id="refresh-change-log" style="margin-bottom: 1rem; padding: 0.5rem 1rem; background: rgba(109, 92, 231, 0.9); color: white; border: none; border-radius: 6px; cursor: pointer;">Refresh</button>
-              <div id="change-log-body" style="background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 1rem; max-height: 400px; overflow-y: auto;">
+              <div id="change-log-body" style="background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 1rem; max-height: 400px; overflow-y: auto; color: black;">
                 <div class="loading">Loading change log...</div>
               </div>
             </div>
@@ -1814,15 +2118,24 @@
 
           <div class="inner">
 
+            <div class="whatsapp-bubble whatsapp-bubble--top-right">
+              <a href="https://chat.whatsapp.com/BI51UKUcHJtLho8yVLaAQo" target="_blank" rel="noopener" class="whatsapp-link">
+                <span class="whatsapp-icon">📱</span>
+                Join Stag WhatsApp Group
+              </a>
+            </div>
+
             <h2>Stag Adventure</h2>
 
             <p class="note">Detailed plans will drop about two months before the wedding. Expect an outdoorsy afternoon with a hearty feast to follow.</p>
 
             <p>We'll share timings, meeting point, and kit list as soon as venues confirm availability. A group message will go out once everything is booked.</p>
 
-            <div class="stag-toggle" id="stag-toggle">
-              <button class="attendance-button attendance-button--yes" type="button" data-status="1">I'll be there</button>
-              <button class="attendance-button attendance-button--no" type="button" data-status="0">Can't make it</button>
+            <div class="stag-selection" id="stag-selection">
+              <h3>RSVP for Stag Adventure</h3>
+              <div id="stag-guests" class="stag-guests">
+                <!-- Individual guest stag selections will be populated here -->
+              </div>
             </div>
 
             <div class="stag-names" id="stag-names">
@@ -1835,13 +2148,6 @@
               <textarea id="stag-ideas-text" placeholder="Share your stag adventure ideas here..." rows="3"></textarea>
             </div>
 
-            <div class="whatsapp-bubble">
-              <a href="https://chat.whatsapp.com/BI51UKUcHJtLho8yVLaAQo" target="_blank" rel="noopener" class="whatsapp-link">
-                <span class="whatsapp-icon">📱</span>
-                Join Stag WhatsApp Group
-              </a>
-            </div>
-
           </div>
 
         </li>
@@ -1852,15 +2158,24 @@
 
           <div class="inner">
 
+            <div class="whatsapp-bubble whatsapp-bubble--top-right">
+              <a href="https://chat.whatsapp.com/KKFD5tVsRfGKnMspqhhLqD" target="_blank" rel="noopener" class="whatsapp-link">
+                <span class="whatsapp-icon">📱</span>
+                Join Hen WhatsApp Group
+              </a>
+            </div>
+
             <h2>Hen Gathering</h2>
 
             <p class="note">Heather is shaping the perfect calm-before-the-celebration day. Finalised details will arrive around the two-month mark.</p>
 
             <p>Plan on relaxed pampering, something floral, and golden hour cocktails. We'll publish the full itinerary and RSVP info soon.</p>
 
-            <div class="hen-toggle" id="hen-toggle">
-              <button class="attendance-button attendance-button--yes" type="button" data-status="1">I'll be there</button>
-              <button class="attendance-button attendance-button--no" type="button" data-status="0">Can't make it</button>
+            <div class="hen-selection" id="hen-selection">
+              <h3>RSVP for Hen Gathering</h3>
+              <div id="hen-guests" class="hen-guests">
+                <!-- Individual guest hen selections will be populated here -->
+              </div>
             </div>
 
             <div class="hen-names" id="hen-names">
@@ -1871,13 +2186,6 @@
             <div class="hen-ideas">
               <h3>Hen Ideas:</h3>
               <textarea id="hen-ideas-text" placeholder="Share your hen gathering ideas here..." rows="3"></textarea>
-            </div>
-
-            <div class="whatsapp-bubble">
-              <a href="https://chat.whatsapp.com/KKFD5tVsRfGKnMspqhhLqD" target="_blank" rel="noopener" class="whatsapp-link">
-                <span class="whatsapp-icon">📱</span>
-                Join Hen WhatsApp Group
-              </a>
             </div>
 
           </div>
@@ -1922,6 +2230,36 @@
 
             </ul>
 
+            <!-- Friday Night Stay Options -->
+            <div class="stay-options">
+              <h3>Choose Your Friday Night Accommodation</h3>
+              <div class="stay-cards">
+                <div class="stay-card" data-option="2">
+                  <div class="stay-card-header">
+                    <h4>New Place Hotel</h4>
+                    <span class="stay-address">Shirrell Heath, Southampton SO32 2JY</span>
+                  </div>
+                  <div class="stay-card-content">
+                    <p>Comfortable accommodations in a convenient location with easy access to the wedding venue.</p>
+                    <a href="https://maps.app.goo.gl/K7Fs4aTNEL4SNhiQ7" target="_blank" class="map-link">View on Maps</a>
+                  </div>
+                  <button class="stay-select-btn" data-option="2" data-day="friday">Select This Option</button>
+                </div>
+                
+                <div class="stay-card" data-option="3">
+                  <div class="stay-card-header">
+                    <h4>Quob Park Old House Hotel & Spa</h4>
+                    <span class="stay-address">The Square, Wickham, Fareham PO17 5JG</span>
+                  </div>
+                  <div class="stay-card-content">
+                    <p>Historic hotel with spa facilities for a luxurious and relaxing stay.</p>
+                    <a href="https://maps.app.goo.gl/NGywh41ocL2GK8NaA" target="_blank" class="map-link">View on Maps</a>
+                  </div>
+                  <button class="stay-select-btn" data-option="3" data-day="friday">Select This Option</button>
+                </div>
+              </div>
+            </div>
+
           </div>
 
         </li>
@@ -1936,9 +2274,11 @@
 
             <p>We'll say "I do" in the oak meadow, then celebrate with bubbles and canapes.</p>
 
-            <div class="ceremony-toggle" id="ceremony-toggle">
-              <button class="attendance-button attendance-button--yes" type="button" data-status="1">I'll be there</button>
-              <button class="attendance-button attendance-button--no" type="button" data-status="0">Can't make it</button>
+            <div class="ceremony-selection" id="ceremony-selection">
+              <h3>RSVP for Formal Ceremony</h3>
+              <div id="ceremony-guests" class="ceremony-guests">
+                <!-- Individual guest ceremony selections will be populated here -->
+              </div>
             </div>
 
             <div class="ceremony-names" id="ceremony-names">
@@ -2000,6 +2340,13 @@
 
             </ul>
 
+            <div class="wedding-meal-selection" id="wedding-meal-selection">
+              <h3>Select Your Meal Preference</h3>
+              <div id="wedding-meal-guests" class="wedding-meal-guests">
+                <!-- Guest meal selections will be populated here -->
+              </div>
+            </div>
+
           </div>
 
         </li>
@@ -2018,7 +2365,7 @@
 
               <p><strong>Live Band:</strong> <a href="https://www.instagram.com/beardbanduk" target="_blank" rel="noopener">@beardbanduk</a> - 169 posts - 350 followers - 377 following. Available for bookings via <a href="https://www.facebook.com/share/1BKjEJbGak" target="_blank" rel="noopener">Facebook</a>.</p>
 
-              <p><strong>Evening Flow:</strong> Party kicks off 18:20 with Beard's first set, DJ takeover from 22:30 mixing crowd requests until 01:00.</p>
+              <p><strong>Evening Flow:</strong> Party kicks off 18:20 with Beard's first set, DJ takeover from 22:30 mixing crowd requests until 23:30.</p>
 
             </div>
 
@@ -2034,11 +2381,19 @@
 
               <li class="schedule-item">
 
+                <time>18:30</time>
+
+                <p>Laid-back BBQ and salad bar, acoustic set by the fire, and cosy blankets.</p>
+
+              </li>
+              <li class="schedule-item">
+
                 <time>21:00</time>
 
                 <p>Cut the cake, refill the glasses, and transition to the DJ's high-energy mix.</p>
 
               </li>
+
 
               <li class="schedule-item">
 
@@ -2053,6 +2408,18 @@
 
 
             <div class="insta-grid" id="instagram-feed" aria-live="polite"></div>
+
+            <div class="upcoming-events">
+              <h3>Upcoming BEARD Events:</h3>
+              <div id="facebook-events" aria-live="polite">
+                <div class="loading">Loading upcoming events...</div>
+              </div>
+            </div>
+
+            <div class="music-requests">
+              <h3>Song Requests & Special Requests:</h3>
+              <textarea id="music-requests-text" placeholder="Let us know your favourite songs or any special requests for the evening..." rows="3"></textarea>
+            </div>
 
           </div>
 
@@ -2070,13 +2437,6 @@
 
             <ul class="schedule">
 
-              <li class="schedule-item">
-
-                <time>18:30</time>
-
-                <p>Laid-back BBQ and salad bar, acoustic set by the fire, and cosy blankets.</p>
-
-              </li>
 
               <li class="schedule-item">
 
@@ -2398,9 +2758,9 @@
 
           hideElement('hen-section');
 
-          hideElement('friday-section');
-
-          hideElement('saturday-section');
+          // Friday and Saturday sections should always be visible
+          // hideElement('friday-section');
+          // hideElement('saturday-section');
 
           return;
 
@@ -2490,55 +2850,15 @@
 
 
 
-        // Show friday section if any family member has friday_room >= -1 (invited or attending)
-
-        const hasFridayRoom = familyData.some(guest => {
-
-          const fridayValue = guest.friday_room;
-
-          return fridayValue !== null && fridayValue !== undefined && fridayValue !== '' && parseInt(fridayValue, 10) >= -1;
-
-        });
-
-        if (hasFridayRoom) {
-
-          console.log('Showing friday section');
-
-          showElement('friday-section');
-
-        } else {
-
-          console.log('Hiding friday section');
-
-          hideElement('friday-section');
-
-        }
+        // Friday section should always be visible
+        console.log('Showing friday section');
+        showElement('friday-section');
 
 
 
-        // Show saturday section if any family member has saturday_room >= -1 (invited or attending)
-
-        const hasSaturdayRoom = familyData.some(guest => {
-
-          const saturdayValue = guest.saturday_room;
-
-          return saturdayValue !== null && saturdayValue !== undefined && saturdayValue !== '' && parseInt(saturdayValue, 10) >= -1;
-
-        });
-
-        if (hasSaturdayRoom) {
-
-          console.log('Showing saturday section');
-
-          showElement('saturday-section');
-
-        } else {
-
-          console.log('Hiding saturday section');
-
-          hideElement('saturday-section');
-
-        }
+        // Saturday section should always be visible
+        console.log('Showing saturday section');
+        showElement('saturday-section');
 
 
 
@@ -2578,78 +2898,55 @@
 
 
 
-        // Set active state for stag buttons
-
-        const stagStatuses = familyData.map(guest => guest.stag).filter(s => s !== null && s !== undefined && s !== '');
-
-        const stagYesBtn = document.querySelector('#stag-toggle [data-status="1"]');
-
-        const stagNoBtn = document.querySelector('#stag-toggle [data-status="0"]');
-
-        if (stagYesBtn && stagNoBtn) {
-
-          if (stagStatuses.includes(1)) {
-
-            stagYesBtn.classList.add('is-active');
-
-            stagNoBtn.classList.remove('is-active');
-
-          } else if (stagStatuses.includes(0)) {
-
-            stagNoBtn.classList.add('is-active');
-
-            stagYesBtn.classList.remove('is-active');
-
-          } else {
-
-            stagYesBtn.classList.remove('is-active');
-
-            stagNoBtn.classList.remove('is-active');
-
-          }
-
-        }
-
-
-
-        // Set active state for hen buttons
-
-        const henStatuses = familyData.map(guest => guest.hen).filter(s => s !== null && s !== undefined && s !== '');
-
-        const henYesBtn = document.querySelector('#hen-toggle [data-status="1"]');
-
-        const henNoBtn = document.querySelector('#hen-toggle [data-status="0"]');
-
-        if (henYesBtn && henNoBtn) {
-
-          if (henStatuses.includes(1)) {
-
-            henYesBtn.classList.add('is-active');
-
-            henNoBtn.classList.remove('is-active');
-
-          } else if (henStatuses.includes(0)) {
-
-            henNoBtn.classList.add('is-active');
-
-            henYesBtn.classList.remove('is-active');
-
-          } else {
-
-            henYesBtn.classList.remove('is-active');
-
-            henNoBtn.classList.remove('is-active');
-
-          }
-
-        }
-
-
-
         // Update stag and hen names display
 
-        updateStagHenNames();
+        updateStagHenCeremonyNames();
 
+        // Update individual guest selections
+
+        updateStagGuests();
+
+        updateHenGuests();
+
+        updateCeremonyGuests();
+
+        // Update wedding meal guests
+
+        updateWeddingMealGuests();
+
+      }
+
+      function populateTextAreas() {
+        if (!familyData || familyData.length === 0) {
+          return;
+        }
+
+        // Find the first guest with stag_ideas data
+        const stagIdeasGuest = familyData.find(guest => guest.stag_ideas);
+        if (stagIdeasGuest) {
+          const stagTextarea = document.getElementById('stag-ideas-text');
+          if (stagTextarea) {
+            stagTextarea.value = stagIdeasGuest.stag_ideas;
+          }
+        }
+
+        // Find the first guest with hen_ideas data
+        const henIdeasGuest = familyData.find(guest => guest.hen_ideas);
+        if (henIdeasGuest) {
+          const henTextarea = document.getElementById('hen-ideas-text');
+          if (henTextarea) {
+            henTextarea.value = henIdeasGuest.hen_ideas;
+          }
+        }
+
+        // Find the first guest with music_requests data
+        const musicRequestsGuest = familyData.find(guest => guest.music_requests);
+        if (musicRequestsGuest) {
+          const musicTextarea = document.getElementById('music-requests-text');
+          if (musicTextarea) {
+            musicTextarea.value = musicRequestsGuest.music_requests;
+          }
+        }
       }
 
 
@@ -2711,6 +3008,9 @@
           
 
           updateFamilySection();
+
+          // Populate text areas with existing data
+          populateTextAreas();
 
 
 
@@ -2856,6 +3156,8 @@
 
           updateFamilySection();
 
+          populateTextAreas();
+
         }
 
       } else {
@@ -2887,6 +3189,8 @@
             } else {
 
               updateFamilySection();
+
+              populateTextAreas();
 
             }
 
@@ -3123,213 +3427,522 @@
       function updateStagHenCeremonyNames() {
         if (!familyData) return;
 
-        // Update stag names
+        // Update stag names - show ALL guests EXCEPT those with stag = -2
         const stagNamesList = document.getElementById('stag-names-list');
         if (stagNamesList) {
           const stagGuests = familyData.filter(guest => {
             const stagValue = guest.stag;
-            return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) >= -1;
+            return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) !== -2;
           });
-
+          
           stagNamesList.innerHTML = stagGuests.map(guest => {
-            const stagValue = parseInt(guest.stag, 10);
+            const stagValue = guest.stag;
             let className = 'name-tag';
-            if (stagValue === 1) className += ' attending';
-            else if (stagValue === -1) className += ' invited';
-            else if (stagValue === 0) className += ' not-attending';
+            
+            // Color code based on stag status
+            if (stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) === 1) {
+              className += ' attending';  // Green for attending
+            } else if (stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) === 0) {
+              className += ' not-attending';  // Red for not attending
+            } else if (stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) === -1) {
+              className += ' invited';  // Yellow for invited but no response
+            } else {
+              className += ' not-invited';  // Gray for not invited
+            }
+            
             return `<span class="${className}">${guest.name}</span>`;
           }).join('');
+
+          // Update stag count - count only those invited and attending
+          const stagHeader = document.querySelector('#stag-names h3');
+          if (stagHeader) {
+            const invitedStagGuests = stagGuests.filter(guest => {
+              const stagValue = guest.stag;
+              return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) >= -1;
+            });
+            const attendingCount = invitedStagGuests.filter(guest => parseInt(guest.stag, 10) === 1).length;
+            stagHeader.textContent = `Who's Coming (${attendingCount}/${invitedStagGuests.length}):`;
+          }
         }
 
-        // Update hen names
+        // Update hen names - show ALL guests EXCEPT those with hen = -2
         const henNamesList = document.getElementById('hen-names-list');
         if (henNamesList) {
           const henGuests = familyData.filter(guest => {
             const henValue = guest.hen;
-            return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) >= -1;
+            return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) !== -2;
           });
-
+          
           henNamesList.innerHTML = henGuests.map(guest => {
-            const henValue = parseInt(guest.hen, 10);
+            const henValue = guest.hen;
             let className = 'name-tag';
-            if (henValue === 1) className += ' attending';
-            else if (henValue === -1) className += ' invited';
-            else if (henValue === 0) className += ' not-attending';
+            
+            // Color code based on hen status
+            if (henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) === 1) {
+              className += ' attending';  // Green for attending
+            } else if (henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) === 0) {
+              className += ' not-attending';  // Red for not attending
+            } else if (henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) === -1) {
+              className += ' invited';  // Yellow for invited but no response
+            } else {
+              className += ' not-invited';  // Gray for not invited
+            }
+            
             return `<span class="${className}">${guest.name}</span>`;
           }).join('');
+
+          // Update hen count - count only those invited and attending
+          const henHeader = document.querySelector('#hen-names h3');
+          if (henHeader) {
+            const invitedHenGuests = henGuests.filter(guest => {
+              const henValue = guest.hen;
+              return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) >= -1;
+            });
+            const attendingCount = invitedHenGuests.filter(guest => parseInt(guest.hen, 10) === 1).length;
+            henHeader.textContent = `Who's Coming (${attendingCount}/${invitedHenGuests.length}):`;
+          }
         }
 
-        // Update ceremony names
+        // Update ceremony names - show ALL guests with color coding
         const ceremonyNamesList = document.getElementById('ceremony-names-list');
         if (ceremonyNamesList) {
-          const ceremonyGuests = familyData.filter(guest => {
+          ceremonyNamesList.innerHTML = familyData.map(guest => {
             const ceremonyValue = guest.ceremony;
-            return ceremonyValue !== null && ceremonyValue !== undefined && ceremonyValue !== '' && parseInt(ceremonyValue, 10) >= -1;
-          });
-
-          ceremonyNamesList.innerHTML = ceremonyGuests.map(guest => {
-            const ceremonyValue = parseInt(guest.ceremony, 10);
             let className = 'name-tag';
-            if (ceremonyValue === 1) className += ' attending';
-            else if (ceremonyValue === -1) className += ' invited';
-            else if (ceremonyValue === 0) className += ' not-attending';
+            
+            // Color code based on ceremony status for all guests
+            if (ceremonyValue !== null && ceremonyValue !== undefined && ceremonyValue !== '' && parseInt(ceremonyValue, 10) === 1) {
+              className += ' attending';  // Green for attending
+            } else if (ceremonyValue !== null && ceremonyValue !== undefined && ceremonyValue !== '' && parseInt(ceremonyValue, 10) === 0) {
+              className += ' not-attending';  // Red for not attending
+            } else if (ceremonyValue !== null && ceremonyValue !== undefined && ceremonyValue !== '' && parseInt(ceremonyValue, 10) === -1) {
+              className += ' invited';  // Yellow for invited but no response
+            } else {
+              className += ' not-invited';  // Gray for not invited
+            }
+            
             return `<span class="${className}">${guest.name}</span>`;
           }).join('');
+
+          // Update ceremony count - count only those invited and attending
+          const ceremonyHeader = document.querySelector('#ceremony-names h3');
+          if (ceremonyHeader) {
+            const invitedCeremonyGuests = familyData.filter(guest => {
+              const ceremonyValue = guest.ceremony;
+              return ceremonyValue !== null && ceremonyValue !== undefined && ceremonyValue !== '' && parseInt(ceremonyValue, 10) >= -1;
+            });
+            const attendingCount = invitedCeremonyGuests.filter(guest => parseInt(guest.ceremony, 10) === 1).length;
+            ceremonyHeader.textContent = `Who's Attending the Ceremony (${attendingCount}/${invitedCeremonyGuests.length}):`;
+          }
         }
       }
 
-      // Stag attendance toggle
-      const stagToggle = document.getElementById('stag-toggle');
-      if (stagToggle) {
-        const buttons = stagToggle.querySelectorAll('.attendance-button');
+      // Update stag guests selection
+      function updateStagGuests() {
+        if (!familyData) return;
 
-        const setStagActiveState = (targetStatus) => {
-          buttons.forEach((btn) => {
-            const btnStatus = Number(btn.dataset.status);
-            btn.classList.toggle('is-active', btnStatus === targetStatus);
-          });
-        };
+        const stagGuestsContainer = document.getElementById('stag-guests');
+        if (!stagGuestsContainer) return;
 
-        buttons.forEach((button) => {
-          button.addEventListener('click', async () => {
-            const status = Number(button.dataset.status);
-            if (!currentFamilyCode || Number.isNaN(status)) {
-              return;
-            }
+        // Filter guests who are invited to stag (stag >= -1)
+        const stagGuests = familyData.filter(guest => {
+          const stagValue = guest.stag;
+          return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) >= -1;
+        });
 
-            // Store original button texts
-            const originalTexts = {};
-            buttons.forEach((btn) => {
-              originalTexts[btn.dataset.status] = btn.textContent;
-              btn.disabled = true;
-              btn.textContent = 'Saving...';
-            });
+        stagGuestsContainer.innerHTML = stagGuests.map(guest => {
+          const stagValue = parseInt(guest.stag, 10);
+          return `
+            <div class="stag-guest" data-guest-id="${guest.id}">
+              <div class="stag-guest-name">${guest.name}</div>
+              <div class="stag-options">
+                <button class="stag-option${stagValue === 1 ? ' is-active' : ''}" data-stag="1" data-guest-id="${guest.id}">I'll be there</button>
+                <button class="stag-option${stagValue === 0 ? ' is-active' : ''}" data-stag="0" data-guest-id="${guest.id}">Can't make it</button>
+              </div>
+            </div>
+          `;
+        }).join('');
 
-            try {
-              const response = await fetch('/api/family/stag', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ family_code: currentFamilyCode, status }),
-              });
-
-              if (!response.ok) {
-                let message = 'Unable to update stag attendance right now.';
-                try {
-                  const payload = await response.json();
-                  message = payload.description || payload.message || message;
-                } catch (_) {
-                  // noop
-                }
-                throw new Error(message);
-              }
-
-              const result = await response.json();
-
-              // Update buttons immediately
-              setStagActiveState(status);
-
-              // Update local family data to reflect the change
-              if (familyData) {
-                familyData.forEach(guest => {
-                  guest.stag = status;
-                });
-                updateFamilySection();
-                updateStagHenNames();
-              }
-
-              // Show success toast
-              showToast(`Stag attendance updated for ${result.updated_guests} guest${result.updated_guests !== 1 ? 's' : ''}!`);
-
-            } catch (error) {
-              console.error('Stag attendance update failed:', error);
-              showToast(error.message || 'Could not update stag attendance. Please try again.', 'error');
-            } finally {
-              // Reset button states
-              buttons.forEach((btn) => {
-                btn.disabled = false;
-                const btnStatus = btn.dataset.status;
-                btn.textContent = originalTexts[btnStatus] || (btnStatus === '1' ? 'I\'ll be there' : 'Can\'t make it');
-              });
-            }
-          });
+        // Add event listeners to the stag options
+        stagGuestsContainer.querySelectorAll('.stag-option').forEach(button => {
+          button.addEventListener('click', handleStagSelection);
         });
       }
 
-      // Hen attendance toggle
-      const henToggle = document.getElementById('hen-toggle');
-      if (henToggle) {
-        const buttons = henToggle.querySelectorAll('.attendance-button');
+      // Update hen guests selection
+      function updateHenGuests() {
+        if (!familyData) return;
 
-        const setHenActiveState = (targetStatus) => {
-          buttons.forEach((btn) => {
-            const btnStatus = Number(btn.dataset.status);
-            btn.classList.toggle('is-active', btnStatus === targetStatus);
-          });
-        };
+        const henGuestsContainer = document.getElementById('hen-guests');
+        if (!henGuestsContainer) return;
 
-        buttons.forEach((button) => {
-          button.addEventListener('click', async () => {
-            const status = Number(button.dataset.status);
-            if (!currentFamilyCode || Number.isNaN(status)) {
-              return;
-            }
-
-            // Store original button texts
-            const originalTexts = {};
-            buttons.forEach((btn) => {
-              originalTexts[btn.dataset.status] = btn.textContent;
-              btn.disabled = true;
-              btn.textContent = 'Saving...';
-            });
-
-            try {
-              const response = await fetch('/api/family/hen', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ family_code: currentFamilyCode, status }),
-              });
-
-              if (!response.ok) {
-                let message = 'Unable to update hen attendance right now.';
-                try {
-                  const payload = await response.json();
-                  message = payload.description || payload.message || message;
-                } catch (_) {
-                  // noop
-                }
-                throw new Error(message);
-              }
-
-              const result = await response.json();
-
-              // Update buttons immediately
-              setHenActiveState(status);
-
-              // Update local family data to reflect the change
-              if (familyData) {
-                familyData.forEach(guest => {
-                  guest.hen = status;
-                });
-                updateFamilySection();
-                updateStagHenNames();
-              }
-
-              // Show success toast
-              showToast(`Hen attendance updated for ${result.updated_guests} guest${result.updated_guests !== 1 ? 's' : ''}!`);
-
-            } catch (error) {
-              console.error('Hen attendance update failed:', error);
-              showToast(error.message || 'Could not update hen attendance. Please try again.', 'error');
-            } finally {
-              // Reset button states
-              buttons.forEach((btn) => {
-                btn.disabled = false;
-                const btnStatus = btn.dataset.status;
-                btn.textContent = originalTexts[btnStatus] || (btnStatus === '1' ? 'I\'ll be there' : 'Can\'t make it');
-              });
-            }
-          });
+        // Filter guests who are invited to hen (hen >= -1)
+        const henGuests = familyData.filter(guest => {
+          const henValue = guest.hen;
+          return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) >= -1;
         });
+
+        henGuestsContainer.innerHTML = henGuests.map(guest => {
+          const henValue = parseInt(guest.hen, 10);
+          return `
+            <div class="hen-guest" data-guest-id="${guest.id}">
+              <div class="hen-guest-name">${guest.name}</div>
+              <div class="hen-options">
+                <button class="hen-option${henValue === 1 ? ' is-active' : ''}" data-hen="1" data-guest-id="${guest.id}">I'll be there</button>
+                <button class="hen-option${henValue === 0 ? ' is-active' : ''}" data-hen="0" data-guest-id="${guest.id}">Can't make it</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Add event listeners to the hen options
+        henGuestsContainer.querySelectorAll('.hen-option').forEach(button => {
+          button.addEventListener('click', handleHenSelection);
+        });
+      }
+
+      // Update ceremony guests selection
+      function updateCeremonyGuests() {
+        if (!familyData) return;
+
+        const ceremonyGuestsContainer = document.getElementById('ceremony-guests');
+        if (!ceremonyGuestsContainer) return;
+
+        // Filter guests who are invited to ceremony (ceremony >= -1)
+        const ceremonyGuests = familyData.filter(guest => {
+          const ceremonyValue = guest.ceremony;
+          return ceremonyValue !== null && ceremonyValue !== undefined && ceremonyValue !== '' && parseInt(ceremonyValue, 10) >= -1;
+        });
+
+        ceremonyGuestsContainer.innerHTML = ceremonyGuests.map(guest => {
+          const ceremonyValue = parseInt(guest.ceremony, 10);
+          return `
+            <div class="ceremony-guest" data-guest-id="${guest.id}">
+              <div class="ceremony-guest-name">${guest.name}</div>
+              <div class="ceremony-options">
+                <button class="ceremony-option${ceremonyValue === 1 ? ' is-active' : ''}" data-ceremony="1" data-guest-id="${guest.id}">I'll be there</button>
+                <button class="ceremony-option${ceremonyValue === 0 ? ' is-active' : ''}" data-ceremony="0" data-guest-id="${guest.id}">Can't make it</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Add event listeners to the ceremony options
+        ceremonyGuestsContainer.querySelectorAll('.ceremony-option').forEach(button => {
+          button.addEventListener('click', handleCeremonySelection);
+        });
+      }
+
+      // Handle stag selection
+      async function handleStagSelection(event) {
+        const button = event.target;
+        const stagValue = parseInt(button.dataset.stag);
+        const guestId = button.dataset.guestId;
+
+        if (!currentFamilyCode || !guestId) return;
+
+        // Find the guest in familyData
+        const guest = familyData.find(g => g.id === guestId);
+        if (!guest) return;
+
+        // If already selected, don't do anything
+        if (parseInt(guest.stag, 10) === stagValue) return;
+
+        // Disable all buttons for this guest
+        const guestContainer = button.closest('.stag-guest');
+        const allButtons = guestContainer.querySelectorAll('.stag-option');
+        allButtons.forEach(btn => {
+          btn.disabled = true;
+          btn.textContent = 'Saving...';
+        });
+
+        try {
+          const response = await fetch('/api/family/stag-individual', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              family_code: currentFamilyCode,
+              guest_id: guestId,
+              stag_status: stagValue
+            }),
+          });
+
+          if (!response.ok) {
+            let message = 'Unable to update stag attendance right now.';
+            try {
+              const payload = await response.json();
+              message = payload.description || payload.message || message;
+            } catch (_) {
+              // noop
+            }
+            throw new Error(message);
+          }
+
+          const result = await response.json();
+
+          // Update local family data
+          guest.stag = stagValue;
+
+          // Update UI
+          updateStagGuests();
+          updateStagHenCeremonyNames();
+
+          // Show success toast
+          showToast(`Stag attendance updated for ${guest.name}!`);
+
+        } catch (error) {
+          console.error('Stag attendance update failed:', error);
+          showToast(error.message || 'Could not update stag attendance. Please try again.', 'error');
+
+          // Re-enable buttons
+          allButtons.forEach(btn => {
+            btn.disabled = false;
+            const btnStag = parseInt(btn.dataset.stag);
+            btn.textContent = btnStag === 1 ? "I'll be there" : "Can't make it";
+          });
+        }
+      }
+
+      // Handle hen selection
+      async function handleHenSelection(event) {
+        const button = event.target;
+        const henValue = parseInt(button.dataset.hen);
+        const guestId = button.dataset.guestId;
+
+        if (!currentFamilyCode || !guestId) return;
+
+        // Find the guest in familyData
+        const guest = familyData.find(g => g.id === guestId);
+        if (!guest) return;
+
+        // If already selected, don't do anything
+        if (parseInt(guest.hen, 10) === henValue) return;
+
+        // Disable all buttons for this guest
+        const guestContainer = button.closest('.hen-guest');
+        const allButtons = guestContainer.querySelectorAll('.hen-option');
+        allButtons.forEach(btn => {
+          btn.disabled = true;
+          btn.textContent = 'Saving...';
+        });
+
+        try {
+          const response = await fetch('/api/family/hen-individual', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              family_code: currentFamilyCode,
+              guest_id: guestId,
+              hen_status: henValue
+            }),
+          });
+
+          if (!response.ok) {
+            let message = 'Unable to update hen attendance right now.';
+            try {
+              const payload = await response.json();
+              message = payload.description || payload.message || message;
+            } catch (_) {
+              // noop
+            }
+            throw new Error(message);
+          }
+
+          const result = await response.json();
+
+          // Update local family data
+          guest.hen = henValue;
+
+          // Update UI
+          updateHenGuests();
+          updateStagHenCeremonyNames();
+
+          // Show success toast
+          showToast(`Hen attendance updated for ${guest.name}!`);
+
+        } catch (error) {
+          console.error('Hen attendance update failed:', error);
+          showToast(error.message || 'Could not update hen attendance. Please try again.', 'error');
+
+          // Re-enable buttons
+          allButtons.forEach(btn => {
+            btn.disabled = false;
+            const btnHen = parseInt(btn.dataset.hen);
+            btn.textContent = btnHen === 1 ? "I'll be there" : "Can't make it";
+          });
+        }
+      }
+
+      // Handle ceremony selection
+      async function handleCeremonySelection(event) {
+        const button = event.target;
+        const ceremonyValue = parseInt(button.dataset.ceremony);
+        const guestId = button.dataset.guestId;
+
+        if (!currentFamilyCode || !guestId) return;
+
+        // Find the guest in familyData
+        const guest = familyData.find(g => g.id === guestId);
+        if (!guest) return;
+
+        // If already selected, don't do anything
+        if (parseInt(guest.ceremony, 10) === ceremonyValue) return;
+
+        // Disable all buttons for this guest
+        const guestContainer = button.closest('.ceremony-guest');
+        const allButtons = guestContainer.querySelectorAll('.ceremony-option');
+        allButtons.forEach(btn => {
+          btn.disabled = true;
+          btn.textContent = 'Saving...';
+        });
+
+        try {
+          const response = await fetch('/api/family/ceremony-individual', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              family_code: currentFamilyCode,
+              guest_id: guestId,
+              ceremony_status: ceremonyValue
+            }),
+          });
+
+          if (!response.ok) {
+            let message = 'Unable to update ceremony attendance right now.';
+            try {
+              const payload = await response.json();
+              message = payload.description || payload.message || message;
+            } catch (_) {
+              // noop
+            }
+            throw new Error(message);
+          }
+
+          const result = await response.json();
+
+          // Update local family data
+          guest.ceremony = ceremonyValue;
+
+          // Update UI
+          updateCeremonyGuests();
+          updateStagHenCeremonyNames();
+
+          // Show success toast
+          showToast(`Ceremony attendance updated for ${guest.name}!`);
+
+        } catch (error) {
+          console.error('Ceremony attendance update failed:', error);
+          showToast(error.message || 'Could not update ceremony attendance. Please try again.', 'error');
+
+          // Re-enable buttons
+          allButtons.forEach(btn => {
+            btn.disabled = false;
+            const btnCeremony = parseInt(btn.dataset.ceremony);
+            btn.textContent = btnCeremony === 1 ? "I'll be there" : "Can't make it";
+          });
+        }
+      }
+
+      // Update wedding meal guests
+      function updateWeddingMealGuests() {
+        if (!familyData) return;
+
+        const weddingMealGuestsContainer = document.getElementById('wedding-meal-guests');
+        if (!weddingMealGuestsContainer) return;
+
+        // Filter guests who are attending the wedding meal (wedding_meal >= 1)
+        const weddingMealGuests = familyData.filter(guest => {
+          const mealValue = guest.wedding_meal;
+          return mealValue !== null && mealValue !== undefined && mealValue !== '' && parseInt(mealValue, 10) >= 1;
+        });
+
+        weddingMealGuestsContainer.innerHTML = weddingMealGuests.map(guest => {
+          const mealValue = parseInt(guest.wedding_meal, 10);
+          return `
+            <div class="wedding-meal-guest" data-guest-id="${guest.id}">
+              <div class="wedding-meal-guest-name">${guest.name}</div>
+              <div class="wedding-meal-options">
+                <button class="wedding-meal-option${mealValue === 5 ? ' is-active' : ''}" data-meal="5" data-guest-id="${guest.id}">Beef</button>
+                <button class="wedding-meal-option${mealValue === 4 ? ' is-active' : ''}" data-meal="4" data-guest-id="${guest.id}">Fish</button>
+                <button class="wedding-meal-option${mealValue === 3 ? ' is-active' : ''}" data-meal="3" data-guest-id="${guest.id}">Vegetarian</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Add event listeners to the meal options
+        weddingMealGuestsContainer.querySelectorAll('.wedding-meal-option').forEach(button => {
+          button.addEventListener('click', handleWeddingMealSelection);
+        });
+      }
+
+      // Handle wedding meal selection
+      async function handleWeddingMealSelection(event) {
+        const button = event.target;
+        const mealValue = parseInt(button.dataset.meal);
+        const guestId = button.dataset.guestId;
+
+        if (!currentFamilyCode || !guestId) return;
+
+        // Find the guest in familyData
+        const guest = familyData.find(g => g.id === guestId);
+        if (!guest) return;
+
+        // If already selected, don't do anything
+        if (parseInt(guest.wedding_meal, 10) === mealValue) return;
+
+        // Disable all buttons for this guest
+        const guestContainer = button.closest('.wedding-meal-guest');
+        const allButtons = guestContainer.querySelectorAll('.wedding-meal-option');
+        allButtons.forEach(btn => {
+          btn.disabled = true;
+          btn.textContent = 'Saving...';
+        });
+
+        try {
+          const response = await fetch('/api/family/wedding-meal', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              family_code: currentFamilyCode,
+              guest_id: guestId,
+              meal_preference: mealValue
+            }),
+          });
+
+          if (!response.ok) {
+            let message = 'Unable to update meal preference right now.';
+            try {
+              const payload = await response.json();
+              message = payload.description || payload.message || message;
+            } catch (_) {
+              // noop
+            }
+            throw new Error(message);
+          }
+
+          const result = await response.json();
+
+          // Update local family data
+          guest.wedding_meal = mealValue;
+
+          // Update UI
+          updateWeddingMealGuests();
+
+          // Show success toast
+          showToast(`Meal preference updated for ${guest.name}!`);
+
+        } catch (error) {
+          console.error('Wedding meal update failed:', error);
+          showToast(error.message || 'Could not update meal preference. Please try again.', 'error');
+
+          // Re-enable buttons
+          allButtons.forEach(btn => {
+            btn.disabled = false;
+            const btnMeal = parseInt(btn.dataset.meal);
+            btn.textContent = btnMeal === 5 ? 'Beef' : btnMeal === 4 ? 'Fish' : 'Vegetarian';
+          });
+        }
       }
 
       // Debounced save function for ideas
@@ -3399,6 +4012,33 @@
         });
       }
 
+      // Music requests saving
+      const musicRequestsTextarea = document.getElementById('music-requests-text');
+      if (musicRequestsTextarea) {
+        const saveMusicRequests = debounce(async (requests) => {
+          try {
+            const response = await fetch('/api/family/music-requests', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ family_code: currentFamilyCode, requests }),
+            });
+
+            if (!response.ok) {
+              throw new Error('Failed to save music requests');
+            }
+
+            showToast('Music requests saved!', 'success');
+          } catch (error) {
+            console.error('Failed to save music requests:', error);
+            showToast('Failed to save music requests', 'error');
+          }
+        }, 2000);
+
+        musicRequestsTextarea.addEventListener('input', (e) => {
+          saveMusicRequests(e.target.value);
+        });
+      }
+
       async function loadInstagramPosts() {
 
         const container = document.getElementById('instagram-feed');
@@ -3448,6 +4088,66 @@
           console.error('Failed to load Instagram posts', error);
 
           container.innerHTML = '<p>Instagram feed is temporarily unavailable. Check back soon!</p>';
+
+        }
+
+      }
+
+      
+
+      async function loadFacebookEvents() {
+
+        const container = document.getElementById('facebook-events');
+
+        if (!container) return;
+
+        try {
+
+          const response = await fetch('/api/entertainment/events');
+
+          if (!response.ok) throw new Error('Network response was not ok');
+
+          const payload = await response.json();
+
+          const events = Array.isArray(payload.data) ? payload.data : [];
+
+          if (!events.length) {
+
+            container.innerHTML = '<p>No upcoming events available. Check <a href="https://www.facebook.com/bearduk/events" target="_blank" rel="noopener">Facebook</a> for updates.</p>';
+
+            return;
+
+          }
+
+          container.innerHTML = `
+
+            <div class="events-grid">
+
+              ${events.map(event => `
+
+                <div class="event-card">
+
+                  <div class="event-title">${event.title}</div>
+
+                  <div class="event-date">${event.date}</div>
+
+                  <div class="event-venue">${event.venue}</div>
+
+                  <a href="${event.url}" target="_blank" rel="noopener" class="event-link">View Event</a>
+
+                </div>
+
+              `).join('')}
+
+            </div>
+
+          `;
+
+        } catch (error) {
+
+          console.error('Failed to load Facebook events', error);
+
+          container.innerHTML = '<p>Events feed is temporarily unavailable. Check back soon!</p>';
 
         }
 
@@ -4053,6 +4753,72 @@
 
         }
 
+        
+
+        // Function to convert numeric values to readable text
+        function getReadableValue(columnName, value) {
+          if (value === null || value === undefined || value === '') {
+            return 'empty';
+          }
+          
+          // Handle text-based columns
+          if (['stag_ideas', 'hen_ideas', 'music_requests', 'comment'].includes(columnName)) {
+            return value; // Return text as-is for text columns
+          }
+          
+          const numValue = parseInt(value);
+          
+          // Handle different column types
+          switch (columnName) {
+            case 'ceremony':
+              switch (numValue) {
+                case 0: return 'Not Attending';
+                case 1: return 'Attending';
+                default: return value;
+              }
+            case 'stag':
+              switch (numValue) {
+                case -2: return 'Not Invited';
+                case -1: return 'Invited - No Response';
+                case 0: return 'Not Attending';
+                case 1: return 'Attending';
+                default: return value;
+              }
+            case 'hen':
+              switch (numValue) {
+                case -2: return 'Not Invited';
+                case -1: return 'Invited - No Response';
+                case 0: return 'Not Attending';
+                case 1: return 'Attending';
+                default: return value;
+              }
+            case 'friday_room':
+              switch (numValue) {
+                case 0: return 'Not Staying';
+                case 1: return 'Newplace Hotel';
+                case 2: return 'Quab Park';
+                case 3: return 'Quab Estate';
+                default: return value;
+              }
+            case 'saturday_room':
+              switch (numValue) {
+                case 0: return 'Not Staying';
+                case 1: return 'Newplace Hotel';
+                case 2: return 'Quab Park';
+                case 3: return 'Quab Estate';
+                default: return value;
+              }
+            case 'meal':
+              switch (numValue) {
+                case 0: return 'Not Attending';
+                case 1: return 'Attending';
+                default: return value;
+              }
+            default:
+              return value;
+          }
+        }
+
 
 
         const entriesHtml = entries.map(entry => {
@@ -4077,9 +4843,9 @@
 
           const columnName = entry.column_name || 'unknown';
 
-          const oldVal = entry.old_value ?? 'empty';
+          const oldVal = getReadableValue(columnName, entry.old_value);
 
-          const newVal = entry.new_value ?? 'empty';
+          const newVal = getReadableValue(columnName, entry.new_value);
 
           return `<div style="padding: 0.5rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1); font-family: monospace; font-size: 0.9rem;">
 
@@ -4315,18 +5081,6 @@
 
         loadChangeLog();
 
-
-
-        const refreshButton = document.getElementById('refresh-change-log');
-
-        if (refreshButton) {
-
-          refreshButton.addEventListener('click', () => loadChangeLog());
-
-        }
-
-
-
         // Handle guest ID clicks
 
         document.addEventListener('click', (e) => {
@@ -4462,6 +5216,8 @@
 
 
       loadInstagramPosts();
+
+      loadFacebookEvents();
 
 
 

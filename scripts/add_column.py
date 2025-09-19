@@ -28,9 +28,13 @@ def main() -> None:
 
     SQL = """
     ALTER TABLE public.guests ADD COLUMN IF NOT EXISTS attendance_status integer;
+    ALTER TABLE public.guests ADD COLUMN IF NOT EXISTS stag_ideas text;
+    ALTER TABLE public.guests ADD COLUMN IF NOT EXISTS hen_ideas text;
+    ALTER TABLE public.guests ADD COLUMN IF NOT EXISTS friday_stay_preference integer;
+    ALTER TABLE public.guests ADD COLUMN IF NOT EXISTS saturday_stay_preference integer;
     """
     execute_sql(SQL, database_url)
-    print("Added attendance_status column to guests table.")
+    print("Added attendance_status, stag_ideas, hen_ideas, friday_stay_preference, and saturday_stay_preference columns to guests table.")
 
 if __name__ == "__main__":
     main()
