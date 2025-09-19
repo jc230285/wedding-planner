@@ -1193,6 +1193,129 @@
         color: rgba(255, 255, 255, 0.6);
       }
 
+      /* Stay Option Cards */
+      .stay-options {
+        margin: 2rem 0;
+      }
+
+      .stay-options h3 {
+        margin: 0 0 1.5rem 0;
+        color: #ffd6ff;
+        font-size: 1.4rem;
+        text-align: center;
+      }
+
+      .stay-cards {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 1.5rem 0;
+      }
+
+      .stay-card {
+        background: rgba(0, 0, 0, 0.7);
+        border: 2px solid rgba(255, 214, 255, 0.3);
+        border-radius: 12px;
+        padding: 1.5rem;
+        flex: 1;
+        min-width: 280px;
+        max-width: 350px;
+        transition: all 0.3s ease;
+        position: relative;
+        backdrop-filter: blur(10px);
+      }
+
+      .stay-card:hover {
+        border-color: #ffd6ff;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(255, 214, 255, 0.3);
+      }
+
+      .stay-card.selected {
+        border-color: #ffd6ff;
+        background: rgba(255, 214, 255, 0.1);
+        box-shadow: 0 4px 20px rgba(255, 214, 255, 0.4);
+      }
+
+      .stay-card-header h4 {
+        margin: 0 0 0.5rem 0;
+        color: #ffd6ff;
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      .stay-address {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        display: block;
+        margin-bottom: 1rem;
+      }
+
+      .stay-card-content p {
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0 0 1rem 0;
+        line-height: 1.5;
+        font-size: 0.95rem;
+      }
+
+      .map-link {
+        color: #ffd6ff;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        transition: color 0.2s ease;
+      }
+
+      .map-link:hover {
+        color: #ffffff;
+        text-decoration: underline;
+      }
+
+      .stay-select-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .stay-select-btn:hover {
+        background: linear-gradient(135deg, #ff5252, #ff7979);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      }
+
+      .stay-select-btn:active {
+        transform: translateY(0);
+      }
+
+      .stay-select-btn.selected {
+        background: linear-gradient(135deg, #4caf50, #66bb6a);
+      }
+
+      .stay-select-btn.selected:hover {
+        background: linear-gradient(135deg, #43a047, #5cb85c);
+      }
+
+      @media (max-width: 768px) {
+        .stay-cards {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .stay-card {
+          max-width: 100%;
+          min-width: auto;
+        }
+      }
+
       .ceremony-names {
         margin: 1.5rem 0;
       }
@@ -2456,6 +2579,48 @@
 
             </ul>
 
+            <!-- Saturday Night Stay Options -->
+            <div class="stay-options">
+              <h3>Choose Your Saturday Night Accommodation</h3>
+              <div class="stay-cards">
+                <div class="stay-card" data-option="2">
+                  <div class="stay-card-header">
+                    <h4>New Place Hotel</h4>
+                    <span class="stay-address">Shirrell Heath, Southampton SO32 2JY</span>
+                  </div>
+                  <div class="stay-card-content">
+                    <p>Comfortable accommodations in a convenient location with easy access to the wedding venue.</p>
+                    <a href="https://maps.app.goo.gl/K7Fs4aTNEL4SNhiQ7" target="_blank" class="map-link">View on Maps</a>
+                  </div>
+                  <button class="stay-select-btn" data-option="2" data-day="saturday">Select This Option</button>
+                </div>
+                
+                <div class="stay-card" data-option="3">
+                  <div class="stay-card-header">
+                    <h4>Quob Park Old House Hotel & Spa</h4>
+                    <span class="stay-address">The Square, Wickham, Fareham PO17 5JG</span>
+                  </div>
+                  <div class="stay-card-content">
+                    <p>Historic hotel with spa facilities for a luxurious and relaxing stay.</p>
+                    <a href="https://maps.app.goo.gl/NGywh41ocL2GK8NaA" target="_blank" class="map-link">View on Maps</a>
+                  </div>
+                  <button class="stay-select-btn" data-option="3" data-day="saturday">Select This Option</button>
+                </div>
+
+                <div class="stay-card" data-option="4">
+                  <div class="stay-card-header">
+                    <h4>Quob Park Estate</h4>
+                    <span class="stay-address">Titchfield Ln, Wickham, Fareham PO17 5PG</span>
+                  </div>
+                  <div class="stay-card-content">
+                    <p>Beautiful estate setting with extensive grounds for a unique and memorable experience.</p>
+                    <a href="https://maps.app.goo.gl/qto1K3TgckxQVmoa6" target="_blank" class="map-link">View on Maps</a>
+                  </div>
+                  <button class="stay-select-btn" data-option="4" data-day="saturday">Select This Option</button>
+                </div>
+              </div>
+            </div>
+
           </div>
 
         </li>
@@ -2918,34 +3083,41 @@
 
       function populateTextAreas() {
         if (!familyData || familyData.length === 0) {
+          console.log('No family data available for populateTextAreas');
           return;
         }
 
-        // Find the first guest with stag_ideas data
-        const stagIdeasGuest = familyData.find(guest => guest.stag_ideas);
-        if (stagIdeasGuest) {
+        // Always use the first guest in the family for all text areas
+        const firstGuest = familyData[0];
+        console.log('First guest data for text areas:', firstGuest);
+
+        // Load stag_ideas from first guest
+        if (firstGuest.stag_ideas) {
           const stagTextarea = document.getElementById('stag-ideas-text');
           if (stagTextarea) {
-            stagTextarea.value = stagIdeasGuest.stag_ideas;
+            console.log('Loading stag_ideas:', firstGuest.stag_ideas);
+            stagTextarea.value = firstGuest.stag_ideas;
           }
         }
 
-        // Find the first guest with hen_ideas data
-        const henIdeasGuest = familyData.find(guest => guest.hen_ideas);
-        if (henIdeasGuest) {
+        // Load hen_ideas from first guest
+        if (firstGuest.hen_ideas) {
           const henTextarea = document.getElementById('hen-ideas-text');
           if (henTextarea) {
-            henTextarea.value = henIdeasGuest.hen_ideas;
+            console.log('Loading hen_ideas:', firstGuest.hen_ideas);
+            henTextarea.value = firstGuest.hen_ideas;
           }
         }
 
-        // Find the first guest with music_requests data
-        const musicRequestsGuest = familyData.find(guest => guest.music_requests);
-        if (musicRequestsGuest) {
+        // Load music_requests from first guest
+        if (firstGuest.music_requests) {
           const musicTextarea = document.getElementById('music-requests-text');
           if (musicTextarea) {
-            musicTextarea.value = musicRequestsGuest.music_requests;
+            console.log('Loading music_requests:', firstGuest.music_requests);
+            musicTextarea.value = firstGuest.music_requests;
           }
+        } else {
+          console.log('No music_requests found for first guest:', firstGuest.music_requests);
         }
       }
 
@@ -3011,6 +3183,8 @@
 
           // Populate text areas with existing data
           populateTextAreas();
+          // Update stay preferences UI
+          updateStayPreferences();
 
 
 
@@ -3157,6 +3331,7 @@
           updateFamilySection();
 
           populateTextAreas();
+          updateStayPreferences();
 
         }
 
@@ -3191,6 +3366,7 @@
               updateFamilySection();
 
               populateTextAreas();
+              updateStayPreferences();
 
             }
 
@@ -4037,6 +4213,129 @@
         musicRequestsTextarea.addEventListener('input', (e) => {
           saveMusicRequests(e.target.value);
         });
+      }
+
+      // Stay preference selection
+      function initializeStayPreferences() {
+        const staySelectButtons = document.querySelectorAll('.stay-select-btn');
+        
+        staySelectButtons.forEach(button => {
+          button.addEventListener('click', async (e) => {
+            const option = parseInt(e.target.dataset.option);
+            const day = e.target.dataset.day; // 'friday' or 'saturday'
+            
+            if (!currentFamilyCode) {
+              showToast('Please enter a valid family code first', 'error');
+              return;
+            }
+
+            try {
+              // Update UI immediately
+              const dayCards = document.querySelectorAll(`.stay-card[data-option]`);
+              const dayButtons = document.querySelectorAll(`.stay-select-btn[data-day="${day}"]`);
+              
+              // Remove selected state from all cards/buttons for this day
+              dayCards.forEach(card => {
+                if (card.closest(`#${day}-section`)) {
+                  card.classList.remove('selected');
+                }
+              });
+              dayButtons.forEach(btn => {
+                btn.classList.remove('selected');
+                btn.textContent = 'Select This Option';
+              });
+              
+              // Add selected state to clicked option
+              const selectedCard = document.querySelector(`.stay-card[data-option="${option}"]`);
+              if (selectedCard && selectedCard.closest(`#${day}-section`)) {
+                selectedCard.classList.add('selected');
+                e.target.classList.add('selected');
+                e.target.textContent = 'Selected ✓';
+              }
+
+              // Save to database
+              const endpoint = day === 'friday' ? '/api/family/friday-stay' : '/api/family/saturday-stay';
+              const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                  family_code: currentFamilyCode, 
+                  stay_option: option,
+                  updated_by: 'family'
+                }),
+              });
+
+              if (!response.ok) {
+                throw new Error(`Failed to save ${day} stay preference`);
+              }
+
+              const result = await response.json();
+              showToast(result.message, 'success');
+              
+            } catch (error) {
+              console.error(`Failed to save ${day} stay preference:`, error);
+              showToast(`Failed to save ${day} stay preference`, 'error');
+              
+              // Revert UI on error
+              const selectedCard = document.querySelector(`.stay-card[data-option="${option}"]`);
+              if (selectedCard) {
+                selectedCard.classList.remove('selected');
+                e.target.classList.remove('selected');
+                e.target.textContent = 'Select This Option';
+              }
+            }
+          });
+        });
+      }
+
+      // Load current stay preferences when family data loads
+      function updateStayPreferences() {
+        if (!familyData || familyData.length === 0) {
+          return;
+        }
+
+        // Find the first guest's preferences (all family members should have the same preferences)
+        const firstGuest = familyData[0];
+        
+        // Update Friday stay preference
+        if (firstGuest.friday_stay_preference) {
+          const fridayCard = document.querySelector(`#friday-section .stay-card[data-option="${firstGuest.friday_stay_preference}"]`);
+          const fridayButton = document.querySelector(`#friday-section .stay-select-btn[data-option="${firstGuest.friday_stay_preference}"]`);
+          
+          if (fridayCard && fridayButton) {
+            // Clear all Friday selections first
+            document.querySelectorAll('#friday-section .stay-card').forEach(card => card.classList.remove('selected'));
+            document.querySelectorAll('#friday-section .stay-select-btn').forEach(btn => {
+              btn.classList.remove('selected');
+              btn.textContent = 'Select This Option';
+            });
+            
+            // Set selected state
+            fridayCard.classList.add('selected');
+            fridayButton.classList.add('selected');
+            fridayButton.textContent = 'Selected ✓';
+          }
+        }
+
+        // Update Saturday stay preference
+        if (firstGuest.saturday_stay_preference) {
+          const saturdayCard = document.querySelector(`#saturday-section .stay-card[data-option="${firstGuest.saturday_stay_preference}"]`);
+          const saturdayButton = document.querySelector(`#saturday-section .stay-select-btn[data-option="${firstGuest.saturday_stay_preference}"]`);
+          
+          if (saturdayCard && saturdayButton) {
+            // Clear all Saturday selections first
+            document.querySelectorAll('#saturday-section .stay-card').forEach(card => card.classList.remove('selected'));
+            document.querySelectorAll('#saturday-section .stay-select-btn').forEach(btn => {
+              btn.classList.remove('selected');
+              btn.textContent = 'Select This Option';
+            });
+            
+            // Set selected state
+            saturdayCard.classList.add('selected');
+            saturdayButton.classList.add('selected');
+            saturdayButton.textContent = 'Selected ✓';
+          }
+        }
       }
 
       async function loadInstagramPosts() {
@@ -5218,6 +5517,9 @@
       loadInstagramPosts();
 
       loadFacebookEvents();
+
+      // Initialize stay preference functionality
+      initializeStayPreferences();
 
 
 
