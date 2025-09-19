@@ -1030,7 +1030,7 @@
 
         gap: 0.35rem;
 
-        min-height: 120px;
+        min-height: 200px;
 
       }
 
@@ -1063,6 +1063,46 @@
         font-size: 1.8rem;
 
         font-weight: 700;
+
+        color: #2b1d42;
+
+      }
+
+
+
+      .admin-stat-breakdown {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 0.25rem;
+
+        margin-top: 0.5rem;
+
+      }
+
+
+
+      .admin-stat-breakdown .admin-stat-subtext {
+
+        font-size: 0.75rem;
+
+        color: rgba(43, 29, 66, 0.85);
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+      }
+
+
+
+      .admin-stat-breakdown .admin-stat-subtext span {
+
+        font-weight: 600;
 
         color: #2b1d42;
 
@@ -1269,11 +1309,25 @@
 
         cursor: pointer;
 
-        color: rgba(109, 92, 231, 0.9);
+        color: #ffffff;
 
-        font-weight: bold;
+        background: linear-gradient(120deg, rgba(109, 92, 231, 0.9), rgba(24, 18, 43, 0.95));
 
-        text-decoration: underline;
+        padding: 0.25rem 0.75rem;
+
+        border-radius: 6px;
+
+        font-size: 0.85rem;
+
+        font-weight: 600;
+
+        text-align: center;
+
+        display: inline-block;
+
+        transition: all 0.2s ease;
+
+        border: 1px solid rgba(109, 92, 231, 0.3);
 
       }
 
@@ -1281,7 +1335,11 @@
 
       .admin-table .guest-id:hover {
 
-        color: rgba(24, 18, 43, 0.9);
+        background: linear-gradient(120deg, rgba(24, 18, 43, 0.95), rgba(109, 92, 231, 0.9));
+
+        transform: translateY(-1px);
+
+        box-shadow: 0 2px 8px rgba(109, 92, 231, 0.3);
 
       }
 
@@ -1337,11 +1395,15 @@
 
         border-radius: 12px;
 
-        max-width: 500px;
+        max-width: 600px;
 
         width: 90%;
 
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+
+        color: #333;
+
+        line-height: 1.6;
 
       }
 
@@ -1376,6 +1438,20 @@
         font-family: monospace;
 
         font-size: 0.9rem;
+
+        color: #6d5ce7;
+
+        text-decoration: none;
+
+      }
+
+
+
+      .guest-popup .guest-link:hover {
+
+        background: rgba(109, 92, 231, 0.2);
+
+        text-decoration: underline;
 
       }
 
@@ -1419,10 +1495,10 @@
 
         <div class="hero-actions">
 
-            <p>Saturday 12 September 2026 - 
+            <p>
             <a href="https://www.quobpark.com/" target="_blank" rel="noopener">
               <button type="button" style="padding: 0.5em 1.2em; font-size: 1rem; border-radius: 999px; border: none; background: linear-gradient(120deg, #ffd6ff 80%, #6d5ce7 100%); color: #12082c; font-weight: 600; cursor: pointer;">
-              Quob Park
+              Saturday 12 September 2026 - Quob Park
               </button>
             </a>
             </p></a>
@@ -1505,20 +1581,34 @@
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Wedding Meal</div>
-                <div class="admin-stat-subtext">Confirmed / Invited</div>
-                <div class="admin-stat-value" id="stat-wedding_meal">0 / 0</div>
+                <div class="admin-stat-breakdown">
+                  <div class="admin-stat-subtext">Attending: <span id="stat-wedding_meal-attending">0</span></div>
+                  <div class="admin-stat-subtext">Invited: <span id="stat-wedding_meal-invited">0</span></div>
+                  <div class="admin-stat-subtext">Beef: <span id="stat-wedding_meal-beef">0</span></div>
+                  <div class="admin-stat-subtext">Fish: <span id="stat-wedding_meal-fish">0</span></div>
+                  <div class="admin-stat-subtext">Vegetarian: <span id="stat-wedding_meal-vegetarian">0</span></div>
+                </div>
               </div>
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Friday Room</div>
-                <div class="admin-stat-subtext">Families booked / Families invited</div>
-                <div class="admin-stat-value" id="stat-friday_room">0 / 0</div>
+                <div class="admin-stat-breakdown">
+                  <div class="admin-stat-subtext">Attending: <span id="stat-friday_room-attending">0</span></div>
+                  <div class="admin-stat-subtext">Invited: <span id="stat-friday_room-invited">0</span></div>
+                  <div class="admin-stat-subtext">New Place: <span id="stat-friday_room-newplace">0</span></div>
+                  <div class="admin-stat-subtext">Quab Park: <span id="stat-friday_room-quabpark">0</span></div>
+                </div>
               </div>
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Saturday Room</div>
-                <div class="admin-stat-subtext">Families booked / Families invited</div>
-                <div class="admin-stat-value" id="stat-saturday_room">0 / 0</div>
+                <div class="admin-stat-breakdown">
+                  <div class="admin-stat-subtext">Attending: <span id="stat-saturday_room-attending">0</span></div>
+                  <div class="admin-stat-subtext">Invited: <span id="stat-saturday_room-invited">0</span></div>
+                  <div class="admin-stat-subtext">New Place: <span id="stat-saturday_room-newplace">0</span></div>
+                  <div class="admin-stat-subtext">Quab Park: <span id="stat-saturday_room-quabpark">0</span></div>
+                  <div class="admin-stat-subtext">Quab Estate: <span id="stat-saturday_room-quabestate">0</span></div>
+                </div>
               </div>
 
             </div>
@@ -1549,11 +1639,7 @@
 
                       <th>Wedding Meal</th>
 
-                      <th>Restrictions</th>
-
                       <th>Saturday Room</th>
-
-                      <th>Comment</th>
 
                     </tr>
 
@@ -1563,7 +1649,7 @@
 
                     <tr>
 
-                      <td colspan="11" class="loading">Loading guest data...</td>
+                      <td colspan="9" class="loading">Loading guest data...</td>
 
                     </tr>
 
@@ -1623,7 +1709,7 @@
 
 
 
-        <li class="section" style="--section-image: url('{{ url_for('static', filename='images/friday.jpg') }}');">
+        <li id="friday-section" class="section" style="--section-image: url('{{ url_for('static', filename='images/friday-stay.webp') }}');">
 
           <div class="inner">
 
@@ -1699,7 +1785,7 @@
 
 
 
-        <li class="section" style="--section-image: url('{{ url_for('static', filename='images/meal.jpg') }}');">
+        <li class="section" style="--section-image: url('{{ url_for('static', filename='images/wedding-meal.jpg') }}');">
 
           <div class="inner">
 
@@ -1787,7 +1873,7 @@
 
 
 
-        <li class="section" style="--section-image: url('{{ url_for('static', filename='images/saturday.jpg') }}');">
+        <li id="saturday-section" class="section" style="--section-image: url('{{ url_for('static', filename='images/saturday-stay.jpg') }}');">
 
           <div class="inner">
 
@@ -2125,6 +2211,10 @@
 
           hideElement('hen-section');
 
+          hideElement('friday-section');
+
+          hideElement('saturday-section');
+
           return;
 
         }
@@ -2161,9 +2251,15 @@
 
 
 
-        // Show stag section if any family member has stag > 0
+        // Show stag section if any family member has stag >= -1 (invited or attending)
 
-        const hasStag = familyData.some(guest => guest.stag && guest.stag > 0);
+        const hasStag = familyData.some(guest => {
+
+          const stagValue = guest.stag;
+
+          return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) >= -1;
+
+        });
 
         if (hasStag) {
 
@@ -2181,9 +2277,15 @@
 
 
 
-        // Show hen section if any family member has hen > 0
+        // Show hen section if any family member has hen >= -1 (invited or attending)
 
-        const hasHen = familyData.some(guest => guest.hen && guest.hen > 0);
+        const hasHen = familyData.some(guest => {
+
+          const henValue = guest.hen;
+
+          return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) >= -1;
+
+        });
 
         if (hasHen) {
 
@@ -2196,6 +2298,58 @@
           console.log('Hiding hen section');
 
           hideElement('hen-section');
+
+        }
+
+
+
+        // Show friday section if any family member has friday_room >= -1 (invited or attending)
+
+        const hasFridayRoom = familyData.some(guest => {
+
+          const fridayValue = guest.friday_room;
+
+          return fridayValue !== null && fridayValue !== undefined && fridayValue !== '' && parseInt(fridayValue, 10) >= -1;
+
+        });
+
+        if (hasFridayRoom) {
+
+          console.log('Showing friday section');
+
+          showElement('friday-section');
+
+        } else {
+
+          console.log('Hiding friday section');
+
+          hideElement('friday-section');
+
+        }
+
+
+
+        // Show saturday section if any family member has saturday_room >= -1 (invited or attending)
+
+        const hasSaturdayRoom = familyData.some(guest => {
+
+          const saturdayValue = guest.saturday_room;
+
+          return saturdayValue !== null && saturdayValue !== undefined && saturdayValue !== '' && parseInt(saturdayValue, 10) >= -1;
+
+        });
+
+        if (hasSaturdayRoom) {
+
+          console.log('Showing saturday section');
+
+          showElement('saturday-section');
+
+        } else {
+
+          console.log('Hiding saturday section');
+
+          hideElement('saturday-section');
 
         }
 
@@ -2287,6 +2441,14 @@
 
           console.log('currentFamilyCode:', currentFamilyCode);
 
+          
+
+          // Save family code to cookie for future visits
+
+          saveFamilyCodeToCookie(code);
+
+          
+
           updateFamilySection();
 
 
@@ -2367,11 +2529,63 @@
 
 
 
+      function saveFamilyCodeToCookie(code) {
+
+        if (code) {
+
+          // Save for 30 days
+
+          const expiryDate = new Date();
+
+          expiryDate.setDate(expiryDate.getDate() + 30);
+
+          document.cookie = `family_code=${code.toUpperCase()}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Lax`;
+
+        }
+
+      }
+
+
+
+      function getFamilyCodeFromCookie() {
+
+        const cookies = document.cookie.split(';');
+
+        for (let cookie of cookies) {
+
+          const [name, value] = cookie.trim().split('=');
+
+          if (name === 'family_code') {
+
+            return value;
+
+          }
+
+        }
+
+        return null;
+
+      }
+
+
+
       // On page load
 
       if (ensureFunctionsReady()) {
 
-        const initialCode = getFamilyCodeFromURL();
+        let initialCode = getFamilyCodeFromURL();
+
+        
+
+        // If no code in URL, try cookie
+
+        if (!initialCode) {
+
+          initialCode = getFamilyCodeFromCookie();
+
+        }
+
+        
 
         if (initialCode) {
 
@@ -2391,7 +2605,19 @@
 
           if (ensureFunctionsReady()) {
 
-            const initialCode = getFamilyCodeFromURL();
+            let initialCode = getFamilyCodeFromURL();
+
+            
+
+            // If no code in URL, try cookie
+
+            if (!initialCode) {
+
+              initialCode = getFamilyCodeFromCookie();
+
+            }
+
+            
 
             if (initialCode) {
 
@@ -2746,7 +2972,7 @@
 
           document.getElementById('admin-table-body').innerHTML =
 
-            '<tr><td colspan="11" style="color: red;">Error loading guest data</td></tr>';
+            '<tr><td colspan="9" style="color: red;">Error loading guest data</td></tr>';
 
         }
 
@@ -2770,7 +2996,7 @@
 
         if (!allAdminGuests || allAdminGuests.length === 0) {
 
-          tbody.innerHTML = '<tr><td colspan="11" class="loading">No guest data available</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="9" class="loading">No guest data available</td></tr>';
 
           return;
 
@@ -2906,7 +3132,6 @@
 
         const attendanceOptions = [
 
-          { value: '', label: '' },
 
           { value: -2, label: 'Not Invited' },
 
@@ -2921,8 +3146,6 @@
 
 
         const fridayRoomOptions = [
-
-          { value: '', label: '' },
 
           { value: -2, label: 'Not Invited' },
 
@@ -2942,7 +3165,6 @@
 
         const saturdayRoomOptions = [
 
-          { value: '', label: '' },
 
           { value: -2, label: 'Not Invited' },
 
@@ -2964,7 +3186,6 @@
 
         const weddingMealOptions = [
 
-          { value: '', label: '' },
 
           { value: -2, label: 'Not Invited' },
 
@@ -2974,11 +3195,11 @@
 
           { value: 1, label: 'Attending' },
 
-          { value: 3, label: 'Vegetarian' },
+          { value: 5, label: 'Beef' },
 
           { value: 4, label: 'Fish' },
 
-          { value: 5, label: 'Beef' }
+          { value: 3, label: 'Vegetarian' }
 
         ];
 
@@ -2988,7 +3209,7 @@
 
           <tr>
 
-            <td><span class="guest-id" data-guest-id="${guest.id}" style="cursor: pointer; color: #6d5ce7;"><i class="fas fa-cog" style="font-size: 1.2em;"></i></span></td>
+            <td><span class="guest-id" data-guest-id="${guest.id}" style="cursor: pointer; color: #6d5ce7; padding: 0.25rem 0.5rem; background: rgba(109, 92, 231, 0.1); border-radius: 4px; display: inline-block;">Open</span></td>
 
             <td><div class="name-cell">${createInput('name', guest.name)}${familyBadge}</div></td>
 
@@ -3004,11 +3225,7 @@
 
             <td>${createSelect('wedding_meal', guest.wedding_meal, weddingMealOptions)}</td>
 
-            <td>${createTextarea('restrictions', guest.restrictions)}</td>
-
             <td>${createSelect('saturday_room', guest.saturday_room, saturdayRoomOptions)}</td>
-
-            <td>${createTextarea('comment', guest.comment)}</td>
 
           </tr>
 
@@ -3118,40 +3335,136 @@
 
       function updateAdminStats() {
 
-        const metrics = [
-
+        // Update simple metrics (stag, hen, attendance_status, ceremony)
+        const simpleMetrics = [
           { field: 'stag', element: 'stat-stag', compute: computeGuestMetric },
-
           { field: 'hen', element: 'stat-hen', compute: computeGuestMetric },
-
           { field: 'attendance_status', element: 'stat-attendance_status', compute: computeGuestMetric },
-
           { field: 'ceremony', element: 'stat-ceremony', compute: computeGuestMetric },
-
-          { field: 'wedding_meal', element: 'stat-wedding_meal', compute: computeGuestMetric },
-
-          { field: 'friday_room', element: 'stat-friday_room', compute: computeFamilyMetric },
-
-          { field: 'saturday_room', element: 'stat-saturday_room', compute: computeFamilyMetric },
-
         ];
 
-
-
-        metrics.forEach(metric => {
-
+        simpleMetrics.forEach(metric => {
           const result = metric.compute(metric.field);
-
           const target = document.getElementById(metric.element);
-
           if (target) {
-
             target.textContent = `${result.numerator} / ${result.denominator}`;
-
           }
-
         });
 
+        // Update detailed wedding meal stats
+        updateWeddingMealStats();
+
+        // Update detailed Friday room stats
+        updateFridayRoomStats();
+
+        // Update detailed Saturday room stats
+        updateSaturdayRoomStats();
+      }
+
+      function updateWeddingMealStats() {
+        let attending = 0;
+        let invited = 0;
+        let beef = 0;
+        let fish = 0;
+        let vegetarian = 0;
+
+        (allAdminGuests || []).forEach(guest => {
+          const value = guest.wedding_meal;
+          const intValue = value === null || value === undefined || value === '' ? null : parseInt(value, 10);
+
+          if (intValue !== null && intValue >= -1) {
+            invited++;
+          }
+          if (intValue !== null && intValue >= 1) {
+            attending++;
+          }
+          if (intValue === 5) beef++;
+          if (intValue === 4) fish++;
+          if (intValue === 3) vegetarian++;
+        });
+
+        document.getElementById('stat-wedding_meal-attending').textContent = attending;
+        document.getElementById('stat-wedding_meal-invited').textContent = invited;
+        document.getElementById('stat-wedding_meal-beef').textContent = beef;
+        document.getElementById('stat-wedding_meal-fish').textContent = fish;
+        document.getElementById('stat-wedding_meal-vegetarian').textContent = vegetarian;
+      }
+
+      function updateFridayRoomStats() {
+        const families = new Map();
+        let attending = 0;
+        let invited = 0;
+        let newPlace = 0;
+        let quabPark = 0;
+
+        (allAdminGuests || []).forEach(guest => {
+          const familyId = guest.family_id || `guest-${guest.id}`;
+          const value = guest.friday_room;
+          const intValue = value === null || value === undefined || value === '' ? null : parseInt(value, 10);
+
+          if (!families.has(familyId)) {
+            families.set(familyId, []);
+          }
+          families.get(familyId).push(intValue);
+        });
+
+        families.forEach(values => {
+          const hasInvite = values.some(v => v !== null && v >= -1);
+          if (hasInvite) {
+            invited++;
+            if (values.some(v => v !== null && v >= 1)) {
+              attending++;
+            }
+          }
+
+          if (values.some(v => v === 3)) newPlace++;
+          if (values.some(v => v === 4)) quabPark++;
+        });
+
+        document.getElementById('stat-friday_room-attending').textContent = attending;
+        document.getElementById('stat-friday_room-invited').textContent = invited;
+        document.getElementById('stat-friday_room-newplace').textContent = newPlace;
+        document.getElementById('stat-friday_room-quabpark').textContent = quabPark;
+      }
+
+      function updateSaturdayRoomStats() {
+        const families = new Map();
+        let attending = 0;
+        let invited = 0;
+        let newPlace = 0;
+        let quabPark = 0;
+        let quabEstate = 0;
+
+        (allAdminGuests || []).forEach(guest => {
+          const familyId = guest.family_id || `guest-${guest.id}`;
+          const value = guest.saturday_room;
+          const intValue = value === null || value === undefined || value === '' ? null : parseInt(value, 10);
+
+          if (!families.has(familyId)) {
+            families.set(familyId, []);
+          }
+          families.get(familyId).push(intValue);
+        });
+
+        families.forEach(values => {
+          const hasInvite = values.some(v => v !== null && v >= -1);
+          if (hasInvite) {
+            invited++;
+            if (values.some(v => v !== null && v >= 1)) {
+              attending++;
+            }
+          }
+
+          if (values.some(v => v === 3)) newPlace++;
+          if (values.some(v => v === 4)) quabPark++;
+          if (values.some(v => v === 5)) quabEstate++;
+        });
+
+        document.getElementById('stat-saturday_room-attending').textContent = attending;
+        document.getElementById('stat-saturday_room-invited').textContent = invited;
+        document.getElementById('stat-saturday_room-newplace').textContent = newPlace;
+        document.getElementById('stat-saturday_room-quabpark').textContent = quabPark;
+        document.getElementById('stat-saturday_room-quabestate').textContent = quabEstate;
       }
 
 
@@ -3262,13 +3575,57 @@
 
           <div class="guest-popup-content">
 
-            <button class="close-btn" onclick="this.closest('.guest-popup').remove()">x</button>
+            <button class="close-btn" onclick="this.closest('.guest-popup').remove()">×</button>
 
-            <h3>Invitation Link for ${guest.name}</h3>
+            <h3>Guest Details: ${guest.name}</h3>
 
-            <p><strong>Guest ID:</strong> ${guest.id}</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
 
-            <p><strong>Family Code:</strong> ${guest.family_id || 'None'}</p>
+              <div>
+
+                <p><strong>Guest ID:</strong> ${guest.id}</p>
+
+                <p><strong>Family Code:</strong> ${guest.family_id || 'None'}</p>
+
+                <p><strong>Email:</strong> ${guest.email || 'Not provided'}</p>
+
+                <p><strong>Mobile:</strong> ${guest.mobile || 'Not provided'}</p>
+
+              </div>
+
+              <div>
+
+                <p><strong>Address:</strong> ${guest.address || 'Not provided'}</p>
+
+                <p><strong>Music Requests:</strong> ${guest.music_requests || 'None'}</p>
+
+              </div>
+
+            </div>
+
+            <div style="margin: 1rem 0;">
+
+              <p><strong>Restrictions:</strong></p>
+
+              <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem; border-radius: 4px; font-style: italic;">
+
+                ${guest.restrictions || 'No restrictions specified'}
+
+              </div>
+
+            </div>
+
+            <div style="margin: 1rem 0;">
+
+              <p><strong>Comments:</strong></p>
+
+              <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem; border-radius: 4px; font-style: italic;">
+
+                ${guest.comment || 'No comments'}
+
+              </div>
+
+            </div>
 
             <div style="background: rgba(109, 92, 231, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
 
