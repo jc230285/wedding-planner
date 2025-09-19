@@ -1133,7 +1133,7 @@
         font-size: 0.9rem;
         font-weight: 500;
         border: 1px solid rgba(255, 255, 255, 0.3);
-        margin-right: 5px;
+        margin: 3px;
       }
 
       .name-tag.attending {
@@ -1193,6 +1193,39 @@
         color: rgba(255, 255, 255, 0.6);
       }
 
+      /* AI Suggestions */
+      .stag-ai-suggestions, .hen-ai-suggestions {
+        margin-top: 1.5rem;
+      }
+
+      .stag-ai-suggestions h3, .hen-ai-suggestions h3 {
+        color: rgba(255, 255, 255, 0.95);
+        margin-bottom: 0.8rem;
+        font-size: 1rem;
+      }
+
+      .ai-suggestions-content {
+        background: rgba(12, 8, 30, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        padding: 1rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .ai-suggestion-item {
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.8rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .ai-suggestion-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+
       /* Stay Option Cards */
       .stay-options {
         margin: 2rem 0;
@@ -1207,8 +1240,7 @@
 
       .stay-cards {
         display: flex;
-        gap: 1.5rem;
-        flex-wrap: wrap;
+        gap: 0.5rem;
         justify-content: center;
         margin: 1.5rem 0;
       }
@@ -1273,6 +1305,13 @@
         text-decoration: underline;
       }
 
+      .stay-card-actions {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
       .stay-select-btn {
         width: 100%;
         background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
@@ -1318,6 +1357,7 @@
 
       .ceremony-names {
         margin: 1.5rem 0;
+        display: none;
       }
 
       .ceremony-names h3 {
@@ -1391,27 +1431,27 @@
       }
 
       .stag-option:hover, .hen-option:hover, .ceremony-option:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgb(0 0 0 / 62%);
         border-color: rgba(255, 255, 255, 0.5);
         color: #ffffff;
       }
 
       .stag-option.is-active, .hen-option.is-active, .ceremony-option.is-active {
-        background: rgba(64, 224, 182, 0.3);
+        background: rgb(0 0 0 / 62%);
         border-color: #40e0b6;
         color: #40e0b6;
       }
 
       /* Red styling for "Can't make it" buttons - only when active */
       .stag-option[data-stag="0"].is-active, .hen-option[data-hen="0"].is-active, .ceremony-option[data-ceremony="0"].is-active {
-        background: rgba(220, 38, 38, 0.4);
+        background: rgb(0 0 0 / 62%);
         border-color: #dc2626;
         color: #dc2626;
       }
 
       /* Hover states for "Can't make it" buttons */
       .stag-option[data-stag="0"]:hover, .hen-option[data-hen="0"]:hover, .ceremony-option[data-ceremony="0"]:hover {
-        background: rgba(220, 38, 38, 0.1);
+        background: rgb(0 0 0 / 62%);
         border-color: rgba(220, 38, 38, 0.5);
         color: #dc2626;
       }
@@ -1868,7 +1908,26 @@
 
       }
 
+      /* Color-coding for dropdown values */
+      .admin-table select.value--2,
+      .admin-table select.value-0 {
+        background-color: #ffebee !important; /* Light red background */
+        color: #c62828 !important; /* Dark red text */
+      }
 
+      .admin-table select.value--1 {
+        background-color: #fff8e1 !important; /* Light yellow background */
+        color: #f57f17 !important; /* Dark yellow text */
+      }
+
+      .admin-table select.value-1,
+      .admin-table select.value-2,
+      .admin-table select.value-3,
+      .admin-table select.value-4,
+      .admin-table select.value-5 {
+        background-color: #e8f5e8 !important; /* Light green background */
+        color: #2e7d32 !important; /* Dark green text */
+      }
 
       .admin-table .guest-id {
 
@@ -2133,6 +2192,16 @@
               </div>
 
               <div class="admin-stat-card">
+                <div class="admin-stat-label">Friday Room</div>
+                <div class="admin-stat-breakdown">
+                  <div class="admin-stat-subtext">Attending: <span id="stat-friday_room-attending">0</span></div>
+                  <div class="admin-stat-subtext">Invited: <span id="stat-friday_room-invited">0</span></div>
+                  <div class="admin-stat-subtext">New Place: <span id="stat-friday_room-newplace">0</span></div>
+                  <div class="admin-stat-subtext">Quab Park: <span id="stat-friday_room-quabpark">0</span></div>
+                </div>
+              </div>
+
+              <div class="admin-stat-card">
                 <div class="admin-stat-label">Attendance Status</div>
                 <div class="admin-stat-subtext">Attending / Invited</div>
                 <div class="admin-stat-value" id="stat-attendance_status">0 / 0</div>
@@ -2152,16 +2221,6 @@
                   <div class="admin-stat-subtext">Beef: <span id="stat-wedding_meal-beef">0</span></div>
                   <div class="admin-stat-subtext">Fish: <span id="stat-wedding_meal-fish">0</span></div>
                   <div class="admin-stat-subtext">Vegetarian: <span id="stat-wedding_meal-vegetarian">0</span></div>
-                </div>
-              </div>
-
-              <div class="admin-stat-card">
-                <div class="admin-stat-label">Friday Room</div>
-                <div class="admin-stat-breakdown">
-                  <div class="admin-stat-subtext">Attending: <span id="stat-friday_room-attending">0</span></div>
-                  <div class="admin-stat-subtext">Invited: <span id="stat-friday_room-invited">0</span></div>
-                  <div class="admin-stat-subtext">New Place: <span id="stat-friday_room-newplace">0</span></div>
-                  <div class="admin-stat-subtext">Quab Park: <span id="stat-friday_room-quabpark">0</span></div>
                 </div>
               </div>
 
@@ -2271,6 +2330,13 @@
               <textarea id="stag-ideas-text" placeholder="Share your stag adventure ideas here..." rows="3"></textarea>
             </div>
 
+            <div class="stag-ai-suggestions" id="stag-ai-suggestions" style="display: none;">
+              <h3>AI Suggestions:</h3>
+              <div id="stag-ai-content" class="ai-suggestions-content">
+                Loading suggestions...
+              </div>
+            </div>
+
           </div>
 
         </li>
@@ -2309,6 +2375,13 @@
             <div class="hen-ideas">
               <h3>Hen Ideas:</h3>
               <textarea id="hen-ideas-text" placeholder="Share your hen gathering ideas here..." rows="3"></textarea>
+            </div>
+
+            <div class="hen-ai-suggestions" id="hen-ai-suggestions" style="display: none;">
+              <h3>AI Suggestions:</h3>
+              <div id="hen-ai-content" class="ai-suggestions-content">
+                Loading suggestions...
+              </div>
             </div>
 
           </div>
@@ -2364,9 +2437,11 @@
                   </div>
                   <div class="stay-card-content">
                     <p>Comfortable accommodations in a convenient location with easy access to the wedding venue.</p>
-                    <a href="https://maps.app.goo.gl/K7Fs4aTNEL4SNhiQ7" target="_blank" class="map-link">View on Maps</a>
                   </div>
-                  <button class="stay-select-btn" data-option="2" data-day="friday">Select This Option</button>
+                  <div class="stay-card-actions">
+                    <a href="https://maps.app.goo.gl/K7Fs4aTNEL4SNhiQ7" target="_blank" class="map-link">View on Maps</a>
+                    <button class="stay-select-btn" data-option="2" data-day="friday">Select This Option</button>
+                  </div>
                 </div>
                 
                 <div class="stay-card" data-option="3">
@@ -2376,9 +2451,11 @@
                   </div>
                   <div class="stay-card-content">
                     <p>Historic hotel with spa facilities for a luxurious and relaxing stay.</p>
-                    <a href="https://maps.app.goo.gl/NGywh41ocL2GK8NaA" target="_blank" class="map-link">View on Maps</a>
                   </div>
-                  <button class="stay-select-btn" data-option="3" data-day="friday">Select This Option</button>
+                  <div class="stay-card-actions">
+                    <a href="https://maps.app.goo.gl/NGywh41ocL2GK8NaA" target="_blank" class="map-link">View on Maps</a>
+                    <button class="stay-select-btn" data-option="3" data-day="friday">Select This Option</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2590,9 +2667,11 @@
                   </div>
                   <div class="stay-card-content">
                     <p>Comfortable accommodations in a convenient location with easy access to the wedding venue.</p>
-                    <a href="https://maps.app.goo.gl/K7Fs4aTNEL4SNhiQ7" target="_blank" class="map-link">View on Maps</a>
                   </div>
-                  <button class="stay-select-btn" data-option="2" data-day="saturday">Select This Option</button>
+                  <div class="stay-card-actions">
+                    <a href="https://maps.app.goo.gl/K7Fs4aTNEL4SNhiQ7" target="_blank" class="map-link">View on Maps</a>
+                    <button class="stay-select-btn" data-option="2" data-day="saturday">Select This Option</button>
+                  </div>
                 </div>
                 
                 <div class="stay-card" data-option="3">
@@ -2602,9 +2681,11 @@
                   </div>
                   <div class="stay-card-content">
                     <p>Historic hotel with spa facilities for a luxurious and relaxing stay.</p>
-                    <a href="https://maps.app.goo.gl/NGywh41ocL2GK8NaA" target="_blank" class="map-link">View on Maps</a>
                   </div>
-                  <button class="stay-select-btn" data-option="3" data-day="saturday">Select This Option</button>
+                  <div class="stay-card-actions">
+                    <a href="https://maps.app.goo.gl/NGywh41ocL2GK8NaA" target="_blank" class="map-link">View on Maps</a>
+                    <button class="stay-select-btn" data-option="3" data-day="saturday">Select This Option</button>
+                  </div>
                 </div>
 
                 <div class="stay-card" data-option="4">
@@ -2614,9 +2695,11 @@
                   </div>
                   <div class="stay-card-content">
                     <p>Beautiful estate setting with extensive grounds for a unique and memorable experience.</p>
-                    <a href="https://maps.app.goo.gl/qto1K3TgckxQVmoa6" target="_blank" class="map-link">View on Maps</a>
                   </div>
-                  <button class="stay-select-btn" data-option="4" data-day="saturday">Select This Option</button>
+                  <div class="stay-card-actions">
+                    <a href="https://maps.app.goo.gl/qto1K3TgckxQVmoa6" target="_blank" class="map-link">View on Maps</a>
+                    <button class="stay-select-btn" data-option="4" data-day="saturday">Select This Option</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2841,7 +2924,8 @@
 
         if ((noFamilyGuests && noFamilyGuests.length > 0) || (allGuests && allGuests.length > 0)) {
 
-          showElement('additional-guests');
+          // Keep debugging section hidden - commented out for production
+          // showElement('additional-guests');
 
           
 
@@ -3082,42 +3166,50 @@
       }
 
       function populateTextAreas() {
+        console.log('=== populateTextAreas() called ===');
         if (!familyData || familyData.length === 0) {
           console.log('No family data available for populateTextAreas');
           return;
         }
 
-        // Always use the first guest in the family for all text areas
-        const firstGuest = familyData[0];
-        console.log('First guest data for text areas:', firstGuest);
+        // Find the main guest (first adult, or groom/bride, or first guest as fallback)
+        let mainGuest = familyData.find(guest => guest.guest_type === 'Groom') ||
+                       familyData.find(guest => guest.guest_type === 'Bride') ||
+                       familyData.find(guest => guest.age === 'Adult') ||
+                       familyData[0];
 
-        // Load stag_ideas from first guest
-        if (firstGuest.stag_ideas) {
+        console.log('Main guest data for text areas:', mainGuest);
+
+        // Load stag_ideas from main guest
+        if (mainGuest.stag_ideas) {
           const stagTextarea = document.getElementById('stag-ideas-text');
           if (stagTextarea) {
-            console.log('Loading stag_ideas:', firstGuest.stag_ideas);
-            stagTextarea.value = firstGuest.stag_ideas;
+            console.log('Loading stag_ideas:', mainGuest.stag_ideas);
+            stagTextarea.value = mainGuest.stag_ideas;
           }
         }
 
-        // Load hen_ideas from first guest
-        if (firstGuest.hen_ideas) {
+        // Load hen_ideas from main guest
+        if (mainGuest.hen_ideas) {
           const henTextarea = document.getElementById('hen-ideas-text');
           if (henTextarea) {
-            console.log('Loading hen_ideas:', firstGuest.hen_ideas);
-            henTextarea.value = firstGuest.hen_ideas;
+            console.log('Loading hen_ideas:', mainGuest.hen_ideas);
+            henTextarea.value = mainGuest.hen_ideas;
           }
         }
 
-        // Load music_requests from first guest
-        if (firstGuest.music_requests) {
-          const musicTextarea = document.getElementById('music-requests-text');
-          if (musicTextarea) {
-            console.log('Loading music_requests:', firstGuest.music_requests);
-            musicTextarea.value = firstGuest.music_requests;
+        // Load music_requests from main guest - check for any value including empty string
+        const musicTextarea = document.getElementById('music-requests-text');
+        if (musicTextarea) {
+          if (mainGuest.music_requests !== null && mainGuest.music_requests !== undefined) {
+            console.log('Loading music_requests:', mainGuest.music_requests);
+            musicTextarea.value = mainGuest.music_requests;
+          } else {
+            console.log('No music_requests found for main guest (null/undefined):', mainGuest.music_requests);
+            musicTextarea.value = ''; // Clear the field
           }
         } else {
-          console.log('No music_requests found for first guest:', firstGuest.music_requests);
+          console.log('Music textarea element not found!');
         }
       }
 
@@ -3173,6 +3265,14 @@
 
           
 
+          // Debug: Check first guest data specifically
+          if (familyData && familyData.length > 0) {
+            console.log('First guest in familyData:', familyData[0]);
+            console.log('First guest music_requests:', familyData[0].music_requests);
+          }
+
+          
+
           // Save family code to cookie for future visits
 
           saveFamilyCodeToCookie(code);
@@ -3186,7 +3286,22 @@
           // Update stay preferences UI
           updateStayPreferences();
 
-
+          // Load ALL guests for stag/hen sections
+          try {
+            const allGuestsResponse = await fetch('/api/guests');
+            if (allGuestsResponse.ok) {
+              const allGuestsData = await allGuestsResponse.json();
+              allGuests = allGuestsData.data;
+              console.log('All guests loaded successfully:', allGuests.length, 'guests');
+              
+              // Update stag/hen sections now that we have all guest data
+              updateStagGuests();
+              updateHenGuests();
+              updateStagHenCeremonyNames();
+            }
+          } catch (error) {
+            console.error('Failed to load all guests', error);
+          }
 
           // If we got family data, also fetch guests without family
 
@@ -3601,14 +3716,14 @@
       // Stag, Hen, and Ceremony Section Functionality
 
       function updateStagHenCeremonyNames() {
-        if (!familyData) return;
+        if (!allGuests) return;
 
-        // Update stag names - show ALL guests EXCEPT those with stag = -2
+        // Update stag names - show ALL guests (not just family) with stag > -2
         const stagNamesList = document.getElementById('stag-names-list');
         if (stagNamesList) {
-          const stagGuests = familyData.filter(guest => {
+          const stagGuests = allGuests.filter(guest => {
             const stagValue = guest.stag;
-            return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) !== -2;
+            return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) > -2;
           });
           
           stagNamesList.innerHTML = stagGuests.map(guest => {
@@ -3641,12 +3756,12 @@
           }
         }
 
-        // Update hen names - show ALL guests EXCEPT those with hen = -2
+        // Update hen names - show ALL guests (not just family) with hen > -2
         const henNamesList = document.getElementById('hen-names-list');
         if (henNamesList) {
-          const henGuests = familyData.filter(guest => {
+          const henGuests = allGuests.filter(guest => {
             const henValue = guest.hen;
-            return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) !== -2;
+            return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) > -2;
           });
           
           henNamesList.innerHTML = henGuests.map(guest => {
@@ -3720,10 +3835,10 @@
         const stagGuestsContainer = document.getElementById('stag-guests');
         if (!stagGuestsContainer) return;
 
-        // Filter guests who are invited to stag (stag >= -1)
+        // Filter FAMILY guests who have stag > -2 (invited family members)
         const stagGuests = familyData.filter(guest => {
           const stagValue = guest.stag;
-          return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) >= -1;
+          return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) > -2;
         });
 
         stagGuestsContainer.innerHTML = stagGuests.map(guest => {
@@ -3752,10 +3867,10 @@
         const henGuestsContainer = document.getElementById('hen-guests');
         if (!henGuestsContainer) return;
 
-        // Filter guests who are invited to hen (hen >= -1)
+        // Filter FAMILY guests who have hen > -2 (invited family members)
         const henGuests = familyData.filter(guest => {
           const henValue = guest.hen;
-          return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) >= -1;
+          return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) > -2;
         });
 
         henGuestsContainer.innerHTML = henGuests.map(guest => {
@@ -3859,6 +3974,14 @@
           // Update local family data
           guest.stag = stagValue;
 
+          // Also update the same guest in allGuests array
+          if (allGuests) {
+            const allGuestsEntry = allGuests.find(g => g.id === guestId);
+            if (allGuestsEntry) {
+              allGuestsEntry.stag = stagValue;
+            }
+          }
+
           // Update UI
           updateStagGuests();
           updateStagHenCeremonyNames();
@@ -3928,6 +4051,14 @@
 
           // Update local family data
           guest.hen = henValue;
+
+          // Also update the same guest in allGuests array
+          if (allGuests) {
+            const allGuestsEntry = allGuests.find(g => g.id === guestId);
+            if (allGuestsEntry) {
+              allGuestsEntry.hen = henValue;
+            }
+          }
 
           // Update UI
           updateHenGuests();
@@ -4026,11 +4157,13 @@
         const weddingMealGuestsContainer = document.getElementById('wedding-meal-guests');
         if (!weddingMealGuestsContainer) return;
 
-        // Filter guests who are attending the wedding meal (wedding_meal >= 1)
+        // Filter FAMILY guests who are invited to the wedding meal (wedding_meal > -2)
         const weddingMealGuests = familyData.filter(guest => {
           const mealValue = guest.wedding_meal;
-          return mealValue !== null && mealValue !== undefined && mealValue !== '' && parseInt(mealValue, 10) >= 1;
+          return mealValue !== null && mealValue !== undefined && mealValue !== '' && parseInt(mealValue, 10) > -2;
         });
+
+        console.log('Wedding meal guests found:', weddingMealGuests.length, weddingMealGuests);
 
         weddingMealGuestsContainer.innerHTML = weddingMealGuests.map(guest => {
           const mealValue = parseInt(guest.wedding_meal, 10);
@@ -4218,14 +4351,18 @@
       // Stay preference selection
       function initializeStayPreferences() {
         const staySelectButtons = document.querySelectorAll('.stay-select-btn');
+        console.log('Initializing stay preferences, found buttons:', staySelectButtons.length);
         
         staySelectButtons.forEach(button => {
           button.addEventListener('click', async (e) => {
             const option = parseInt(e.target.dataset.option);
             const day = e.target.dataset.day; // 'friday' or 'saturday'
             
+            console.log('Stay button clicked:', { option, day, currentFamilyCode });
+            
             if (!currentFamilyCode) {
               showToast('Please enter a valid family code first', 'error');
+              console.error('No currentFamilyCode set!');
               return;
             }
 
@@ -4246,8 +4383,8 @@
               });
               
               // Add selected state to clicked option
-              const selectedCard = document.querySelector(`.stay-card[data-option="${option}"]`);
-              if (selectedCard && selectedCard.closest(`#${day}-section`)) {
+              const selectedCard = document.querySelector(`#${day}-section .stay-card[data-option="${option}"]`);
+              if (selectedCard) {
                 selectedCard.classList.add('selected');
                 e.target.classList.add('selected');
                 e.target.textContent = 'Selected ✓';
@@ -4255,29 +4392,47 @@
 
               // Save to database
               const endpoint = day === 'friday' ? '/api/family/friday-stay' : '/api/family/saturday-stay';
+              const requestData = { 
+                family_code: currentFamilyCode, 
+                stay_option: option,
+                updated_by: 'family'
+              };
+              
+              console.log('Sending API request:', { endpoint, requestData });
+              
               const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                  family_code: currentFamilyCode, 
-                  stay_option: option,
-                  updated_by: 'family'
-                }),
+                body: JSON.stringify(requestData),
               });
 
+              console.log('API response status:', response.status);
+              
               if (!response.ok) {
                 throw new Error(`Failed to save ${day} stay preference`);
               }
 
               const result = await response.json();
+              console.log('API response data:', result);
+              
+              // Update local familyData to reflect the change
+              familyData.forEach(guest => {
+                if (day === 'friday') {
+                  guest.friday_stay_preference = option;
+                } else {
+                  guest.saturday_stay_preference = option;
+                }
+              });
+              
               showToast(result.message, 'success');
               
             } catch (error) {
               console.error(`Failed to save ${day} stay preference:`, error);
+              console.error('Full error details:', error);
               showToast(`Failed to save ${day} stay preference`, 'error');
               
               // Revert UI on error
-              const selectedCard = document.querySelector(`.stay-card[data-option="${option}"]`);
+              const selectedCard = document.querySelector(`#${day}-section .stay-card[data-option="${option}"]`);
               if (selectedCard) {
                 selectedCard.classList.remove('selected');
                 e.target.classList.remove('selected');
@@ -4638,8 +4793,9 @@
         const createSelect = (field, value, options) => {
 
           const numericValue = toInt(value);
+          const colorClass = `value-${numericValue !== null ? numericValue : 'null'}`;
 
-          let select = `<select data-field="${field}" data-guest-id="${guest.id}">`;
+          let select = `<select data-field="${field}" data-guest-id="${guest.id}" class="${colorClass}">`;
 
           options.forEach(option => {
 
@@ -4752,7 +4908,7 @@
 
             <td><span class="guest-id" data-guest-id="${guest.id}" style="cursor: pointer; color: #6d5ce7; padding: 0.25rem 0.5rem; background: rgba(109, 92, 231, 0.1); border-radius: 4px; display: inline-block;">Open</span></td>
 
-            <td><div class="name-cell">${createInput('name', guest.name)}${familyBadge}</div></td>
+            <td><div class="name-cell">${createInput('name', guest.name)}</div></td>
 
             <td>${createSelect('stag', guest.stag, attendanceOptions)}</td>
 
@@ -4958,8 +5114,8 @@
             }
           }
 
-          if (values.some(v => v === 3)) newPlace++;
-          if (values.some(v => v === 4)) quabPark++;
+          if (values.some(v => v === 2)) newPlace++;
+          if (values.some(v => v === 3)) quabPark++;
         });
 
         document.getElementById('stat-friday_room-attending').textContent = attending;
@@ -4996,9 +5152,9 @@
             }
           }
 
-          if (values.some(v => v === 3)) newPlace++;
-          if (values.some(v => v === 4)) quabPark++;
-          if (values.some(v => v === 5)) quabEstate++;
+          if (values.some(v => v === 2)) newPlace++;
+          if (values.some(v => v === 3)) quabPark++;
+          if (values.some(v => v === 4)) quabEstate++;
         });
 
         document.getElementById('stat-saturday_room-attending').textContent = attending;
@@ -5502,7 +5658,14 @@
 
             }
 
-
+            // Update color-coding for select elements
+            if (target.tagName === 'SELECT') {
+              // Remove all existing value classes
+              target.className = target.className.replace(/value-[-\w]+/g, '').trim();
+              // Add new value class
+              const colorClass = `value-${value !== null ? value : 'null'}`;
+              target.className += ` ${colorClass}`;
+            }
 
             saveGuestField(guestId, field, value);
 
@@ -5512,7 +5675,47 @@
 
       }
 
+      // AI Suggestions functionality
+      async function loadAISuggestions(suggestionType) {
+        try {
+          const response = await fetch(`/api/ai/${suggestionType}`);
+          if (!response.ok) {
+            throw new Error('Failed to load AI suggestions');
+          }
+          const suggestions = await response.json();
+          return suggestions;
+        } catch (error) {
+          console.error('Error loading AI suggestions:', error);
+          return [];
+        }
+      }
 
+      async function displayAISuggestions(suggestionType, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        container.innerHTML = 'Loading suggestions...';
+        
+        const suggestions = await loadAISuggestions(suggestionType);
+        
+        if (suggestions.length === 0) {
+          container.innerHTML = 'No suggestions available.';
+          return;
+        }
+
+        container.innerHTML = suggestions.map(suggestion => 
+          `<div class="ai-suggestion-item">${suggestion.ai}</div>`
+        ).join('');
+      }
+
+      // Initialize AI suggestions when DOM is loaded
+      function initializeAISuggestions() {
+        // Load stag suggestions
+        displayAISuggestions('stag', 'stag-ai-content');
+        
+        // Load hen suggestions  
+        displayAISuggestions('hen', 'hen-ai-content');
+      }
 
       loadInstagramPosts();
 
@@ -5520,6 +5723,8 @@
 
       // Initialize stay preference functionality
       initializeStayPreferences();
+      // Initialize AI suggestions
+      initializeAISuggestions();
 
 
 

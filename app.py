@@ -1339,6 +1339,31 @@ def update_family_saturday_stay():
     })
 
 
+@app.get("/api/ai/<string:name>")
+def get_ai_suggestions(name):
+    """Get AI suggestions by name."""
+    try:
+        with psycopg.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT id, ai, name FROM public.ai WHERE name = %s ORDER BY id",
+                    (name,)
+                )
+                rows = cur.fetchall()
+                
+                suggestions = []
+                for row in rows:
+                    suggestions.append({
+                        "id": row[0],
+                        "ai": row[1], 
+                        "name": row[2]
+                    })
+                
+                return jsonify(suggestions)
+    except psycopg.Error as exc:
+        abort(500, description=f"Database error: {exc}")
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
 
