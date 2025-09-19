@@ -1054,6 +1054,12 @@
 
       .admin-stat-value {
 
+        margin-top: auto;
+
+        align-self: flex-end;
+
+        text-align: right;
+
         font-size: 1.8rem;
 
         font-weight: 700;
@@ -1075,7 +1081,6 @@
 
 
       .admin-table-container {
-
 
 
         width: 100%;
@@ -1476,44 +1481,44 @@
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Stag</div>
-                <div class="admin-stat-value" id="stat-stag">0 / 0</div>
                 <div class="admin-stat-subtext">Attending / Invited</div>
+                <div class="admin-stat-value" id="stat-stag">0 / 0</div>
               </div>
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Hen</div>
-                <div class="admin-stat-value" id="stat-hen">0 / 0</div>
                 <div class="admin-stat-subtext">Attending / Invited</div>
+                <div class="admin-stat-value" id="stat-hen">0 / 0</div>
               </div>
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Attendance Status</div>
-                <div class="admin-stat-value" id="stat-attendance_status">0 / 0</div>
                 <div class="admin-stat-subtext">Attending / Invited</div>
+                <div class="admin-stat-value" id="stat-attendance_status">0 / 0</div>
               </div>
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Ceremony</div>
-                <div class="admin-stat-value" id="stat-ceremony">0 / 0</div>
                 <div class="admin-stat-subtext">Attending / Invited</div>
+                <div class="admin-stat-value" id="stat-ceremony">0 / 0</div>
               </div>
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Wedding Meal</div>
-                <div class="admin-stat-value" id="stat-wedding_meal">0 / 0</div>
                 <div class="admin-stat-subtext">Confirmed / Invited</div>
+                <div class="admin-stat-value" id="stat-wedding_meal">0 / 0</div>
               </div>
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Friday Room</div>
-                <div class="admin-stat-value" id="stat-friday_room">0 / 0</div>
                 <div class="admin-stat-subtext">Families booked / Families invited</div>
+                <div class="admin-stat-value" id="stat-friday_room">0 / 0</div>
               </div>
 
               <div class="admin-stat-card">
                 <div class="admin-stat-label">Saturday Room</div>
-                <div class="admin-stat-value" id="stat-saturday_room">0 / 0</div>
                 <div class="admin-stat-subtext">Families booked / Families invited</div>
+                <div class="admin-stat-value" id="stat-saturday_room">0 / 0</div>
               </div>
 
             </div>
@@ -1568,6 +1573,14 @@
 
               </div>
 
+            </div>
+
+            <div class="admin-table-container">
+              <h3>Recent Changes</h3>
+              <button id="refresh-change-log" style="margin-bottom: 1rem; padding: 0.5rem 1rem; background: rgba(109, 92, 231, 0.9); color: white; border: none; border-radius: 6px; cursor: pointer;">Refresh</button>
+              <div id="change-log-body" style="background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 1rem; max-height: 400px; overflow-y: auto;">
+                <div class="loading">Loading change log...</div>
+              </div>
             </div>
 
           </div>
@@ -2765,28 +2778,60 @@
 
 
 
-        const sortedGuests = [...allAdminGuests].sort((a, b) => {
+        // Group guests by family and calculate max engagement score
+        const familyGroups = new Map();
 
-          const famA = (a.family_id || '').toString();
+        allAdminGuests.forEach(guest => {
+          const familyId = guest.family_id || '';
+          if (!familyGroups.has(familyId)) {
+            familyGroups.set(familyId, []);
+          }
+          familyGroups.get(familyId).push(guest);
+        });
 
-          const famB = (b.family_id || '').toString();
+        // Calculate max engagement score for each family
+        const familyScores = new Map();
+        familyGroups.forEach((guests, familyId) => {
+          let maxScore = 0;
+          guests.forEach(guest => {
+            const fields = ['stag', 'hen', 'friday_room', 'ceremony', 'attendance_status', 'wedding_meal', 'saturday_room'];
+            let score = 0;
+            fields.forEach(field => {
+              const value = guest[field];
+              const numValue = value === null || value === undefined || value === '' ? 0 : parseInt(value, 10) || 0;
+              score += numValue;
+            });
+            if (score > maxScore) maxScore = score;
+          });
+          familyScores.set(familyId, maxScore);
+        });
 
-          if (famA && famB && famA !== famB) {
+        // Sort families by max score (descending), then by family code
+        const sortedFamilyIds = Array.from(familyGroups.keys()).sort((a, b) => {
+          const scoreA = familyScores.get(a) || 0;
+          const scoreB = familyScores.get(b) || 0;
 
-            return famA.localeCompare(famB, undefined, { numeric: true, sensitivity: 'base' });
-
+          if (scoreA !== scoreB) {
+            return scoreB - scoreA; // Higher score first
           }
 
-          if (famA && !famB) return -1;
+          // If scores are equal, sort by family code
+          const famA = a.toString();
+          const famB = b.toString();
+          return famA.localeCompare(famB, undefined, { numeric: true, sensitivity: 'base' });
+        });
 
-          if (!famA && famB) return 1;
-
-          const nameA = (a.name || '').toString();
-
-          const nameB = (b.name || '').toString();
-
-          return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
-
+        // Flatten back to sorted guests array
+        const sortedGuests = [];
+        sortedFamilyIds.forEach(familyId => {
+          const familyGuests = familyGroups.get(familyId);
+          // Sort guests within family by name
+          familyGuests.sort((a, b) => {
+            const nameA = (a.name || '').toString();
+            const nameB = (b.name || '').toString();
+            return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
+          });
+          sortedGuests.push(...familyGuests);
         });
 
 
@@ -2863,13 +2908,77 @@
 
           { value: '', label: '' },
 
-          { value: -2, label: 'Invited' },
+          { value: -2, label: 'Not Invited' },
 
-          { value: -1, label: 'Not Invited' },
+          { value: -1, label: 'Invited' },
 
           { value: 0, label: 'Not Attending' },
 
           { value: 1, label: 'Attending' }
+
+        ];
+
+
+
+        const fridayRoomOptions = [
+
+          { value: '', label: '' },
+
+          { value: -2, label: 'Not Invited' },
+
+          { value: -1, label: 'Invited' },
+
+          { value: 0, label: 'Not Attending' },
+
+          { value: 1, label: 'Attending' },
+
+          { value: 3, label: 'New Place Hotel' },
+
+          { value: 4, label: 'Quab Park Hotel' }
+
+        ];
+
+
+
+        const saturdayRoomOptions = [
+
+          { value: '', label: '' },
+
+          { value: -2, label: 'Not Invited' },
+
+          { value: -1, label: 'Invited' },
+
+          { value: 0, label: 'Not Attending' },
+
+          { value: 1, label: 'Attending' },
+
+          { value: 3, label: 'New Place Hotel' },
+
+          { value: 4, label: 'Quab Park Hotel' },
+
+          { value: 5, label: 'Quab Park Estate' }
+
+        ];
+
+
+
+        const weddingMealOptions = [
+
+          { value: '', label: '' },
+
+          { value: -2, label: 'Not Invited' },
+
+          { value: -1, label: 'Invited' },
+
+          { value: 0, label: 'Not Attending' },
+
+          { value: 1, label: 'Attending' },
+
+          { value: 3, label: 'Vegetarian' },
+
+          { value: 4, label: 'Fish' },
+
+          { value: 5, label: 'Beef' }
 
         ];
 
@@ -2887,17 +2996,17 @@
 
             <td>${createSelect('hen', guest.hen, attendanceOptions)}</td>
 
-            <td>${createSelect('friday_room', guest.friday_room, attendanceOptions)}</td>
+            <td>${createSelect('friday_room', guest.friday_room, fridayRoomOptions)}</td>
 
             <td>${createSelect('ceremony', guest.ceremony, attendanceOptions)}</td>
 
             <td>${createSelect('attendance_status', guest.attendance_status, attendanceOptions)}</td>
 
-            <td>${createSelect('wedding_meal', guest.wedding_meal, attendanceOptions)}</td>
+            <td>${createSelect('wedding_meal', guest.wedding_meal, weddingMealOptions)}</td>
 
             <td>${createTextarea('restrictions', guest.restrictions)}</td>
 
-            <td>${createSelect('saturday_room', guest.saturday_room, attendanceOptions)}</td>
+            <td>${createSelect('saturday_room', guest.saturday_room, saturdayRoomOptions)}</td>
 
             <td>${createTextarea('comment', guest.comment)}</td>
 
@@ -2929,13 +3038,13 @@
 
           const intValue = value === null || value === undefined || value === '' ? null : parseInt(value, 10);
 
-          if (intValue === -2 || (intValue !== null && intValue > 0)) {
+          if (intValue !== null && intValue >= -1) {
 
             denominator += 1;
 
           }
 
-          if (intValue !== null && intValue > 0) {
+          if (intValue !== null && intValue >= 1) {
 
             numerator += 1;
 
@@ -2983,13 +3092,13 @@
 
         families.forEach(values => {
 
-          const hasInvite = values.some(v => v === -2 || (v !== null && v > 0));
+          const hasInvite = values.some(v => v !== null && v >= -1);
 
           if (hasInvite) {
 
             denominator += 1;
 
-            if (values.some(v => v !== null && v > 0)) {
+            if (values.some(v => v !== null && v >= 1)) {
 
               numerator += 1;
 
@@ -3047,7 +3156,7 @@
 
 
 
-      async function loadChangeLog(limit = 40) {
+      async function loadChangeLog(limit = 50) {
 
         try {
 
@@ -3083,7 +3192,7 @@
 
         if (!entries.length) {
 
-          body.innerHTML = '<tr><td colspan="7" class="loading">No updates yet</td></tr>';
+          body.innerHTML = '<div class="loading">No updates yet</div>';
 
           return;
 
@@ -3091,43 +3200,43 @@
 
 
 
-        const rows = entries.map(entry => {
+        const entriesHtml = entries.map(entry => {
 
-          const when = entry.changed_at ? new Date(entry.changed_at).toLocaleString() : 'n/a';
+          const ukTimestamp = entry.changed_at ? new Date(entry.changed_at).toLocaleString('en-GB', {
 
-          const guest = entry.guest_name ? `${entry.guest_name} (#${entry.guest_id})` : `Guest #${entry.guest_id}`;
+            year: 'numeric',
 
-          const family = entry.family_id || 'n/a';
+            month: 'short',
 
-          const oldVal = entry.old_value ?? 'n/a';
+            day: 'numeric',
 
-          const newVal = entry.new_value ?? 'n/a';
+            hour: '2-digit',
 
-          const by = entry.changed_by || 'n/a';
+            minute: '2-digit',
 
-          return `<tr>
+            second: '2-digit'
 
-            <td>${when}</td>
+          }) : 'n/a';
 
-            <td>${guest}</td>
+          const guestName = entry.guest_name || `Guest #${entry.guest_id}`;
 
-            <td>${family}</td>
+          const columnName = entry.column_name || 'unknown';
 
-            <td>${entry.column_name}</td>
+          const oldVal = entry.old_value ?? 'empty';
 
-            <td>${oldVal}</td>
+          const newVal = entry.new_value ?? 'empty';
 
-            <td>${newVal}</td>
+          return `<div style="padding: 0.5rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1); font-family: monospace; font-size: 0.9rem;">
 
-            <td>${by}</td>
+            <strong>${ukTimestamp}:</strong> ${guestName}, [${columnName}], ${oldVal} &gt; ${newVal}
 
-          </tr>`;
+          </div>`;
 
-        });
+        }).join('');
 
 
 
-        body.innerHTML = rows.join('');
+        body.innerHTML = entriesHtml;
 
       }
 
@@ -3316,8 +3425,6 @@
           refreshButton.addEventListener('click', () => loadChangeLog());
 
         }
-
-
 
 
 

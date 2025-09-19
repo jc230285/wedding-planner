@@ -237,6 +237,42 @@ def get_entertainment_posts():
     return jsonify({"data": posts[:3]})
 
 
+@app.get("/api/guest-changes")
+def get_guest_changes():
+    limit = request.args.get("limit", 50, type=int)
+    if limit > 100:
+        limit = 100  # Cap at 100 for safety
+
+    sql = """
+        SELECT
+            gcl.id,
+            gcl.guest_id,
+            g.name as guest_name,
+            gcl.family_id,
+            gcl.column_name,
+            gcl.old_value,
+            gcl.new_value,
+            gcl.changed_by,
+            gcl.changed_at
+        FROM public.guest_change_log gcl
+        LEFT JOIN public.guests g ON gcl.guest_id = g.id
+        ORDER BY gcl.changed_at DESC
+        LIMIT %s
+    """
+
+    with psycopg.connect(_require_database_url(), row_factory=dict_row) as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql, (limit,))
+            rows = cur.fetchall()
+
+    # Serialize datetime
+    for row in rows:
+        if isinstance(row["changed_at"], datetime):
+            row["changed_at"] = row["changed_at"].isoformat()
+
+    return jsonify({"data": rows})
+
+
 def _normalize_update_value(column: str, value: Any) -> Any:
     if value is None:
         return None
