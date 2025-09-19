@@ -3,7 +3,10 @@ import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 import requests
-from bs4 import BeautifulSoup
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    BeautifulSoup = None
 import re
 from flask import url_for
 
@@ -69,6 +72,10 @@ def _scrape_instagram_posts() -> List[Dict[str, Any]]:
         )
         
         if response.ok:
+            if BeautifulSoup is None:
+                print("BeautifulSoup not available, cannot parse Instagram data")
+                return []
+                
             soup = BeautifulSoup(response.text, 'html.parser')
             
             # Find the script tag containing the page data
