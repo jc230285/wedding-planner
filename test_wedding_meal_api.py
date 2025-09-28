@@ -24,6 +24,20 @@ with psycopg.connect(DATABASE_URL, row_factory=dict_row) as conn:
             guest_name = row['name']
             print(f"Testing with guest: {guest_name} (ID: {guest_id})")
 
+            # Test updating to Not Attending (0)
+            payload = {
+                "family_code": "LAMP",
+                "guest_id": guest_id,
+                "meal_preference": 0
+            }
+
+            try:
+                response = requests.post(url, headers=headers, data=json.dumps(payload))
+                print(f"Response status for Not Attending: {response.status_code}")
+                print(f"Response: {response.json()}")
+            except Exception as e:
+                print(f"Error testing Not Attending: {e}")
+
             # Test updating to Beef (5)
             payload = {
                 "family_code": "LAMP",

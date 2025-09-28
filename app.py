@@ -37,6 +37,7 @@ UPDATABLE_COLUMNS = {
     "side",
     "guest_type",
     "sex",
+    "ideas",
     "stag",
     "hen",
     "friday_room",
@@ -60,6 +61,7 @@ GUEST_COLUMNS = (
     "side",
     "guest_type",
     "sex",
+    "ideas",
     "stag",
     "hen",
     "friday_room",
@@ -74,10 +76,6 @@ GUEST_COLUMNS = (
     "music_requests",
     "comment",
     "attendance_status",
-    "stag_ideas",
-    "hen_ideas",
-    "friday_stay_preference",
-    "saturday_stay_preference",
     "created_at",
 )
 
@@ -733,8 +731,8 @@ def update_family_wedding_meal():
     except (TypeError, ValueError):
         abort(400, description="Meal preference must be an integer.")
 
-    if meal_preference_int not in {3, 4, 5}:
-        abort(400, description="Meal preference must be 3 (Vegetarian), 4 (Fish), or 5 (Beef).")
+    if meal_preference_int not in {0, 3, 4, 5}:
+        abort(400, description="Meal preference must be 0 (Not Attending), 3 (Vegetarian), 4 (Fish), or 5 (Beef).")
 
     family_code = str(family_code_raw).strip().upper()
     guest_id = str(guest_id_raw).strip()
@@ -1050,16 +1048,16 @@ def update_family_stag_ideas():
             with conn.cursor() as cur:
                 # Check if any guests exist for this family
                 cur.execute(
-                    "SELECT id FROM public.guests WHERE upper(family_id) = %s",
+                    "SELECT id FROM public.guests WHERE upper(family_id) = %s AND stag > -2",
                     (family_code,),
                 )
                 rows = cur.fetchall()
                 if not rows:
-                    abort(404, description="No guests found for that family code.")
+                    abort(404, description="No guests invited to stag found for that family code.")
 
-                # Update stag_ideas for all guests in the family
+                # Update ideas only for guests who are invited to the stag (stag > -2)
                 cur.execute(
-                    "UPDATE public.guests SET stag_ideas = %s WHERE upper(family_id) = %s",
+                    "UPDATE public.guests SET ideas = %s WHERE upper(family_id) = %s AND stag > -2",
                     (ideas, family_code),
                 )
 
@@ -1068,7 +1066,7 @@ def update_family_stag_ideas():
                     log_entries = [(
                         rows[0]["id"],
                         family_code,
-                        "stag_ideas",
+                        "ideas",
                         None,  # We don't track old value for ideas
                         ideas,
                         updated_by,
@@ -1113,16 +1111,16 @@ def update_family_hen_ideas():
             with conn.cursor() as cur:
                 # Check if any guests exist for this family
                 cur.execute(
-                    "SELECT id FROM public.guests WHERE upper(family_id) = %s",
+                    "SELECT id FROM public.guests WHERE upper(family_id) = %s AND hen > -2",
                     (family_code,),
                 )
                 rows = cur.fetchall()
                 if not rows:
-                    abort(404, description="No guests found for that family code.")
+                    abort(404, description="No guests invited to hen found for that family code.")
 
-                # Update hen_ideas for all guests in the family
+                # Update ideas only for guests who are invited to the hen (hen > -2)
                 cur.execute(
-                    "UPDATE public.guests SET hen_ideas = %s WHERE upper(family_id) = %s",
+                    "UPDATE public.guests SET ideas = %s WHERE upper(family_id) = %s AND hen > -2",
                     (ideas, family_code),
                 )
 
@@ -1131,7 +1129,7 @@ def update_family_hen_ideas():
                     log_entries = [(
                         rows[0]["id"],
                         family_code,
-                        "hen_ideas",
+                        "ideas",
                         None,  # We don't track old value for ideas
                         ideas,
                         updated_by,
@@ -1214,6 +1212,71 @@ def update_family_music_requests():
     })
 
 
+@app.post("/api/family/restrictions")
+def update_guest_restrictions():
+    """Update dietary restrictions for a specific guest"""
+    payload = request.get_json(silent=True)
+    if payload is None or not isinstance(payload, dict):
+        abort(400, description="Request must contain a JSON object.")
+
+    family_code_raw = payload.get("family_code") or payload.get("family_id")
+    guest_id = payload.get("guest_id")
+    restrictions = payload.get("restrictions", "")
+    updated_by = payload.get("updated_by", "family")
+
+    if family_code_raw is None or str(family_code_raw).strip() == "":
+        abort(400, description="Family code is required.")
+
+    if guest_id is None:
+        abort(400, description="Guest ID is required.")
+
+    family_code = str(family_code_raw).strip().upper()
+
+    try:
+        with psycopg.connect(_require_database_url(), row_factory=dict_row) as conn:
+            with conn.cursor() as cur:
+                # Check if the guest exists and belongs to this family
+                cur.execute(
+                    "SELECT id, restrictions FROM public.guests WHERE id = %s AND upper(family_id) = %s",
+                    (guest_id, family_code),
+                )
+                guest = cur.fetchone()
+                if not guest:
+                    abort(404, description="Guest not found for that family code.")
+
+                old_restrictions = guest["restrictions"]
+
+                # Update restrictions for the specific guest
+                cur.execute(
+                    "UPDATE public.guests SET restrictions = %s WHERE id = %s",
+                    (restrictions if restrictions.strip() else None, guest_id),
+                )
+
+                # Log the change
+                cur.execute(
+                    """
+                    INSERT INTO public.guest_change_log
+                        (guest_id, family_id, column_name, old_value, new_value, changed_by)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    """,
+                    (
+                        guest_id,
+                        family_code,
+                        "restrictions",
+                        old_restrictions,
+                        restrictions if restrictions.strip() else None,
+                        updated_by,
+                    ),
+                )
+            conn.commit()
+    except psycopg.Error as exc:
+        abort(500, description=f"Database error: {exc}")
+
+    return jsonify({
+        "message": "Dietary restrictions saved successfully.",
+    })
+
+
 @app.post("/api/family/friday-stay")
 def update_family_friday_stay():
     """Update Friday stay preference for all guests in a family"""
@@ -1236,7 +1299,7 @@ def update_family_friday_stay():
             with conn.cursor() as cur:
                 # Update all guests in the family
                 cur.execute(
-                    "UPDATE public.guests SET friday_stay_preference = %s WHERE family_id = %s",
+                    "UPDATE public.guests SET friday_room = %s WHERE family_id = %s",
                     (stay_option, family_code)
                 )
 
@@ -1256,7 +1319,7 @@ def update_family_friday_stay():
                         (
                             guest_id,
                             family_code,
-                            "friday_stay_preference",
+                            "friday_room",
                             None,  # We don't track old value for stay preferences
                             stay_option,
                             updated_by,
@@ -1298,7 +1361,7 @@ def update_family_saturday_stay():
             with conn.cursor() as cur:
                 # Update all guests in the family
                 cur.execute(
-                    "UPDATE public.guests SET saturday_stay_preference = %s WHERE family_id = %s",
+                    "UPDATE public.guests SET saturday_room = %s WHERE family_id = %s",
                     (stay_option, family_code)
                 )
 
@@ -1318,7 +1381,7 @@ def update_family_saturday_stay():
                         (
                             guest_id,
                             family_code,
-                            "saturday_stay_preference",
+                            "saturday_room",
                             None,  # We don't track old value for stay preferences
                             stay_option,
                             updated_by,

@@ -1492,11 +1492,24 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
+      .wedding-meal-guest-info {
+        flex: 1;
+      }
+
       .wedding-meal-guest-name {
         font-weight: 600;
         color: #ffffff;
         font-size: 1.1rem;
-        flex: 1;
+        margin-bottom: 0.3rem;
+      }
+
+      .wedding-meal-restrictions {
+        font-size: 0.9rem;
+        color: #ffd6cc;
+        font-style: italic;
+        line-height: 1.3;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
       }
 
       .wedding-meal-options {
@@ -3162,17 +3175,32 @@
 
         console.log('Main guest data for text areas:', mainGuest);
 
-        // Load stag_ideas from main guest
-        if (mainGuest.stag_ideas) {
-          const stagTextarea = document.getElementById('stag-ideas-text');
-          if (stagTextarea) {
-            console.log('Loading stag_ideas:', mainGuest.stag_ideas);
-            stagTextarea.value = mainGuest.stag_ideas;
-          }
+        // Load stag ideas from guest invited to stag (stag > -2)
+        const stagGuest = familyData.find(guest => {
+          const stagValue = guest.stag;
+          return stagValue !== null && stagValue !== undefined && stagValue !== '' && parseInt(stagValue, 10) > -2;
+        });
+        
+        const stagTextarea = document.getElementById('stag-ideas-text');
+        if (stagTextarea && stagGuest && stagGuest.ideas) {
+          console.log('Loading stag ideas from:', stagGuest.name, stagGuest.ideas);
+          stagTextarea.value = stagGuest.ideas;
+        }
+        
+        // Load hen ideas from guest invited to hen (hen > -2)
+        const henGuest = familyData.find(guest => {
+          const henValue = guest.hen;
+          return henValue !== null && henValue !== undefined && henValue !== '' && parseInt(henValue, 10) > -2;
+        });
+        
+        const henTextarea = document.getElementById('hen-ideas-text');
+        if (henTextarea && henGuest && henGuest.ideas) {
+          console.log('Loading hen ideas from:', henGuest.name, henGuest.ideas);
+          henTextarea.value = henGuest.ideas;
         }
 
-        // Load hen_ideas from main guest
-        if (mainGuest.hen_ideas) {
+        // Legacy support - remove this section after migration
+        if (mainGuest.hen_ideas && !mainGuest.ideas) {
           const henTextarea = document.getElementById('hen-ideas-text');
           if (henTextarea) {
             console.log('Loading hen_ideas:', mainGuest.hen_ideas);
@@ -4140,18 +4168,36 @@
         if (!weddingMealGuestsContainer) return;
 
         // Filter FAMILY guests who are invited to the wedding meal (wedding_meal > -2)
+        // AND are attending the ceremony or haven't declined
         const weddingMealGuests = familyData.filter(guest => {
           const mealValue = guest.wedding_meal;
-          return mealValue !== null && mealValue !== undefined && mealValue !== '' && parseInt(mealValue, 10) > -2;
+          const ceremonyValue = parseInt(guest.ceremony || -2, 10);
+          const attendanceStatus = parseInt(guest.attendance_status || -2, 10);
+
+          // Must be invited to wedding meal
+          const invitedToMeal = mealValue !== null && mealValue !== undefined && mealValue !== '' && parseInt(mealValue, 10) > -2;
+
+          // Must be attending ceremony (1) or haven't explicitly declined (not 0)
+          // OR have overall attendance status as attending (1) or haven't declined (not 0)
+          const canAttend = (ceremonyValue === 1 || (ceremonyValue !== 0 && ceremonyValue >= -1)) ||
+                           (attendanceStatus === 1 || (attendanceStatus !== 0 && attendanceStatus >= -1));
+
+          return invitedToMeal && canAttend;
         });
 
         console.log('Wedding meal guests found:', weddingMealGuests.length, weddingMealGuests);
 
         weddingMealGuestsContainer.innerHTML = weddingMealGuests.map(guest => {
           const mealValue = parseInt(guest.wedding_meal, 10);
+          const restrictions = guest.restrictions ? guest.restrictions.trim() : '';
           return `
             <div class="wedding-meal-guest" data-guest-id="${guest.id}">
-              <div class="wedding-meal-guest-name">${guest.name}</div>
+              <div class="wedding-meal-guest-info">
+                <div class="wedding-meal-guest-name">${guest.name}</div>
+
+              </div>                <div class="wedding-meal-restrictions">
+                  <input type="text" id="restrictions-${guest.id}" class="restrictions-input" data-guest-id="${guest.id}" value="${restrictions}" placeholder="Any dietary restrictions..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                </div>
               <div class="wedding-meal-options">
                 <button class="wedding-meal-option${mealValue === 5 ? ' is-active' : ''}" data-meal="5" data-guest-id="${guest.id}">Beef</button>
                 <button class="wedding-meal-option${mealValue === 4 ? ' is-active' : ''}" data-meal="4" data-guest-id="${guest.id}">Fish</button>
@@ -4165,6 +4211,43 @@
         // Add event listeners to the meal options
         weddingMealGuestsContainer.querySelectorAll('.wedding-meal-option').forEach(button => {
           button.addEventListener('click', handleWeddingMealSelection);
+        });
+
+        // Add event listeners to the restrictions input fields
+        weddingMealGuestsContainer.querySelectorAll('.restrictions-input').forEach(input => {
+          const saveRestrictions = debounce(async (value, guestId) => {
+            try {
+              const response = await fetch('/api/family/restrictions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                  family_code: currentFamilyCode, 
+                  guest_id: guestId,
+                  restrictions: value 
+                }),
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to save restrictions');
+              }
+
+              // Update local family data
+              const guest = familyData.find(g => g.id === guestId);
+              if (guest) {
+                guest.restrictions = value;
+              }
+
+              showToast('Dietary restrictions saved!', 'success');
+            } catch (error) {
+              console.error('Failed to save restrictions:', error);
+              showToast('Failed to save dietary restrictions', 'error');
+            }
+          }, 2000);
+
+          input.addEventListener('input', (e) => {
+            const guestId = e.target.dataset.guestId;
+            saveRestrictions(e.target.value, guestId);
+          });
         });
       }
 
@@ -4409,9 +4492,9 @@
               // Update local familyData to reflect the change
               familyData.forEach(guest => {
                 if (day === 'friday') {
-                  guest.friday_stay_preference = option;
+                  guest.friday_room = option;
                 } else {
-                  guest.saturday_stay_preference = option;
+                  guest.saturday_room = option;
                 }
               });
               
@@ -4444,9 +4527,9 @@
         const firstGuest = familyData[0];
         
         // Update Friday stay preference
-        if (firstGuest.friday_stay_preference) {
-          const fridayCard = document.querySelector(`#friday-section .stay-card[data-option="${firstGuest.friday_stay_preference}"]`);
-          const fridayButton = document.querySelector(`#friday-section .stay-select-btn[data-option="${firstGuest.friday_stay_preference}"]`);
+        if (firstGuest.friday_room) {
+          const fridayCard = document.querySelector(`#friday-section .stay-card[data-option="${firstGuest.friday_room}"]`);
+          const fridayButton = document.querySelector(`#friday-section .stay-select-btn[data-option="${firstGuest.friday_room}"]`);
           
           if (fridayCard && fridayButton) {
             // Clear all Friday selections first
@@ -4464,9 +4547,9 @@
         }
 
         // Update Saturday stay preference
-        if (firstGuest.saturday_stay_preference) {
-          const saturdayCard = document.querySelector(`#saturday-section .stay-card[data-option="${firstGuest.saturday_stay_preference}"]`);
-          const saturdayButton = document.querySelector(`#saturday-section .stay-select-btn[data-option="${firstGuest.saturday_stay_preference}"]`);
+        if (firstGuest.saturday_room) {
+          const saturdayCard = document.querySelector(`#saturday-section .stay-card[data-option="${firstGuest.saturday_room}"]`);
+          const saturdayButton = document.querySelector(`#saturday-section .stay-select-btn[data-option="${firstGuest.saturday_room}"]`);
           
           if (saturdayCard && saturdayButton) {
             // Clear all Saturday selections first
@@ -5208,7 +5291,7 @@
           }
           
           // Handle text-based columns
-          if (['stag_ideas', 'hen_ideas', 'music_requests', 'comment'].includes(columnName)) {
+          if (['ideas', 'music_requests', 'comment', 'restrictions'].includes(columnName)) {
             return value; // Return text as-is for text columns
           }
           
@@ -5385,11 +5468,11 @@
 
               <h4 style="margin-top: 0; color: #6d5ce7;">Personalized Invitation Message:</h4>
 
-              <p style="font-style: italic; margin-bottom: 0;">
+                <p style="font-style: italic; margin-bottom: 0;">
 
                 "Dear ${guest.name},<br><br>
 
-                You are invited to celebrate the wedding of James & Heather!<br><br>
+                You are invited to celebrate the wedding of James & Heather on Saturday 12 September 2026 at Quob Park!<br><br>
 
                 Please use this personal link to RSVP and view all the wedding details:<br>
 
@@ -5397,7 +5480,7 @@
 
                 We can't wait to celebrate with you!"
 
-              </p>
+                </p>
 
             </div>
 
