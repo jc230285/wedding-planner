@@ -2284,6 +2284,8 @@
 
                       <th>Saturday Room</th>
 
+                      <th>Comments</th>
+
                     </tr>
 
                   </thead>
@@ -2292,7 +2294,7 @@
 
                     <tr>
 
-                      <td colspan="9" class="loading">Loading guest data...</td>
+                      <td colspan="10" class="loading">Loading guest data...</td>
 
                     </tr>
 
@@ -4742,7 +4744,7 @@
 
           document.getElementById('admin-table-body').innerHTML =
 
-            '<tr><td colspan="9" style="color: red;">Error loading guest data</td></tr>';
+            '<tr><td colspan="10" style="color: red;">Error loading guest data</td></tr>';
 
         }
 
@@ -4766,7 +4768,7 @@
 
         if (!allAdminGuests || allAdminGuests.length === 0) {
 
-          tbody.innerHTML = '<tr><td colspan="9" class="loading">No guest data available</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="10" class="loading">No guest data available</td></tr>';
 
           return;
 
@@ -4997,6 +4999,8 @@
             <td>${createSelect('wedding_meal', guest.wedding_meal, weddingMealOptions)}</td>
 
             <td>${createSelect('saturday_room', guest.saturday_room, saturdayRoomOptions)}</td>
+
+            <td>${createTextarea('comment', guest.comment)}</td>
 
           </tr>
 
@@ -5414,7 +5418,7 @@
 
             <button class="close-btn" onclick="this.closest('.guest-popup').remove()">×</button>
 
-            <h3>Guest Details: ${guest.name}</h3>
+            <h3>Guest Details</h3>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
 
@@ -5422,19 +5426,57 @@
 
                 <p><strong>Guest ID:</strong> ${guest.id}</p>
 
-                <p><strong>Family Code:</strong> ${guest.family_id || 'None'}</p>
+                <div style="margin-bottom: 1rem;">
 
-                <p><strong>Email:</strong> ${guest.email || 'Not provided'}</p>
+                  <label style="display: block; font-weight: bold; margin-bottom: 4px;">Name:</label>
 
-                <p><strong>Mobile:</strong> ${guest.mobile || 'Not provided'}</p>
+                  <input type="text" id="popup-name-${guest.id}" value="${guest.name || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+
+                  <label style="display: block; font-weight: bold; margin-bottom: 4px;">Family Code:</label>
+
+                  <input type="text" id="popup-family_id-${guest.id}" value="${guest.family_id || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+
+                  <label style="display: block; font-weight: bold; margin-bottom: 4px;">Email:</label>
+
+                  <input type="email" id="popup-email-${guest.id}" value="${guest.email || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+
+                  <label style="display: block; font-weight: bold; margin-bottom: 4px;">Mobile:</label>
+
+                  <input type="text" id="popup-mobile-${guest.id}" value="${guest.mobile || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+
+                </div>
 
               </div>
 
               <div>
 
-                <p><strong>Address:</strong> ${guest.address || 'Not provided'}</p>
+                <div style="margin-bottom: 1rem;">
 
-                <p><strong>Music Requests:</strong> ${guest.music_requests || 'None'}</p>
+                  <label style="display: block; font-weight: bold; margin-bottom: 4px;">Address:</label>
+
+                  <textarea id="popup-address-${guest.id}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; height: 80px; resize: vertical;">${guest.address || ''}</textarea>
+
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+
+                  <label style="display: block; font-weight: bold; margin-bottom: 4px;">Music Requests:</label>
+
+                  <textarea id="popup-music_requests-${guest.id}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; height: 60px; resize: vertical;">${guest.music_requests || ''}</textarea>
+
+                </div>
 
               </div>
 
@@ -5442,25 +5484,25 @@
 
             <div style="margin: 1rem 0;">
 
-              <p><strong>Restrictions:</strong></p>
+              <label style="display: block; font-weight: bold; margin-bottom: 4px;">Dietary Restrictions:</label>
 
-              <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem; border-radius: 4px; font-style: italic;">
-
-                ${guest.restrictions || 'No restrictions specified'}
-
-              </div>
+              <textarea id="popup-restrictions-${guest.id}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; height: 60px; resize: vertical;">${guest.restrictions || ''}</textarea>
 
             </div>
 
             <div style="margin: 1rem 0;">
 
-              <p><strong>Comments:</strong></p>
+              <label style="display: block; font-weight: bold; margin-bottom: 4px;">Comments:</label>
 
-              <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem; border-radius: 4px; font-style: italic;">
+              <textarea id="popup-comment-${guest.id}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; height: 80px; resize: vertical;">${guest.comment || ''}</textarea>
 
-                ${guest.comment || 'No comments'}
+            </div>
 
-              </div>
+            <div style="margin: 1rem 0;">
+
+              <button onclick="saveAllPopupFields(${guest.id})" style="background: #6d5ce7; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">Save All Changes</button>
+
+              <button onclick="this.closest('.guest-popup').remove()" style="background: #666; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Close</button>
 
             </div>
 
@@ -5511,6 +5553,108 @@
           }
 
         });
+
+      }
+
+
+
+      async function saveAllPopupFields(guestId) {
+
+        const fields = ['name', 'family_id', 'email', 'mobile', 'address', 'music_requests', 'restrictions', 'comment'];
+
+        let hasErrors = false;
+
+        let updateData = {};
+
+
+
+        // Collect all field values
+
+        fields.forEach(field => {
+
+          const element = document.getElementById(`popup-${field}-${guestId}`);
+
+          if (element) {
+
+            let value = element.value.trim();
+
+            if (value === '') value = null;
+
+            updateData[field] = value;
+
+          }
+
+        });
+
+
+
+        try {
+
+          // Save all fields in one request
+
+          const response = await fetch(`/api/guests/${guestId}`, {
+
+            method: 'PATCH',
+
+            headers: { 'Content-Type': 'application/json' },
+
+            body: JSON.stringify(updateData)
+
+          });
+
+
+
+          if (!response.ok) {
+
+            throw new Error('Failed to save changes');
+
+          }
+
+
+
+          // Update local guest data
+
+          const guest = allAdminGuests.find(g => g.id == guestId);
+
+          if (guest) {
+
+            Object.keys(updateData).forEach(field => {
+
+              guest[field] = updateData[field];
+
+            });
+
+          }
+
+
+
+          // Refresh the admin table and stats
+
+          renderAdminTable();
+
+          updateAdminStats();
+
+          loadChangeLog();
+
+
+
+          showToast('All changes saved successfully!', 'success');
+
+          
+
+          // Close the popup
+
+          document.querySelector('.guest-popup').remove();
+
+
+
+        } catch (error) {
+
+          console.error('Error saving guest changes:', error);
+
+          showToast('Failed to save changes', 'error');
+
+        }
 
       }
 
