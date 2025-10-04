@@ -7,16 +7,10 @@ from datetime import datetime
 from uuid import UUID
 from typing import Any, Dict, Iterable, List
 
-import requests
 from dotenv import load_dotenv
 from flask import Flask, abort, jsonify, render_template, request, url_for
 import psycopg
 from psycopg.rows import dict_row
-
-try:
-    from bs4 import BeautifulSoup
-except ImportError:
-    BeautifulSoup = None
 
 from utils.db import normalize_database_url
 from utils.entertainment_cache import get_cached_posts, get_cached_events
@@ -27,7 +21,6 @@ app = Flask(__name__)
 
 DATABASE_URL_RAW = os.getenv("DATABASE_URL")
 DATABASE_URL = normalize_database_url(DATABASE_URL_RAW) if DATABASE_URL_RAW else None
-INSTAGRAM_USER_ID = os.getenv("INSTAGRAM_USER_ID")
 INSTAGRAM_ACCESS_TOKEN = os.getenv("INSTAGRAM_ACCESS_TOKEN")
 
 INT_COLUMNS = {"stag", "hen", "friday_room", "ceremony", "wedding_meal", "saturday_room", "attendance_status"}
@@ -186,14 +179,14 @@ def get_guests_without_family():
 
 @app.get("/api/entertainment/posts")
 def get_entertainment_posts():
-    """Get Instagram posts with caching (max once per day)"""
+    """Get promotional posts (static content, no longer scraping)"""
     posts = get_cached_posts()
     return jsonify({"data": posts})
 
 
 @app.get("/api/entertainment/events")
 def get_facebook_events():
-    """Get Facebook events with caching (max once per day)"""
+    """Get events from beard_events database table with caching"""
     events = get_cached_events()
     return jsonify({"data": events})
 

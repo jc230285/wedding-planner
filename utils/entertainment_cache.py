@@ -2,17 +2,17 @@ import json
 import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
-import requests
-try:
-    from bs4 import BeautifulSoup
-except ImportError:
-    BeautifulSoup = None
-import re
-from flask import url_for
+import psycopg
+from psycopg.rows import dict_row
+from utils.db import normalize_database_url
 
 CACHE_FILE_POSTS = 'entertainment_posts_cache.json'
 CACHE_FILE_EVENTS = 'entertainment_events_cache.json'
 CACHE_DURATION_HOURS = 24  # Cache for 24 hours
+
+# Get database URL from environment
+DATABASE_URL_RAW = os.getenv('DATABASE_URL')
+DATABASE_URL = normalize_database_url(DATABASE_URL_RAW) if DATABASE_URL_RAW else None
 
 
 def _is_cache_valid(cache_file: str) -> bool:
@@ -56,79 +56,69 @@ def _load_cache(cache_file: str) -> Optional[List[Dict[str, Any]]]:
         return None
 
 
-def _scrape_instagram_posts() -> List[Dict[str, Any]]:
-    """Scrape Instagram posts from beardbanduk"""
-    posts = []
+def _get_events_from_database() -> List[Dict[str, Any]]:
+    """Get events from the beard_events database table"""
+    events = []
+    
+    if not DATABASE_URL:
+        print("Database URL not configured")
+        return _get_fallback_events()
     
     try:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-        
-        response = requests.get(
-            "https://www.instagram.com/beardbanduk/",
-            headers=headers,
-            timeout=10
-        )
-        
-        if response.ok:
-            if BeautifulSoup is None:
-                print("BeautifulSoup not available, cannot parse Instagram data")
-                return []
+        with psycopg.connect(DATABASE_URL, row_factory=dict_row) as conn:
+            with conn.cursor() as cur:
+                # Get upcoming events ordered by timestamp
+                cur.execute("""
+                    SELECT 
+                        name,
+                        url,
+                        timestamp,
+                        location,
+                        venueurl,
+                        duration,
+                        imageurl,
+                        responded
+                    FROM beard_events
+                    WHERE timestamp >= NOW()
+                    ORDER BY timestamp ASC
+                    LIMIT 10
+                """)
                 
-            soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # Find the script tag containing the page data
-            script_tags = soup.find_all('script', string=re.compile(r'window\._sharedData'))
-            
-            if script_tags:
-                script_content = script_tags[0].string
-                # Extract JSON data
-                json_match = re.search(r'window\._sharedData = ({.*?});', script_content)
+                rows = cur.fetchall()
                 
-                if json_match:
-                    data = json.loads(json_match.group(1))
+                for row in rows:
+                    # Format the date nicely
+                    event_date = row['timestamp']
+                    if event_date:
+                        formatted_date = event_date.strftime("%a, %d %b at %H:%M")
+                    else:
+                        formatted_date = "Date TBA"
                     
-                    # Navigate through the Instagram data structure
-                    entry_data = data.get('entry_data', {})
-                    profile_page = entry_data.get('ProfilePage', [])
+                    events.append({
+                        "title": row['name'] or "BEARD Live",
+                        "url": row['url'] or "https://www.facebook.com/bearduk/events",
+                        "date": formatted_date,
+                        "venue": row['location'] or "Venue TBA",
+                        "venue_url": row['venueurl'],
+                        "image_url": row['imageurl'],
+                        "duration": row['duration'],
+                        "responded": row['responded']
+                    })
                     
-                    if profile_page and len(profile_page) > 0:
-                        user_data = profile_page[0].get('graphql', {}).get('user', {})
-                        media_data = user_data.get('edge_owner_to_timeline_media', {}).get('edges', [])
-                        
-                        for item in media_data[:3]:  # Get last 3 posts
-                            node = item.get('node', {})
-                            
-                            # Extract post data
-                            image_url = node.get('display_url', '')
-                            caption_edges = node.get('edge_media_to_caption', {}).get('edges', [])
-                            caption = ''
-                            if caption_edges:
-                                caption = caption_edges[0].get('node', {}).get('text', '')
-                            
-                            # Truncate caption
-                            if len(caption) > 140:
-                                caption = caption[:137].rstrip() + "…"
-                            
-                            permalink = f"https://www.instagram.com/p/{node.get('shortcode', '')}/"
-                            
-                            if image_url:
-                                posts.append({
-                                    "caption": caption or "View on Instagram",
-                                    "permalink": permalink,
-                                    "image_url": image_url,
-                                    "timestamp": node.get('taken_at_timestamp')
-                                })
     except Exception as e:
-        print(f"Instagram scraping failed: {e}")
+        print(f"Database query failed: {e}")
+        # Return fallback events if database query fails
+        return _get_fallback_events()
     
-    return posts
+    # If no events found, return fallback
+    if not events:
+        return _get_fallback_events()
+    
+    return events
 
 
 def _get_fallback_posts() -> List[Dict[str, Any]]:
-    """Get fallback posts when scraping fails"""
-    # Note: url_for might not be available outside Flask context, so we'll use a relative path
+    """Get fallback posts when data is unavailable"""
     fallback_image = "/static/images/entertainment.jpg"
     
     return [
@@ -150,18 +140,6 @@ def _get_fallback_posts() -> List[Dict[str, Any]]:
             "image_url": fallback_image,
             "timestamp": None,
         },
-        {
-            "caption": "Late-night DJ sets keep the dance floor packed until close.",
-            "permalink": "https://www.instagram.com/beardbanduk/",
-            "image_url": fallback_image,
-            "timestamp": None,
-        },
-        {
-            "caption": "Behind the scenes with the band – follow @beardbanduk for more!",
-            "permalink": "https://www.instagram.com/beardbanduk/",
-            "image_url": fallback_image,
-            "timestamp": None,
-        }
     ]
 
 
@@ -196,24 +174,18 @@ def _get_fallback_events() -> List[Dict[str, Any]]:
 
 
 def get_cached_posts() -> List[Dict[str, Any]]:
-    """Get Instagram posts with caching (max once per day)"""
+    """Get static promotional posts (no longer scraping Instagram)"""
     # Check if cache is valid
     if _is_cache_valid(CACHE_FILE_POSTS):
         cached_posts = _load_cache(CACHE_FILE_POSTS)
         if cached_posts is not None:
-            print("Using cached Instagram posts")
+            print("Using cached posts")
             return cached_posts[:3]
     
-    print("Cache invalid or missing, scraping Instagram posts...")
+    print("Using static promotional posts...")
     
-    # Try to scrape fresh data
-    posts = _scrape_instagram_posts()
-    
-    # If scraping fails or returns insufficient posts, use fallback
-    if len(posts) < 3:
-        fallback_posts = _get_fallback_posts()
-        needed_posts = 3 - len(posts)
-        posts.extend(fallback_posts[:needed_posts])
+    # Use static fallback posts
+    posts = _get_fallback_posts()
     
     # Save to cache
     final_posts = posts[:3]
@@ -223,19 +195,18 @@ def get_cached_posts() -> List[Dict[str, Any]]:
 
 
 def get_cached_events() -> List[Dict[str, Any]]:
-    """Get Facebook events with caching (max once per day)"""
+    """Get events from database with caching"""
     # Check if cache is valid
     if _is_cache_valid(CACHE_FILE_EVENTS):
         cached_events = _load_cache(CACHE_FILE_EVENTS)
         if cached_events is not None:
-            print("Using cached Facebook events")
+            print("Using cached events")
             return cached_events
     
-    print("Cache invalid or missing, using fallback events...")
+    print("Fetching events from database...")
     
-    # For now, we're using static events as Facebook scraping is complex
-    # In the future, this could be enhanced to scrape Facebook events
-    events = _get_fallback_events()
+    # Get events from database
+    events = _get_events_from_database()
     
     # Save to cache
     _save_cache(CACHE_FILE_EVENTS, events)
