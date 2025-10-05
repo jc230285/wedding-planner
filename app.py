@@ -100,6 +100,11 @@ def _fetch_guests(where_clause: str = "", params: Iterable[Any] = ()) -> List[Di
     return [_serialize_guest(row) for row in rows]
 
 
+@app.route("/timeline")
+def timeline() -> str:
+    """Wedding timeline/planning page - read-only view"""
+    return render_template("timeline.html")
+
 
 @app.route("/")
 def home() -> str:
@@ -1421,5 +1426,5 @@ def get_ai_suggestions(name):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
 

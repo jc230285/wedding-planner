@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Schedule | Matt & Lucy's Wedding</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #f5f5f5;
+                       {
+                number: 6,
+                title: "Evening Entertainment",
+                date: "Saturday, 13th September 2026",
+                time: "20:00 - 01:30",
+                location: "Quob Park Estate",
+                description: `<strong>20:00</strong> - Light snacks served<br><strong>21:00 onwards</strong> - Live music from BEARD, DJ, dancing, and evening buffet<br><strong>01:30</strong> - Carriages<br><br><strong>Costs:</strong><br>• Band: £2,000.00 (Paid £200 deposit. No deadline for final balance)<br>• Evening per guest: £25.00<br>• Bar Tab: £3,000.00`,
+                statsKey: 'wedding_meal', // Tie to meal guests
+                costs: [
+                    { amount: 2000, category: 'band', type: 'fixed' },
+                    { perGuest: 25, category: 'quob', type: 'per-guest' },
+                    { amount: 3000, category: 'bar-tab', type: 'fixed' }
+                ]
+            }, 1rem;
+            line-height: 1.6;
+        }
+
+        .page {
+            max-width: 210mm; /* A4 width */
+            min-height: 297mm; /* A4 height */
+            margin: 0 auto;
+            background: white;
+            padding: 30mm 20mm;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: #764ba2;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .date {
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .category-totals {
+            margin-bottom: 2.5rem;
+            overflow-x: auto;
+        }
+
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .cost-table th {
+            background: #667eea;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+        }
+
+        .cost-table th:first-child {
+            width: 40%;
+        }
+
+        .cost-table th:nth-child(2),
+        .cost-table th:nth-child(3) {
+            text-align: right;
+            width: 30%;
+        }
+
+        .cost-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .cost-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .cost-table .category-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .cost-table .cost-amount {
+            text-align: right;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .cost-table tfoot {
+            background: #f8f9fa;
+            border-top: 2px solid #667eea;
+        }
+
+        .cost-table tfoot td {
+            padding: 1rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-bottom: none;
+        }
+
+        .cost-table tfoot .total-label {
+            color: #764ba2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cost-table tfoot .total-amount {
+            text-align: right;
+            color: #2ecc71;
+        }
+
+        .event-section {
+            margin-bottom: 2.5rem;
+            page-break-inside: avoid;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .event-section:last-child {
+            border-bottom: none;
+        }
+
+        .event-header {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .event-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 1rem;
+            min-width: 40px;
+        }
+
+        .event-title {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .event-details {
+        }
+
+        .event-datetime {
+            color: #764ba2;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        .event-location {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .event-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        
+        .event-description strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .event-stats {
+            margin-top: 0.8rem;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+
+        .event-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+        }
+
+        .event-stat-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .event-stat-label {
+            color: #666;
+        }
+
+        .event-stat-value {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .cost-highlight {
+            color: #2ecc71;
+            font-weight: 700;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e9ecef;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .page {
+                box-shadow: none;
+                margin: 0;
+                padding: 20mm;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .page {
+                padding: 1.5rem;
+                min-height: auto;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .event-details {
+                margin-left: 0;
+            }
+
+            .event-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .event-number {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <h1>James & Heather's Wedding</h1>
+            <div class="subtitle">Wedding Weekend Schedule</div>
+            <div class="date">
+                12th - 14th September 2026
+                <span style="margin-left: 2rem; color: #667eea; font-weight: 600;">
+                    (<span id="days-to-go">0</span> days to go)
+                </span>
+            </div>
+        </div>
+
+
+        <div class="category-totals">
+            <table class="cost-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>RSVP'd</th>
+                        <th>Invited</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="category-name">Quob Park</td>
+                        <td class="cost-amount" id="quob-total-low">£0</td>
+                        <td class="cost-amount" id="quob-total-high">£0</td>
+                    </tr>
+                    <tr>
+                        <td class="category-name">New Place Hotel</td>
+                        <td class="cost-amount" id="newplace-total-low">£0</td>
+                        <td class="cost-amount" id="newplace-total-high">£0</td>
+                    </tr>
+                    <tr>
+                        <td class="category-name">Beard Band</td>
+                        <td class="cost-amount" id="band-total-low">£0</td>
+                        <td class="cost-amount" id="band-total-high">£0</td>
+                    </tr>
+                    <tr>
+                        <td class="category-name">Bar Tab</td>
+                        <td class="cost-amount" id="bartab-total-low">£0</td>
+                        <td class="cost-amount" id="bartab-total-high">£0</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="total-label">Total Budget</td>
+                        <td class="total-amount" id="total-budget-low">£0</td>
+                        <td class="total-amount" id="total-budget-high">£0</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div id="events-list">
+            <!-- Event items will be inserted here by JavaScript -->
+        </div>
+
+        <div class="footer">
+            <p>We look forward to celebrating with you! 🎉</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem;">For any questions, please contact James & Heather</p>
+        </div>
+    </div>
+
+    <script>
+        // Wedding timeline data with stat keys
+        const timelineData = [
+            {
+                number: 1,
+                title: "Menu & Cake Tasting",
+                date: "TBD - October/November 2025",
+                time: "19:00",
+                location: "Quob Park Estate",
+                description: `<strong>Status:</strong> Awaiting date confirmation from Jess<br><br><strong>Attendees:</strong> James, Heather, Catherine (Heather's Mum), Jane (James' Mum), Ann Marie (the vegetarian), and Josh Streams (Best Man)<br><br><strong>Available 7 PM slots:</strong><br>October: 6–12, 16, 20–21, 23–24, 26<br>November: 1–9, 11, 13–14, 16–18, 20, 23–30<br><br><strong>Preferences:</strong> No lamb or mushrooms, and nothing too spicy<br><br><strong>Menu Planning:</strong><br>• Canapés: TBD<br>• Starters: TBD<br>• Vegetarian option: Please avoid anything too simple (like a salad or risotto), and no corn-based "meat" substitutes. For one guest only.<br>• Meat dish: Beef<br>• Fish dish: Open to suggestions<br>• Dessert: TBD<br>• Wedding Cake: Two tiers - one chocolate and one carrot cake<br><br><strong>Questions to Ask:</strong><br>• How many guests per table?<br>• How many tables can we have?<br>• Can someone from the band (BEARD) come to see the venue during this visit?`,
+                statsKey: null
+            },
+            {
+                number: 2,
+                title: "Dress & Suit Fittings",
+                date: "TBD - Spring/Summer 2026",
+                time: "TBD",
+                location: "Various",
+                description: `<strong>Wedding Dress:</strong><br>• Final fitting and alterations<br>• Shoes and accessories<br>• Veil selection<br><br><strong>Groom's Suit:</strong><br>• Final fitting<br>• Shirt, tie, and accessories<br>• Groomsmen coordination<br><br><strong>Wedding Party:</strong><br>• Bridesmaids dresses<br>• Groomsmen suits<br>• Page boys and flower girls outfits`,
+                statsKey: null
+            },
+            {
+                number: 3,
+                title: "Prenuptial Agreement & Legal",
+                date: "TBD - 2026",
+                time: "TBD",
+                location: "Solicitor's Office",
+                description: `<strong>Tasks:</strong><br>• Consult with solicitors regarding prenuptial agreement<br>• Review and finalize prenup terms<br>• Sign prenuptial agreement (must be done well before wedding)<br>• Discuss wills and life insurance<br>• Review financial planning<br><br><strong>Note:</strong> Prenups should be signed at least 28 days before the wedding to be valid.`,
+                statsKey: null
+            },
+            {
+                number: 4,
+                title: "Registry Office & Legal Requirements",
+                date: "TBD - Summer 2026",
+                time: "TBD",
+                location: "Local Registry Office",
+                description: `<strong>Legal Requirements:</strong><br>• Give notice at registry office (must be 29+ days before ceremony)<br>• Provide birth certificates, proof of address, passport/ID<br>• Pay notice fees (£35 per person)<br>• Collect marriage schedule after 29 days<br>• Deliver schedule to Quob Park before ceremony<br><br><strong>Documents Needed:</strong><br>• Valid passports or birth certificates<br>• Proof of address (utility bill, council tax bill)<br>• Decree absolute (if previously married)<br>• Name change documentation (if applicable)`,
+                statsKey: null
+            },
+            {
+                number: 5,
+                title: "Seating Arrangements & Table Plan",
+                date: "TBD - August 2026",
+                time: "TBD",
+                location: "Home",
+                description: `<strong>Planning Tasks:</strong><br>• Finalize guest list and dietary requirements<br>• Create table plan (round tables of 8-10 guests)<br>• Consider guest relationships and dynamics<br>• Assign seats for top table/high table<br>• Create place cards and table numbers<br>• Coordinate with venue on layout<br><br><strong>Top Table:</strong><br>• Bride & Groom<br>• Best Man & Chief Bridesmaid<br>• Parents (optional traditional layout)<br><br><strong>Guest Tables:</strong><br>• Family tables<br>• Friends tables<br>• Work colleagues<br>• Mixed groups`,
+                statsKey: null
+            },
+            {
+                number: 6,
+                title: "Hen Party",
+                date: "TBD - Summer 2026",
+                time: "TBD",
+                location: "TBD",
+                description: `<strong>Planning:</strong><br>• Date to be confirmed<br>• Location options: Spa weekend, city break, or activities day<br>• Guest list: Bridesmaids and close friends<br>• Budget and activities TBD<br><br><strong>Ideas:</strong><br>• Spa and afternoon tea<br>• Weekend getaway<br>• Cocktail making class<br>• Wine tasting<br>• Pamper session`,
+                statsKey: 'hen'
+            },
+            {
+                number: 7,
+                title: "Stag Party",
+                date: "TBD - Summer 2026",
+                time: "TBD",
+                location: "TBD",
+                description: `<strong>Planning:</strong><br>• Date to be confirmed<br>• Location options: City break, outdoor activities, or weekend away<br>• Guest list: Groomsmen and close friends<br>• Budget and activities TBD<br><br><strong>Ideas:</strong><br>• Brewery tour<br>• Golf weekend<br>• Go-karting and paintball<br>• City break (Edinburgh, Dublin, Amsterdam)<br>• Outdoor adventure activities`,
+                statsKey: 'stag'
+            },
+            {
+                number: 8,
+                title: "Friday Night Stay",
+                date: "Friday, 12th September 2026",
+                time: "14:00 onwards",
+                location: "New Place Hotel / Quob Park Hotel",
+                description: "Check-in available from 14:00. Welcome drinks and casual dinner to kick off the wedding weekend.<br><br><strong>New Place Hotel:</strong> £200.00 per family<br><strong>Quob Park Hotel:</strong> Included in ceremony package",
+                statsKey: 'friday_room',
+                costPerGuest: 200,
+                costCategory: 'new-place',
+                guestFilter: 'new-place' // Only count New Place guests
+            },
+            {
+                number: 9,
+                title: "Wedding Ceremony",
+                date: "Saturday, 13th September 2026",
+                time: "15:30",
+                location: "Quob Park Estate",
+                description: "Our wedding ceremony in the beautiful grounds of Quob Park Estate. Please arrive by 15:15.<br><br><strong>Cost:</strong> £13,250.00",
+                statsKey: 'ceremony',
+                cost: 13250,
+                costCategory: 'quob'
+            },
+            {
+                number: 10,
+                title: "Drinks Reception",
+                date: "Saturday, 13th September 2026",
+                time: "16:15 - 18:00",
+                location: "Quob Park Estate",
+                description: "Champagne reception with canapés on the lawns (weather permitting). Time for photos and congratulations.",
+                statsKey: 'ceremony' // Same as ceremony
+            },
+            {
+                number: 11,
+                title: "Wedding Breakfast",
+                date: "Saturday, 13th September 2026",
+                time: "18:00 - 21:00",
+                location: "Quob Park Estate",
+                description: "Three-course wedding breakfast followed by speeches. Choice of Vegetarian, Fish, or Beef main course.<br><br><strong>Cost:</strong> £125.00 per guest",
+                statsKey: 'wedding_meal',
+                costPerGuest: 125,
+                costCategory: 'quob'
+            },
+            {
+                number: 12,
+                title: "Evening Entertainment",
+                date: "Saturday, 13th September 2026",
+                time: "21:00 - 11:30",
+                location: "Quob Park Estate",
+                description: "Light snacks served at 20:00. Live music from BEARD, DJ, dancing, and evening buffet from 21:00. The party continues into the night!<br><br><strong>Band Cost:</strong> £2,000.00 (Paid £200 deposit. No deadline for final balance)<br><strong>Quob Evening Cost:</strong> £25.00 per guest",
+                statsKey: 'wedding_meal', // Tie to meal guests
+                costs: [
+                    { amount: 2000, category: 'band', type: 'fixed' },
+                    { perGuest: 25, category: 'quob', type: 'per-guest' },
+                    { amount: 3000, category: 'bar-tab', type: 'fixed' }
+                ]
+            },
+            {
+                number: 13,
+                title: "Saturday Night Stay",
+                date: "Saturday, 13th September 2026",
+                time: "Late night",
+                location: "New Place Hotel / Quob Park Hotel / Quob Park Estate",
+                description: "Wind down with marshmallow toasting and stargazing. Wake up to a relaxed Sunday morning.<br><br><strong>Accommodation Costs:</strong><br>• New Place Hotel: £200.00 per family<br>• Quob Park: £3,250.00 (Estate guest rooms)",
+                statsKey: 'saturday_room',
+                costs: [
+                    { perGuest: 200, category: 'new-place', type: 'per-guest', guestFilter: 'new-place' },
+                    { amount: 3250, category: 'quob', type: 'fixed' }
+                ]
+            },
+            {
+                number: 14,
+                title: "Farewell Brunch",
+                date: "Sunday, 14th September 2026",
+                time: "11:00 - 13:00",
+                location: "Quob Park Hotel",
+                description: "Join us for a casual brunch to relax, reminisce, and say goodbye before heading home.<br><br><strong>Cost:</strong> £25.00 per guest",
+                statsKey: 'brunch',
+                costPerGuest: 25,
+                costCategory: 'new-place',
+                useGuestCount: true // Use individual guest count instead of family count
+            }
+        ];
+
+        // Global guests data
+        let guestsData = [];
+
+        // Fetch all guests data
+        async function loadGuestStats() {
+            try {
+                const response = await fetch('/api/guests');
+                const data = await response.json();
+                guestsData = data.data;
+                
+                // Re-render timeline with stats
+                renderTimeline();
+                
+                // Recalculate budget after guest data is loaded
+                calculateTotalBudget();
+            } catch (error) {
+                console.error('Error loading guest stats:', error);
+            }
+        }
+
+        // Calculate stats for a specific event
+        function getEventStats(statsKey) {
+            if (!guestsData.length || !statsKey) return null;
+            
+            const stats = {};
+            
+            switch(statsKey) {
+                case 'friday_room':
+                    // Count unique families instead of individual guests
+                    const fridayAttendingFamilies = new Set(guestsData.filter(g => g.friday_room >= 2).map(g => g.family_id));
+                    const fridayInvitedFamilies = new Set(guestsData.filter(g => g.friday_room >= -1).map(g => g.family_id));
+                    stats.attending = fridayAttendingFamilies.size;
+                    stats.invited = fridayInvitedFamilies.size;
+                    // Only New Place families for cost calculations (low)
+                    stats.newPlaceAttending = new Set(guestsData.filter(g => g.friday_room === 2).map(g => g.family_id)).size;
+                    // For high cost: total invited minus Quob Park Hotel guests (value 3)
+                    const fridayQuobParkFamilies = new Set(guestsData.filter(g => g.friday_room === 3).map(g => g.family_id)).size;
+                    stats.newPlaceInvited = fridayInvitedFamilies.size - fridayQuobParkFamilies;
+                    stats.breakdown = {
+                        'New Place': new Set(guestsData.filter(g => g.friday_room === 2).map(g => g.family_id)).size,
+                        'Quob Park': fridayQuobParkFamilies
+                    };
+                    break;
+                    
+                case 'saturday_room':
+                    // Count unique families instead of individual guests
+                    const saturdayAttendingFamilies = new Set(guestsData.filter(g => g.saturday_room >= 2).map(g => g.family_id));
+                    const saturdayInvitedFamilies = new Set(guestsData.filter(g => g.saturday_room >= -1).map(g => g.family_id));
+                    stats.attending = saturdayAttendingFamilies.size;
+                    stats.invited = saturdayInvitedFamilies.size;
+                    // Only New Place families for cost calculations (low)
+                    stats.newPlaceAttending = new Set(guestsData.filter(g => g.saturday_room === 2 || g.saturday_room === 3).map(g => g.family_id)).size;
+                    // For high cost: total invited minus Quob Park Hotel (value 4) and Quob Estate (value 5)
+                    const saturdayQuobParkHotelFamilies = new Set(guestsData.filter(g => g.saturday_room === 4).map(g => g.family_id)).size;
+                    const saturdayQuobEstateFamilies = new Set(guestsData.filter(g => g.saturday_room === 5).map(g => g.family_id)).size;
+                    stats.newPlaceInvited = saturdayInvitedFamilies.size - saturdayQuobParkHotelFamilies - saturdayQuobEstateFamilies;
+                    // Individual guest counts for per-person costs (like brunch)
+                    stats.guestCountAttending = guestsData.filter(g => g.saturday_room >= 2).length;
+                    stats.guestCountInvited = guestsData.filter(g => g.saturday_room >= -1).length;
+                    stats.breakdown = {
+                        'New Place': new Set(guestsData.filter(g => g.saturday_room === 2 || g.saturday_room === 3).map(g => g.family_id)).size,
+                        'Quob Park Hotel': new Set(guestsData.filter(g => g.saturday_room === 4).map(g => g.family_id)).size,
+                        'Quob Estate': new Set(guestsData.filter(g => g.saturday_room === 5).map(g => g.family_id)).size
+                    };
+                    break;
+                    
+                case 'brunch':
+                    // Only count guests staying at Quob Park Hotel (4) or Quob Estate (5)
+                    stats.guestCountAttending = guestsData.filter(g => g.saturday_room === 4 || g.saturday_room === 5).length;
+                    stats.guestCountInvited = guestsData.filter(g => g.saturday_room === 4 || g.saturday_room === 5 || g.saturday_room === -1).length;
+                    stats.attending = stats.guestCountAttending;
+                    stats.invited = stats.guestCountInvited;
+                    stats.breakdown = {
+                        'Quob Park Hotel': guestsData.filter(g => g.saturday_room === 4).length,
+                        'Quob Estate': guestsData.filter(g => g.saturday_room === 5).length
+                    };
+                    break;
+                    
+                case 'stag':
+                    stats.attending = guestsData.filter(g => g.stag > 0).length;
+                    stats.invited = guestsData.filter(g => g.stag >= -1).length;
+                    break;
+                    
+                case 'hen':
+                    stats.attending = guestsData.filter(g => g.hen > 0).length;
+                    stats.invited = guestsData.filter(g => g.hen >= -1).length;
+                    break;
+                    
+                case 'ceremony':
+                    stats.attending = guestsData.filter(g => g.ceremony === 1).length;
+                    stats.invited = guestsData.filter(g => g.ceremony >= -1).length;
+                    break;
+                    
+                case 'wedding_meal':
+                    stats.attending = guestsData.filter(g => g.wedding_meal >= 3).length;
+                    stats.invited = guestsData.filter(g => g.wedding_meal >= -1).length;
+                    stats.breakdown = {
+                        'Beef': guestsData.filter(g => g.wedding_meal === 5).length,
+                        'Fish': guestsData.filter(g => g.wedding_meal === 4).length,
+                        'Vegetarian': guestsData.filter(g => g.wedding_meal === 3).length
+                    };
+                    break;
+                    
+                case 'attendance_status':
+                    stats.attending = guestsData.filter(g => g.attendance_status === 1).length;
+                    stats.invited = guestsData.filter(g => g.attendance_status >= -1).length;
+                    break;
+            }
+            
+            return stats;
+        }
+
+        // Calculate days until wedding
+        function calculateDaysToGo() {
+            const weddingDate = new Date('2026-09-13');
+            const today = new Date();
+            const diffTime = weddingDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('days-to-go').textContent = diffDays > 0 ? diffDays : 0;
+            
+            // Animate the number
+            animateNumber('days-to-go', diffDays > 0 ? diffDays : 0);
+        }
+
+        // Calculate total budget from events
+        function calculateTotalBudget() {
+            // Calculate costs with ranges
+            let totalLow = 0;
+            let totalHigh = 0;
+            let quobLow = 0;
+            let quobHigh = 0;
+            let newPlaceLow = 0;
+            let newPlaceHigh = 0;
+            let bandLow = 0;
+            let bandHigh = 0;
+            let barTabLow = 0;
+            let barTabHigh = 0;
+            
+            timelineData.forEach(event => {
+                // Handle events with multiple costs (e.g., band + per-guest Quob cost)
+                if (event.costs && Array.isArray(event.costs)) {
+                    event.costs.forEach(costItem => {
+                        if (costItem.type === 'per-guest' && costItem.perGuest) {
+                            const stats = getEventStats(event.statsKey);
+                            if (stats) {
+                                let lowCost, highCost;
+                                
+                                // If this cost item has a guest filter (e.g., only New Place guests)
+                                if (costItem.guestFilter === 'new-place') {
+                                    lowCost = (stats.newPlaceAttending || 0) * costItem.perGuest;
+                                    highCost = (stats.newPlaceInvited || 0) * costItem.perGuest;
+                                } else {
+                                    lowCost = stats.attending * costItem.perGuest;
+                                    highCost = stats.invited * costItem.perGuest;
+                                }
+                                
+                                totalLow += lowCost;
+                                totalHigh += highCost;
+                                
+                                if (costItem.category === 'quob') {
+                                    quobLow += lowCost;
+                                    quobHigh += highCost;
+                                } else if (costItem.category === 'new-place') {
+                                    newPlaceLow += lowCost;
+                                    newPlaceHigh += highCost;
+                                } else if (costItem.category === 'band') {
+                                    bandLow += lowCost;
+                                    bandHigh += highCost;
+                                } else if (costItem.category === 'bar-tab') {
+                                    barTabLow += lowCost;
+                                    barTabHigh += highCost;
+                                }
+                            }
+                        } else if (costItem.type === 'fixed' && costItem.amount) {
+                            totalLow += costItem.amount;
+                            totalHigh += costItem.amount;
+                            
+                            if (costItem.category === 'quob') {
+                                quobLow += costItem.amount;
+                                quobHigh += costItem.amount;
+                            } else if (costItem.category === 'new-place') {
+                                newPlaceLow += costItem.amount;
+                                newPlaceHigh += costItem.amount;
+                            } else if (costItem.category === 'band') {
+                                bandLow += costItem.amount;
+                                bandHigh += costItem.amount;
+                            } else if (costItem.category === 'bar-tab') {
+                                barTabLow += costItem.amount;
+                                barTabHigh += costItem.amount;
+                            }
+                        }
+                    });
+                }
+                // Handle single per-guest cost
+                else if (event.costPerGuest && event.statsKey) {
+                    // Get guest stats for this event
+                    const stats = getEventStats(event.statsKey);
+                    if (stats) {
+                        let lowCost, highCost;
+                        
+                        // If this event uses individual guest count (not family count)
+                        if (event.useGuestCount && stats.guestCountAttending !== undefined) {
+                            lowCost = stats.guestCountAttending * event.costPerGuest;
+                            highCost = stats.guestCountInvited * event.costPerGuest;
+                        }
+                        // If this event has a guest filter (e.g., only New Place guests)
+                        else if (event.guestFilter === 'new-place') {
+                            // Only count New Place Hotel families
+                            lowCost = (stats.newPlaceAttending || 0) * event.costPerGuest;
+                            highCost = (stats.newPlaceInvited || 0) * event.costPerGuest;
+                        } else {
+                            // Count all guests for this event
+                            lowCost = stats.attending * event.costPerGuest;
+                            highCost = stats.invited * event.costPerGuest;
+                        }
+                        
+                        totalLow += lowCost;
+                        totalHigh += highCost;
+                        
+                        if (event.costCategory === 'quob') {
+                            quobLow += lowCost;
+                            quobHigh += highCost;
+                        } else if (event.costCategory === 'new-place') {
+                            newPlaceLow += lowCost;
+                            newPlaceHigh += highCost;
+                        }
+                    }
+                } 
+                // Handle single fixed cost
+                else if (event.cost) {
+                    totalLow += event.cost;
+                    totalHigh += event.cost;
+                    
+                    if (event.costCategory === 'quob') {
+                        quobLow += event.cost;
+                        quobHigh += event.cost;
+                    } else if (event.costCategory === 'new-place') {
+                        newPlaceLow += event.cost;
+                        newPlaceHigh += event.cost;
+                    } else if (event.costCategory === 'band') {
+                        bandLow += event.cost;
+                        bandHigh += event.cost;
+                    } else if (event.costCategory === 'bar-tab') {
+                        barTabLow += event.cost;
+                        barTabHigh += event.cost;
+                    }
+                }
+            });
+            
+            // Format as currency
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('en-GB', {
+                    style: 'currency',
+                    currency: 'GBP',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(amount);
+            };
+            
+            // Display ranges if low and high differ, otherwise just show the amount
+            const totalText = totalLow === totalHigh 
+                ? formatCurrency(totalLow)
+                : `${formatCurrency(totalLow)} - ${formatCurrency(totalHigh)}`;
+                
+            const quobText = quobLow === quobHigh
+                ? formatCurrency(quobLow)
+                : `${formatCurrency(quobLow)} - ${formatCurrency(quobHigh)}`;
+            
+            const newPlaceText = newPlaceLow === newPlaceHigh
+                ? formatCurrency(newPlaceLow)
+                : `${formatCurrency(newPlaceLow)} - ${formatCurrency(newPlaceHigh)}`;
+            
+            const bandText = bandLow === bandHigh
+                ? formatCurrency(bandLow)
+                : `${formatCurrency(bandLow)} - ${formatCurrency(bandHigh)}`;
+            
+            const barTabText = barTabLow === barTabHigh
+                ? formatCurrency(barTabLow)
+                : `${formatCurrency(barTabLow)} - ${formatCurrency(barTabHigh)}`;
+            
+            // Update table cells with individual low/high values
+            document.getElementById('quob-total-low').textContent = formatCurrency(quobLow);
+            document.getElementById('quob-total-high').textContent = formatCurrency(quobHigh);
+            document.getElementById('newplace-total-low').textContent = formatCurrency(newPlaceLow);
+            document.getElementById('newplace-total-high').textContent = formatCurrency(newPlaceHigh);
+            document.getElementById('band-total-low').textContent = formatCurrency(bandLow);
+            document.getElementById('band-total-high').textContent = formatCurrency(bandHigh);
+            document.getElementById('bartab-total-low').textContent = formatCurrency(barTabLow);
+            document.getElementById('bartab-total-high').textContent = formatCurrency(barTabHigh);
+            document.getElementById('total-budget-low').textContent = formatCurrency(totalLow);
+            document.getElementById('total-budget-high').textContent = formatCurrency(totalHigh);
+        }
+
+        // Animate number counting
+        function animateNumber(elementId, target) {
+            const element = document.getElementById(elementId);
+            let current = 0;
+            const increment = target / 20;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 50);
+        }
+
+        // Render events in document format
+        function renderTimeline() {
+            const eventsEl = document.getElementById('events-list');
+            eventsEl.innerHTML = timelineData.map(event => {
+                const stats = getEventStats(event.statsKey);
+                let statsHtml = '';
+                
+                if (stats) {
+                    statsHtml = '<div class="event-stats">';
+                    
+                    // Show guest counts if useGuestCount is true, otherwise show family/default counts
+                    const attendingCount = event.useGuestCount && stats.guestCountAttending !== undefined 
+                        ? stats.guestCountAttending 
+                        : stats.attending;
+                    const invitedCount = event.useGuestCount && stats.guestCountInvited !== undefined 
+                        ? stats.guestCountInvited 
+                        : stats.invited;
+                    
+                    statsHtml += `<div class="event-stat-row">
+                        <span class="event-stat-label">Attending / Invited:</span>
+                        <span class="event-stat-value">${attendingCount} / ${invitedCount}</span>
+                    </div>`;
+                    
+                    // Handle multiple costs (e.g., band + per-guest Quob cost)
+                    if (event.costs && Array.isArray(event.costs)) {
+                        let totalLow = 0;
+                        let totalHigh = 0;
+                        
+                        event.costs.forEach(costItem => {
+                            if (costItem.type === 'per-guest' && costItem.perGuest) {
+                                let lowCost, highCost;
+                                
+                                // If this cost item has a guest filter (e.g., only New Place guests)
+                                if (costItem.guestFilter === 'new-place') {
+                                    lowCost = (stats.newPlaceAttending || 0) * costItem.perGuest;
+                                    highCost = (stats.newPlaceInvited || 0) * costItem.perGuest;
+                                } else {
+                                    lowCost = stats.attending * costItem.perGuest;
+                                    highCost = stats.invited * costItem.perGuest;
+                                }
+                                
+                                totalLow += lowCost;
+                                totalHigh += highCost;
+                            } else if (costItem.type === 'fixed' && costItem.amount) {
+                                totalLow += costItem.amount;
+                                totalHigh += costItem.amount;
+                            }
+                        });
+                        
+                        const formatCurrency = (amount) => {
+                            return new Intl.NumberFormat('en-GB', {
+                                style: 'currency',
+                                currency: 'GBP',
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(amount);
+                        };
+                        
+                        const costText = totalLow === totalHigh 
+                            ? formatCurrency(totalLow)
+                            : `${formatCurrency(totalLow)} - ${formatCurrency(totalHigh)}`;
+                        
+                        statsHtml += `<div class="event-stat-row">
+                            <span class="event-stat-label">Est. Total Cost:</span>
+                            <span class="event-stat-value cost-highlight">${costText}</span>
+                        </div>`;
+                    }
+                    // Add cost estimate for single per-guest pricing
+                    else if (event.costPerGuest) {
+                        let lowCost, highCost;
+                        
+                        // If this event uses individual guest count (not family count)
+                        if (event.useGuestCount && stats.guestCountAttending !== undefined) {
+                            lowCost = stats.guestCountAttending * event.costPerGuest;
+                            highCost = stats.guestCountInvited * event.costPerGuest;
+                        }
+                        // If this event has a guest filter (e.g., only New Place guests)
+                        else if (event.guestFilter === 'new-place') {
+                            lowCost = (stats.newPlaceAttending || 0) * event.costPerGuest;
+                            highCost = (stats.newPlaceInvited || 0) * event.costPerGuest;
+                        } else {
+                            lowCost = stats.attending * event.costPerGuest;
+                            highCost = stats.invited * event.costPerGuest;
+                        }
+                        
+                        const formatCurrency = (amount) => {
+                            return new Intl.NumberFormat('en-GB', {
+                                style: 'currency',
+                                currency: 'GBP',
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(amount);
+                        };
+                        const costText = lowCost === highCost 
+                            ? formatCurrency(lowCost)
+                            : `${formatCurrency(lowCost)} - ${formatCurrency(highCost)}`;
+                        
+                        statsHtml += `<div class="event-stat-row">
+                            <span class="event-stat-label">Est. Cost:</span>
+                            <span class="event-stat-value cost-highlight">${costText}</span>
+                        </div>`;
+                    }
+                    
+                    if (stats.breakdown) {
+                        Object.entries(stats.breakdown).forEach(([key, value]) => {
+                            if (value > 0) {
+                                statsHtml += `<div class="event-stat-row">
+                                    <span class="event-stat-label">${key}:</span>
+                                    <span class="event-stat-value">${value}</span>
+                                </div>`;
+                            }
+                        });
+                    }
+                    statsHtml += '</div>';
+                }
+                
+                return `
+                    <div class="event-section">
+                        <div class="event-header">
+                            <div class="event-number">${event.number}.</div>
+                            <h2 class="event-title">${event.title}</h2>
+                        </div>
+                        <div class="event-details">
+                            <div class="event-datetime">${event.date}${event.time ? ` • ${event.time}` : ''}</div>
+                            <div class="event-location">📍 ${event.location}</div>
+                            <div class="event-description">${event.description}</div>
+                            ${statsHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTimeline();
+            loadGuestStats(); // This will call calculateTotalBudget() after data loads
+            calculateDaysToGo();
+        });
+    </script>
+</body>
+</html>
