@@ -3102,15 +3102,33 @@
 
 
 
-        // Friday section should always be visible
-        console.log('Showing friday section');
-        showElement('friday-section');
+        // Show friday section if any family member has friday_room >= -1 (invited or attending)
+        const hasFridayRoom = familyData.some(guest => {
+          const fridayValue = guest.friday_room;
+          return fridayValue !== null && fridayValue !== undefined && fridayValue !== '' && parseInt(fridayValue, 10) >= -1;
+        });
+        if (hasFridayRoom) {
+          console.log('Showing friday section');
+          showElement('friday-section');
+        } else {
+          console.log('Hiding friday section');
+          hideElement('friday-section');
+        }
 
 
 
-        // Saturday section should always be visible
-        console.log('Showing saturday section');
-        showElement('saturday-section');
+        // Show saturday section if any family member has saturday_room >= -1 (invited or attending)
+        const hasSaturdayRoom = familyData.some(guest => {
+          const saturdayValue = guest.saturday_room;
+          return saturdayValue !== null && saturdayValue !== undefined && saturdayValue !== '' && parseInt(saturdayValue, 10) >= -1;
+        });
+        if (hasSaturdayRoom) {
+          console.log('Showing saturday section');
+          showElement('saturday-section');
+        } else {
+          console.log('Hiding saturday section');
+          hideElement('saturday-section');
+        }
 
 
 
@@ -3134,7 +3152,9 @@
 
           noBtn.classList.remove('is-active');
 
-        } else if (statuses.includes(0)) {
+        } else if (statuses.length > 0) {
+
+          // If there are any statuses but none are 1 (attending), light up "Not attending"
 
           noBtn.classList.add('is-active');
 

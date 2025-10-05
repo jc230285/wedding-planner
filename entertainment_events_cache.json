@@ -1,29 +1,35 @@
 {
-  "cached_at": "2025-09-19T11:12:22.302596",
+  "cached_at": "2025-10-05T17:39:15.621831",
   "data": [
     {
       "title": "BEARD @ The Vaults",
-      "url": "https://www.facebook.com/bearduk/events",
+      "url": "https://www.facebook.com/events/1365306694514142/",
       "date": "Fri, 28 Nov at 21:00",
-      "venue": "The Vaults, Southsea"
+      "venue": "The Vaults, Southsea (41-47 Albert Road, Southsea, Portsmouth, UK)",
+      "venue_url": "https://facebook.com/thevaultssouthsea",
+      "image_url": "https://scontent.fsdn1-1.fna.fbcdn.net/v/t39.30808-1/301576825_8215407925166333_2707822395528229958_n.jpg?stp=dst-jpg_tt6&_nc_cat=103&ccb=1-7&_nc_sid=3ab345&_nc_ohc=0VQNfiF-spoQ7kNvwHMs6MF&_nc_oc=AdmK65Iylr8s1L6HTOFEczYMacPC_nX12VxzsIgeVI2nKj-DgroycMr3ujAg8BazUeM&_nc_zt=24&_nc_ht=scontent.fsdn1-1.fna&_nc_gid=w7BlTel4qNZO9bQqVm3S-Q&oh=00_AfZ6629DqgIkZdbHgkrTQ4Eb-C4MeljhBKg5c7j6dnOH3w&oe=68D5D4C1",
+      "duration": 2,
+      "responded": 2
     },
     {
       "title": "BEARD @ Steamtown",
-      "url": "https://www.facebook.com/bearduk/events",
+      "url": "https://www.facebook.com/events/1276300143600709/",
       "date": "Fri, 19 Dec at 20:00",
-      "venue": "Steam Town Brew Co, Eastleigh"
-    },
-    {
-      "title": "Private Party",
-      "url": "https://www.facebook.com/bearduk/events",
-      "date": "Tomorrow at 19:00",
-      "venue": "Private Venue"
+      "venue": "Eastleigh, Storbritannia",
+      "venue_url": "https://facebook.com/steamtownbrewco",
+      "image_url": "https://scontent.fsdn1-1.fna.fbcdn.net/v/t39.30808-1/298614570_600501374846135_4423711779306456156_n.jpg?stp=dst-jpg_tt6&amp;cstp=mx1304x1304&amp;ctp=s720x720&amp;_nc_cat=101&amp;ccb=1-7&amp;_nc_sid=3ab345&amp;_nc_ohc=HJu5hhC_PJAQ7kNvwHYRTUL&amp;_nc_oc=AdnWwj1KaDKgtoUFBBlSXac8WpgaOL69fEF_Oevm8Nn4mcVpwj-G3JNfFt5KEpftxeE&amp;_nc_zt=24&amp;_nc_ht=scontent.fsdn1-1.fna&amp;_nc_gid=jjq-8rI4OLwQRJheX9HSaw&amp;oh=00_AfZSTDzxJKCdK7DoaFNaagq_ZrdBitFlyKq1a2FeQty_oQ&amp;oe=68D5F08A",
+      "duration": 3,
+      "responded": 7
     },
     {
       "title": "BEARD @ The Anglers",
-      "url": "https://www.facebook.com/bearduk/events",
+      "url": "https://www.facebook.com/events/955296663193145/",
       "date": "Sun, 21 Dec at 16:00",
-      "venue": "The Anglers"
+      "venue": "The Anglers",
+      "venue_url": "",
+      "image_url": null,
+      "duration": 0,
+      "responded": 8
     }
   ]
 }
