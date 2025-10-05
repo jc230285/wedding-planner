@@ -2497,8 +2497,8 @@
 
             <h2>Formal Ceremony</h2>
 
-            <p>We'll say "I do" in the oak meadow, then celebrate with bubbles and canapes.</p>
-            <p>We won't be offended if anyone wants to skip the formalities.</p>
+            <p>We'll say "I do" at Quob Park Hotel in Wickham, then celebrate with bubbles and canapes.</p>
+                        <p>We won't be offended if anyone wants to skip the formalities.</p><p><strong>Dress Code:</strong> Wear what you want - feel comfortable and be yourself!</p>
 
             <div class="ceremony-selection" id="ceremony-selection">
               <h3>RSVP for Formal Ceremony</h3>
@@ -5424,6 +5424,32 @@
 
             <h3>Guest Details</h3>
 
+            <div style="background: rgba(109, 92, 231, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+
+              <h4 style="margin-top: 0; color: #6d5ce7;">Personalized Invitation Message:</h4>
+
+                <p style="font-style: italic; margin-bottom: 0;">
+
+                "Dear ${guest.name},<br><br>
+
+                You are invited to celebrate the wedding of James & Heather on Saturday 12 September 2026 at Quob Park!<br><br>
+
+                Please use this personal link to RSVP and view all the wedding details:<br>
+
+                <a href="${guestLink}" style="color: #6d5ce7; text-decoration: underline;">${guestLink}</a><br><br>
+
+                We can't wait to celebrate with you!"
+
+                </p>
+
+            </div>
+
+            <p><strong>Direct Link:</strong></p>
+
+            <a href="${guestLink}" class="guest-link" target="_blank">${guestLink}</a>
+
+            <p style="margin-bottom: 1.5rem;"><em>Click the link above to copy and send to the guest</em></p>
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
 
               <div>
@@ -5509,32 +5535,6 @@
               <button onclick="this.closest('.guest-popup').remove()" style="background: #666; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Close</button>
 
             </div>
-
-            <div style="background: rgba(109, 92, 231, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-
-              <h4 style="margin-top: 0; color: #6d5ce7;">Personalized Invitation Message:</h4>
-
-                <p style="font-style: italic; margin-bottom: 0;">
-
-                "Dear ${guest.name},<br><br>
-
-                You are invited to celebrate the wedding of James & Heather on Saturday 12 September 2026 at Quob Park!<br><br>
-
-                Please use this personal link to RSVP and view all the wedding details:<br>
-
-                <a href="${guestLink}" style="color: #6d5ce7; text-decoration: underline;">${guestLink}</a><br><br>
-
-                We can't wait to celebrate with you!"
-
-                </p>
-
-            </div>
-
-            <p><strong>Direct Link:</strong></p>
-
-            <a href="${guestLink}" class="guest-link" target="_blank">${guestLink}</a>
-
-            <p><em>Click the link above to copy and send to the guest</em></p>
 
           </div>
 
